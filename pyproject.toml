@@ -1,5 +1,5 @@
 [project]
-name = "python-repo-template"
+name = "latent-space"
 version = "0.0.1"
 description = "A template for Python projects"
 readme = "README.md"
@@ -74,14 +74,14 @@ convention = "google"
 "__init__.py" = ["F401"]
 
 [tool.pyright]
-include = ["python-repo-template", "tests", "utils"]
+include = ["latent-space", "tests", "utils"]
 typeCheckingMode = "basic"
 reportFunctionMemberAccess = true
 reportPossiblyUnboundVariable = true
 reportIncompatibleMethodOverride = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["python-repo-template"]
+packages = ["latent-space"]
 
 [tool.hatch.metadata]
 allow-direct-references = true

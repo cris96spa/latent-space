@@ -1,6 +1,6 @@
 .PHONY: all $(MAKECMDGOALS)
 DOC_PORT ?= 8031
-PROJECT_NAME ?= python_repo_template
+PROJECT_NAME ?= latent_space
 PYTHON_FORMAT_TARGETS ?= main.py $(PROJECT_NAME) tests utils
 help: # print all the available targets
 	@echo "\nAvailable targets:\n"

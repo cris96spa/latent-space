@@ -1,4 +1,4 @@
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square&logo=github)](https://cris96spa.github.io/python-repo-template/)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square&logo=github)](https://cris96spa.github.io/latent-space/)
 
 # Python Repository Template
 
@@ -79,7 +79,7 @@ uv run python main.py --number 5
 The template includes a multi-stage Dockerfile, which produces an image with the code and the dependencies installed. You can build the image with:
 
 ```bash
-docker build -t python-repo-template .
+docker build -t latent-space .
 ```
 
 ### Documentation
@@ -117,6 +117,3 @@ config = MlflowLoggerConfig.from_yaml("configs/other.yaml")  # this instance onl
 ```
 
 Classes without a `DEFAULT_CONFIG_PATH` require an explicit path.
-
-## Greetings
-A big thank you to [Giovanni Giacometti](https://github.com/GiovanniGiacometti) for creating this template and sharing it with the community. This template is a fork of his original work, which can be found at [giovannigiacometti/python-repository-template](https://github.com/GiovanniGiacometti/python-repo-template).

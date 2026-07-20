@@ -7,7 +7,7 @@ import tomllib
 from pathlib import Path
 from textwrap import dedent
 
-DEFAULT_TEMPLATE_URL = "git@github.com:cris96spa/python-repo-template.git"
+DEFAULT_TEMPLATE_URL = "git@github.com:cris96spa/latent-space.git"
 DEFAULT_TEMPLATE_BRANCH = "main"
 UPDATE_BRANCH_NAME = "update-template"
 

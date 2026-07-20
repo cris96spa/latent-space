@@ -2,7 +2,7 @@ from pathlib import Path
 
 import mkdocs_gen_files
 
-PROJECT_NAME = "python_repo_template"
+PROJECT_NAME = "latent_space"
 
 SOURCE_ROOT = Path(PROJECT_NAME)
 API_DIR = Path("api")

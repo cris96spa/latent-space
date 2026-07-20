@@ -1,4 +1,4 @@
-from python_repo_template.func import random_sum
+from latent_space.func import random_sum
 
 
 def test_random_sum():

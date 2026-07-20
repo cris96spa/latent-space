@@ -4,7 +4,7 @@ ARG PYTHON_VERSION=3.12
 FROM python:${PYTHON_VERSION}-slim AS base
 ARG UID=10000
 ARG GID=10000
-ARG PROJECT_NAME=python_repo_template
+ARG PROJECT_NAME=latent_space
 ARG USER=app
 ARG WORKDIR=/app
 
