@@ -1,19 +1,31 @@
 # frontend
 
 The latent-space web client: Vite + React + TypeScript, talking to the FastAPI backend
-over a small HTTP boundary. At this stage it is a skeleton — one placeholder route that
-fetches `/health` to prove the pipeline has a pulse. Design, the forward-pass hero, and the
-scripted chat come later.
+over a small HTTP boundary. It has a visual identity (Tailwind CSS v4, a sky-blue design-token
+system, light/dark themes, and an app shell) and a home route that fetches `/health`. The
+forward-pass hero and the scripted chat come later.
 
 ## Layout
 
-- `src/lib/` — framework-independent helpers, including the typed API client (`api.ts`),
-  the single place backend URLs and response types live.
+- `src/lib/` — framework-independent helpers: the typed API client (`api.ts`, the single
+  place backend URLs and response types live), the `cn` class joiner, `theme.ts`, and
+  external `links.ts`.
+- `src/components/` — reusable UI primitives built on the tokens (`Button`, `ButtonLink`,
+  `TextLink`, `Card`, `SectionHeading`, `TokenChip`) plus the shell (`Header`, `Footer`,
+  `ThemeToggle`).
 - `src/pages/` — route-level components.
-- `src/layouts/` — shared page shells mounted by the router.
+- `src/layouts/` — shared page shells (header + main + footer) mounted by the router.
+- `src/index.css` — the single design-token source (`@theme`), theme variables, and base
+  styles.
 
-Folders from the target structure (`components/`, `features/`, `styles/`) are created when
-first needed, not up front.
+Remaining target folders (`features/`, `styles/`) are created when first needed, not up front.
+
+## Styling
+
+Tailwind CSS v4 via `@tailwindcss/vite`. Design tokens live once in `src/index.css` under
+`@theme`; light is the default theme and dark is a `.dark` class toggled by `ThemeToggle`
+(pre-applied before paint by an inline script in `index.html`). Fonts are self-hosted through
+`@fontsource-variable` (Inter + JetBrains Mono). Every text/background pair meets WCAG AA.
 
 ## Backend contract
 
