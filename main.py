@@ -1,7 +1,8 @@
 import argparse
 import logging
 
-from python_repo_template.func import random_sum
+from latent_space.func import random_sum
+
 from utils.logger import setup_logger
 
 if __name__ == "__main__":
