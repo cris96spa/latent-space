@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from latent_space.api import monitoring
+from latent_space.api import chat, content, monitoring
 from latent_space.constants import APPLICATION_NAME
 from latent_space.core.settings import AppSettings, get_app_settings
 
@@ -35,5 +35,7 @@ def create_app(settings: AppSettings | None = None) -> FastAPI:
         )
 
     app.include_router(monitoring.router)
+    app.include_router(content.router)
+    app.include_router(chat.router)
 
     return app

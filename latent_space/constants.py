@@ -1,3 +1,7 @@
 APPLICATION_NAME = "latent-space"
 DISTRIBUTION_NAME = "latent-space"
 ALLOWED_ORIGINS = ["http://localhost:5173"]
+
+PROJECTS_CONTENT_SUBDIRECTORY = "projects"
+CHAT_CONTENT_SUBDIRECTORY = "chat"
+CONTENT_FILE_SUFFIX = ".md"

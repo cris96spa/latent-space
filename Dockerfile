@@ -51,6 +51,7 @@ COPY --from=builder --chown=$USER:$USER $WORKDIR $WORKDIR
 COPY --chown=$USER:$USER $PROJECT_NAME ./$PROJECT_NAME
 COPY --chown=$USER:$USER utils ./utils
 COPY --chown=$USER:$USER configs ./configs
+COPY --chown=$USER:$USER content ./content
 COPY --chown=$USER:$USER main.py ./main.py
 
 USER $USER
