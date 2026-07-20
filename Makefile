@@ -1,5 +1,7 @@
 .PHONY: all $(MAKECMDGOALS)
 DOC_PORT ?= 8031
+SERVE_HOST ?= 0.0.0.0
+SERVE_PORT ?= 8000
 PROJECT_NAME ?= latent_space
 PYTHON_FORMAT_TARGETS ?= main.py $(PROJECT_NAME) tests utils
 help: # print all the available targets
@@ -35,6 +37,9 @@ lint-fix: # check and fix the code style
 
 lint-doc: # check the docstring style
 	uv run flake8 $(PROJECT_NAME) utils tests
+
+serve: # run the FastAPI app locally with autoreload
+	uv run uvicorn latent_space.app:create_app --factory --reload --host $(SERVE_HOST) --port $(SERVE_PORT)
 
 doc: # create the project documentation; Build and visualize documentation through a local server
 	uv run properdocs serve -f properdocs.yml --dev-addr 0.0.0.0:$(DOC_PORT)
