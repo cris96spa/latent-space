@@ -34,6 +34,8 @@ repos:
       - id: check-case-conflict
       - id: check-docstring-first
       - id: check-json
+        # TypeScript tsconfig files are JSONC (they allow comments); check-json is strict.
+        exclude: (^|/)tsconfig[^/]*\.json$
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-toml

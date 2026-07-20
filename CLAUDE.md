@@ -169,12 +169,18 @@ behind the abstractions those sections require.
 - Use Vite + React + TypeScript for the frontend application (not Next.js). A lightweight
   SPA pairs cleanly with the separate FastAPI backend, keeps the build simple, and leaves
   full control over the custom hero animation.
+- The frontend lives in `frontend/`, managed with **npm**, linted with **oxlint** (the
+  create-vite default), and routed with **React Router** (`react-router-dom`). The
+  production build outputs to `frontend/dist`.
 - Prefer small function components, composition, and local state. Introduce shared state
   only when state genuinely spans unrelated parts of the component tree.
 - Keep route-level components in `pages/`, reusable primitives in `components/`, and
   cohesive product behavior in `features/`.
-- Centralize calls to the FastAPI backend in a typed API client. Components should not
-  scatter raw URLs or duplicate request and response types.
+- Centralize calls to the FastAPI backend in a typed API client (`frontend/src/lib/api.ts`).
+  Components must not scatter raw URLs or duplicate request and response types. The client
+  calls the backend under the `/api` prefix; the Vite dev server (and, later, the production
+  edge) proxy `/api/*` to the backend and strip the prefix, so `/api/health` reaches the
+  backend's unprefixed `/health`.
 - Use semantic HTML and support keyboard navigation, visible focus, sufficient contrast,
   reduced-motion preferences, and useful alternative text.
 - Build responsive layouts mobile-first. Avoid fixed dimensions that only work for one
@@ -305,9 +311,19 @@ docstring linting, and tests.
 - `make doc` — serve the ProperDocs/MkDocs documentation locally on port 8031 by default.
 - `make help` — list available Make targets.
 
-The React frontend commands do not exist yet. When that application is introduced, add
-stable Make targets for local development, builds, tests, and full validation, then document
-the exact commands here. Do not document commands that cannot be run from a clean checkout.
+The React frontend lives in `frontend/` (Vite + React + TypeScript, npm). From a clean
+checkout, run `make fe-install` once before the other targets:
+
+- `make fe-install` — install frontend dependencies (`npm install` in `frontend/`).
+- `make fe-dev` — run the Vite dev server (default port `5173`). It proxies `/api/*` to the
+  backend on port `8000` with the `/api` prefix stripped, so `/api/health` reaches the
+  backend's `/health`; run `make serve` in another shell for the API.
+- `make fe-build` — build the production bundle into `frontend/dist`.
+- `make fe-lint` — lint the frontend with oxlint.
+
+There is no frontend test runner yet; it is introduced with the design and accessibility
+work, not the skeleton. Document new frontend commands here only once they run from a clean
+checkout.
 
 ## Change discipline
 

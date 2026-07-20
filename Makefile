@@ -4,6 +4,8 @@ SERVE_HOST ?= 0.0.0.0
 SERVE_PORT ?= 8000
 PROJECT_NAME ?= latent_space
 PYTHON_FORMAT_TARGETS ?= main.py $(PROJECT_NAME) tests utils
+FRONTEND_DIR ?= frontend
+NPM ?= npm
 help: # print all the available targets
 	@echo "\nAvailable targets:\n"
 	@grep -E '^[a-zA-Z_-]+:.*?# .*$$' $(MAKEFILE_LIST) | sed 's/:.*#/\t/' | column -t -s '	' ; echo
@@ -49,3 +51,15 @@ test: # launch the tests
 
 pre-commit: # run pre-commit hooks
 	uv run pre-commit run --all-files
+
+fe-install: # install frontend dependencies
+	cd $(FRONTEND_DIR) && $(NPM) install
+
+fe-dev: # run the Vite dev server (proxies /api to the backend on port 8000)
+	cd $(FRONTEND_DIR) && $(NPM) run dev
+
+fe-build: # build the frontend production bundle into frontend/dist
+	cd $(FRONTEND_DIR) && $(NPM) run build
+
+fe-lint: # lint the frontend with oxlint
+	cd $(FRONTEND_DIR) && $(NPM) run lint
