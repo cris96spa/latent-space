@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
@@ -21,6 +22,11 @@ class AppSettings(YamlBaseSettings):
     allowed_origins: list[str] = Field(
         description="Origins permitted by CORS, typically the frontend dev URL(s).",
         default_factory=lambda: list(ALLOWED_ORIGINS),
+    )
+
+    content_root: Path = Field(
+        description="Root directory holding authored site content (projects, chat).",
+        default=Path("content"),
     )
 
     model_config = SettingsConfigDict(

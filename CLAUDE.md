@@ -199,7 +199,16 @@ behind the abstractions those sections require.
 - Slugs and published URLs are persistent identifiers. Do not change them casually; add a
   redirect when a published path must move.
 - Draft content must not appear in production API responses or generated metadata.
-- Render authored rich text through a controlled pipeline and sanitize any raw HTML.
+- Render authored rich text through a controlled pipeline and sanitize any raw HTML. The
+  implemented pipeline is Markdown-with-frontmatter on disk (frontmatter carries the
+  metadata, the Markdown body is the prose) under `content/projects/` and `content/chat/`,
+  loaded and validated by `latent_space/services/content.py`. The frontmatter `slug` is the
+  authoritative identifier and must be unique within its directory. Rendering happens
+  server-side in one place: `latent_space/services/markdown.py` renders Markdown with
+  `markdown-it-py` (`html=False`, so raw HTML in the source is escaped) and sanitizes the
+  result through an `nh3` allowlist, so the API returns already-safe HTML and the frontend
+  stays thin. Add new authored rich text through this pipeline; do not render or sanitize in
+  React.
 - Store large binary assets in `src/static/` or the eventual asset pipeline, not inside
   content or Python modules.
 
@@ -303,7 +312,9 @@ docstring linting, and tests.
 - `make serve` — run the FastAPI app locally with Uvicorn autoreload (host `0.0.0.0`, port
   `8000` by default; override with `SERVE_HOST`/`SERVE_PORT`). The app is built through the
   `create_app` factory (`uvicorn latent_space.app:create_app --factory`), so no application
-  object is constructed at import time. Endpoints: `GET /health`, `GET /version`, `GET /`.
+  object is constructed at import time. Endpoints: `GET /health`, `GET /version`, `GET /`,
+  `GET /projects`, `GET /projects/{slug}`, `GET /chat/entries` (the content endpoints read
+  authored files from `content/`, served as sanitized HTML).
 - `make format` / `make format-check` — format Python or check formatting with Ruff.
 - `make lint` / `make lint-doc` — run Python and docstring linters.
 - `make test` — run pytest in parallel with coverage and doctest modules.

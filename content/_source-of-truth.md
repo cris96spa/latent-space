@@ -145,7 +145,7 @@ humor should push. Every clause below is grounded in the facts above.
 ## Open review checklist for Cristian
 
 - [ ] Publish phone number? (default: no)
-- [ ] Publish exact location (Lugano / Milano)? (default: city-level ok)
+- [ ] Publish exact location (Lugano)? (default: city-level ok)
 - [ ] OK to state Artificialy/MLcube achievements with their metrics publicly?
 - [ ] Featured-projects set confirmed?
 - [ ] Canonical bio wording + humor level signed off?
