@@ -105,8 +105,9 @@ latent-space/
 ├── latent_space/           # Python package
 │   ├── api/                # FastAPI routes and request dependencies
 │   ├── core/               # Settings, logging, and application-wide concerns
-│   ├── schemas/            # Pydantic API and content models
+│   ├── models/             # Pydantic API and content models
 │   ├── services/           # Content loading and domain operations
+│   ├── constants.py        # Shared application constants (see Python style)
 │   └── app.py              # FastAPI application factory
 ├── frontend/               # React application
 │   └── src/
@@ -207,8 +208,22 @@ them automatically.
 name plus a comment explaining it: `published_blog_posts` over `posts`,
 `content_source_path` over `path`, and `_require_unique_slug` over `_validate`. A function
 name should say what the function does and, when the return is not obvious, what it
-returns. Use domain vocabulary consistently across API routes, schemas, services, and
+returns. Use domain vocabulary consistently across API routes, models, services, and
 tests. Avoid abbreviations except established terms such as `api`, `url`, and `id`.
+
+**Constants.** Do not hard-code the same literal string or value in more than one place, and
+do not scatter bare magic values through the code. Application-wide constants — identity
+values (the application and distribution name), fixed labels, default endpoints or origins,
+and other shared literals — live in `latent_space/constants.py` as named, `UPPER_SNAKE_CASE`
+values and are imported where needed, so each is defined once and changed in one place. Give
+them explicit names that say what they are, and prefer two well-named constants over one
+reused literal when the same string means two different things (for example the distribution
+name looked up in package metadata versus the human-facing application name, even when they
+currently share a value). Keep this for genuine constants only: a truly module-local,
+single-use sentinel may stay in its module, and anything environment- or deployment-specific
+belongs in configuration (`configs/` and `AppSettings`), never in `constants.py`. Test code
+may assert against an inline literal instead of importing the production constant, so that a
+wrong constant value is actually caught rather than silently confirmed against itself.
 
 **Docstrings.** Use Google style (`ruff` pydocstyle `convention = "google"`, enforced by
 pydoclint/Flake8-DOC). Give trivial public behavior a one-line summary. Add `Args`,
@@ -279,6 +294,10 @@ docstring linting, and tests.
 
 - `make dev` — install all Python dependency groups and pre-commit hooks.
 - `make install` — install production Python dependencies.
+- `make serve` — run the FastAPI app locally with Uvicorn autoreload (host `0.0.0.0`, port
+  `8000` by default; override with `SERVE_HOST`/`SERVE_PORT`). The app is built through the
+  `create_app` factory (`uvicorn latent_space.app:create_app --factory`), so no application
+  object is constructed at import time. Endpoints: `GET /health`, `GET /version`, `GET /`.
 - `make format` / `make format-check` — format Python or check formatting with Ruff.
 - `make lint` / `make lint-doc` — run Python and docstring linters.
 - `make test` — run pytest in parallel with coverage and doctest modules.
@@ -286,10 +305,9 @@ docstring linting, and tests.
 - `make doc` — serve the ProperDocs/MkDocs documentation locally on port 8031 by default.
 - `make help` — list available Make targets.
 
-The React and FastAPI commands do not exist yet. When those applications are introduced,
-add stable Make targets for local development, builds, tests, and full validation, then
-document the exact commands here. Do not document commands that cannot be run from a clean
-checkout.
+The React frontend commands do not exist yet. When that application is introduced, add
+stable Make targets for local development, builds, tests, and full validation, then document
+the exact commands here. Do not document commands that cannot be run from a clean checkout.
 
 ## Change discipline
 

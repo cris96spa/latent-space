@@ -1,20 +1,14 @@
-import argparse
-import logging
+import uvicorn
 
-from latent_space.func import random_sum
 
-from utils.logger import setup_logger
+def main() -> None:
+    """Run the FastAPI application with Uvicorn for local development.
+
+    A convenience entry point equivalent to `make serve`; the app is built via
+    the `create_app` factory so no application object is constructed at import.
+    """
+    uvicorn.run("latent_space.app:create_app", factory=True, reload=True)
+
 
 if __name__ == "__main__":
-    setup_logger()
-    logger = logging.getLogger(__name__)
-
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("--number", type=int, help="Input number")
-    args = arg_parser.parse_args()
-    number = args.number
-
-    logger.info("-" * 50)
-    logger.info(f"Input number: {number}")
-    logger.info(f"Output number: {random_sum(number)}")
-    logger.info("-" * 50)
+    main()
