@@ -1,0 +1,27 @@
+name: Main Lint Test on Main
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  format-lint-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+
+      - name: ✅ validate code
+        env:
+          PY_VERSION: ${{ matrix.python-version }}
+
+        uses: ./.github/actions/validation
