@@ -325,6 +325,22 @@ There is no frontend test runner yet; it is introduced with the design and acces
 work, not the skeleton. Document new frontend commands here only once they run from a clean
 checkout.
 
+The production topology is two containers behind a single origin: a FastAPI **backend**
+(not published publicly) and an nginx **edge** that serves the built SPA and
+reverse-proxies `/api/*` to the backend, stripping the prefix. They are wired by
+`docker-compose.yml`:
+
+- `docker compose build` — build the backend and edge images.
+- `docker compose up` — run the stack locally. The edge is published on port `8080`
+  (override with `EDGE_PORT`); `docker-compose.override.yml` also publishes the backend on
+  `8000` for debugging. Open `http://localhost:8080` for the SPA and
+  `http://localhost:8080/api/health` for the proxied API.
+- `docker compose -f docker-compose.yml up` — run the production topology with the override
+  excluded, so the backend is reachable only through the edge (single origin, no CORS).
+
+The public host, custom domain, and TLS are not chosen yet, so the automated deploy step is
+intentionally not wired; `/health` is the post-deploy smoke check once a host is selected.
+
 ## Change discipline
 
 - Keep changes focused and preserve unrelated user work; this repository may have

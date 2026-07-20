@@ -1,0 +1,4 @@
+services:
+  backend:
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"

@@ -49,7 +49,11 @@ FROM base AS runtime
 COPY --from=builder --chown=$USER:$USER $WORKDIR $WORKDIR
 
 COPY --chown=$USER:$USER $PROJECT_NAME ./$PROJECT_NAME
+COPY --chown=$USER:$USER utils ./utils
+COPY --chown=$USER:$USER configs ./configs
 COPY --chown=$USER:$USER main.py ./main.py
 
 USER $USER
-CMD ["python", "main.py", "--number", "10"]
+EXPOSE 8000
+
+CMD ["python", "-m", "uvicorn", "latent_space.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
