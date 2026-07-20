@@ -2,8 +2,8 @@
 
 The latent-space web client: Vite + React + TypeScript, talking to the FastAPI backend
 over a small HTTP boundary. It has a visual identity (Tailwind CSS v4, a sky-blue design-token
-system, light/dark themes, and an app shell) and a home route that fetches `/health`. The
-forward-pass hero and the scripted chat come later.
+system, light/dark themes, and an app shell), the forward-pass hero, and the ablation-sweep
+loss curve on the home route. The scripted chat comes later.
 
 ## Layout
 
@@ -15,10 +15,17 @@ forward-pass hero and the scripted chat come later.
   `ThemeToggle`).
 - `src/pages/` — route-level components.
 - `src/layouts/` — shared page shells (header + main + footer) mounted by the router.
+- `src/hooks/` — hooks more than one feature needs (`useMediaQuery`, and the
+  reduced-motion and compact-viewport queries built on it).
+- `src/features/forward-pass-hero/` — the hero. Pure logic (`architecture`, `tokenize`,
+  `sampling`, `frames`, `scriptedSource`) is separated from playback (`useForwardPass`)
+  and from the SVG panels in `diagram/`, and only the source knows the data is scripted.
+- `src/features/loss-curve/` — the ablation sweep: `scalingLaw.ts` holds the Chinchilla
+  fit and the run families, the components only draw them.
 - `src/index.css` — the single design-token source (`@theme`), theme variables, and base
   styles.
 
-Remaining target folders (`features/`, `styles/`) are created when first needed, not up front.
+`styles/` is created when first needed, not up front.
 
 ## Styling
 
@@ -41,3 +48,4 @@ Run these from the repository root (they wrap `npm` in `frontend/`):
 - `make fe-dev` — start the Vite dev server (port 5173).
 - `make fe-build` — build the production bundle into `frontend/dist`.
 - `make fe-lint` — lint with oxlint.
+- `make fe-test` — run the unit tests with Vitest (pure logic only; no DOM).

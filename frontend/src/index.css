@@ -30,6 +30,23 @@
   --color-activation-400: #c084fc;
   --color-activation-500: #a855f7;
 
+  /* Tokenizer highlight. Deliberately off the brand hue: blue-on-blue boxes read as
+     links, and two tints of one blue are exactly the comparison red-green colour-vision
+     deficiency makes hardest. Amber stays visible under both common CVD types, and the
+     two steps below are separated by lightness as well as hue, so the alternation is
+     legible even if the hue is not. */
+  --color-token-tint: #f59e0b;
+  --color-token-edge: #b45309;
+
+  /* Ablation-sweep series: six hues that stay separable from each other on both
+     themes, saturated enough to read as thin 1px lines over light and dark panels. */
+  --color-sweep-1: #0ea5e9;
+  --color-sweep-2: #14b8a6;
+  --color-sweep-3: #84cc16;
+  --color-sweep-4: #f59e0b;
+  --color-sweep-5: #f43f5e;
+  --color-sweep-6: #a855f7;
+
   /* Semantic surface colors resolve to runtime variables that flip per theme
      (defined in :root / .dark below), so `bg-surface`/`text-fg` are theme-aware. */
   --color-background: var(--surface-background);
@@ -101,5 +118,73 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Forward-pass hero (task 07). All disabled by the reduced-motion rule above. */
+@keyframes ls-flow {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ls-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ls-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* A context token sliding into the window as the model conditions on it. */
+@keyframes ls-token-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The loss curve drawing itself in; the path sets pathLength="1". */
+@keyframes ls-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The sampled token falling out of the argmax bar toward the detokenized text.
+   Distance varies with the diagram layout, so the caller sets --ls-emit-distance. */
+@keyframes ls-emit {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(var(--ls-emit-distance, 200px));
   }
 }
