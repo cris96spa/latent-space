@@ -41,11 +41,22 @@ These are product requirements, not optional decoration.
 
 ### Forward-pass hero
 
-The landing page animates a prompt such as "who is Cristian?" through a stylized
-embedding -> attention -> MLP -> logits pipeline and streams the bio token by token. The
-current source is deterministic and client-side, but rendering must consume a small
+The landing page animates a prompt such as "who is Cristian?" through the pipeline of a
+named real architecture (Llama 3 8B, in `features/forward-pass-hero/architecture.ts`) and
+streams the bio token by token. Phases follow real inference: tokenize, one parallel
+prefill pass that fills the KV cache, then one decode pass per token. Playback is
+scrubbable — play/pause, single-step, and a slider over the frames that have streamed.
+
+The current source is deterministic and client-side, but rendering must consume a small
 data-source interface so a real browser model or streamed response can replace it without
-rewriting the animation. Rendering components must not depend on the source being fake.
+rewriting the animation. Rendering components must not depend on the source being fake:
+`useForwardPass` buffers whatever the source yields and never asks it for a frame out of
+order, and only `frames()` may pace itself.
+
+Anything the diagram asserts must be checkable. Architecture numbers come from the
+published model config, token splits from the real Llama 3 pretokenizer regex, and the
+loss curves in `features/loss-curve/` from the Chinchilla fit. Where a shape is a
+modelling choice rather than a published result, say so in the docstring.
 
 ### Scripted chat
 
@@ -85,8 +96,8 @@ gate the bio, projects, or resume behind JavaScript or animation completion.
 ### Frontend
 
 - Use Vite, React, TypeScript, npm, oxlint, and React Router. Keep route components in
-  `pages/`, primitives in `components/`, cohesive behavior in `features/`, and small
-  framework-independent helpers in `lib/`.
+  `pages/`, primitives in `components/`, cohesive behavior in `features/`, hooks shared by
+  more than one feature in `hooks/`, and small framework-independent helpers in `lib/`.
 - Centralize backend calls and response types in `frontend/src/lib/api.ts`. Browser calls
   use `/api/*`; development and production proxies strip `/api` before forwarding to the
   backend.
@@ -95,9 +106,15 @@ gate the bio, projects, or resume behind JavaScript or animation completion.
 - Build mobile-first semantic HTML with keyboard navigation, visible focus, WCAG AA
   contrast, useful alternative text, and reduced-motion support.
 - Use Tailwind CSS v4 tokens defined in `frontend/src/index.css`. Preserve the established
-  sky-blue brand palette, visualization accents, semantic theme colors, self-hosted Inter
-  and JetBrains Mono fonts, and `ls-theme` contract between `index.html` and
-  `src/lib/theme.ts`.
+  sky-blue brand palette, visualization accents, the `sweep-*` chart series hues, the
+  off-brand `token-*` tokenizer highlight, semantic theme colors, self-hosted Inter and
+  JetBrains Mono fonts, and `ls-theme` contract between `index.html` and `src/lib/theme.ts`.
+- Check both themes before calling visual work done. A low-alpha wash of a mid-tone over a
+  light panel disappears entirely over a dark one, so tints need a `dark:` variant rather
+  than one opacity that "should" work for both.
+- Cristian has a red-green colour-vision deficiency. Never encode a distinction in hue
+  alone: separate states by lightness, shape, or an outline as well, and keep two tints
+  that must be told apart out of the same narrow hue band.
 - Reuse the primitives in `frontend/src/components/`; `TokenChip` is the recurring token
   motif. Use `brand-700` for CTA/body accents; `brand-600` is large-text-only.
 - Core portfolio content must remain readable and linkable without interaction.

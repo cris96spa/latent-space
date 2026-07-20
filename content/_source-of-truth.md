@@ -123,19 +123,28 @@ publicly with their metrics, or should any be generalized / omitted for confiden
 
 ## Canonical bio — DRAFT, needs sign-off
 
-`TODO(content: needs-cristian)` — this is the single most-read string on the site (the hero
-streams it token by token; the about page expands it). Confirm wording and how hard the
-humor should push. Every clause below is grounded in the facts above.
+This is the single most-read string on the site (the hero streams it token by token; the
+about page expands it). Every clause below is grounded in the facts above, and it carries
+no employer metrics while the confidentiality `TODO` above is open.
 
-**Primary draft (3 sentences):**
+**Direction given by Cristian (2026-07-21):** answer in **first person**, opening on the
+"Hi, I'm Cristian, and this is my latent space…" beat; push the funny/nerdy register
+harder; send people to the résumé for the parts that belong on a résumé.
+`TODO(content: needs-cristian)` — the tone question is settled, the exact wording is not.
+Confirm the text below or edit it; `frontend/src/features/forward-pass-hero/content.ts`
+and the `<noscript>` block in `frontend/index.html` mirror it verbatim.
 
-> Cristian is an NLP engineer at Artificialy in Lugano, where he makes large language models
-> run faster, cost less GPU memory, and stop making things up — efficient inference,
-> fine-tuning (SFT, DPO, GRPO), and evaluation pipelines that actually catch the regressions.
-> He built GPT-2 from scratch in PyTorch for the same reason some people rebuild an engine in
-> the garage: to understand every layer of the thing he works with all day. Politecnico di
-> Milano, 110/110 cum laude, and a sincere intention to keep staring at training-loss curves
-> for the rest of his life.
+**Primary draft:**
+
+> Hi, I'm Cristian, and this is my latent space. I'm an NLP engineer at Artificialy in
+> Lugano, which mostly means I make large language models run faster, fit in less GPU
+> memory, and stop confidently inventing things — efficient inference, fine-tuning (SFT,
+> DPO, GRPO), and evals that catch the regression before the demo does. On my own time I
+> rebuilt GPT-2 from scratch in PyTorch, for the same reason other people rebuild an engine
+> in the garage: I wanted to know what every layer was actually doing. Politecnico di
+> Milano, 110/110 cum laude — and that is the last sentence here that belongs on a résumé.
+> I have one of those, it is one click away, and it is far less fun than this page. What I
+> actually want is to spend the rest of my life looking at training-loss curves.
 
 **Shorter hero lead (1 sentence), if the animation wants a tight opener:**
 
