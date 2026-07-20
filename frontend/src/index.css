@@ -1,19 +1,105 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+@import 'tailwindcss';
+
+/* Class-based dark mode: the ThemeToggle stamps `.dark` on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+
+  /* Brand: sky-blue lead. The signature hue; a full tint/shade scale. */
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
+
+  /* Viz accents: complementary warms/violets so attention vs. activation read
+     clearly in the forward-pass hero and token-flow motifs (task 07). */
+  --color-attention-300: #fcd34d;
+  --color-attention-400: #fbbf24;
+  --color-attention-500: #f59e0b;
+  --color-activation-300: #d8b4fe;
+  --color-activation-400: #c084fc;
+  --color-activation-500: #a855f7;
+
+  /* Semantic surface colors resolve to runtime variables that flip per theme
+     (defined in :root / .dark below), so `bg-surface`/`text-fg` are theme-aware. */
+  --color-background: var(--surface-background);
+  --color-surface: var(--surface-panel);
+  --color-fg: var(--surface-fg);
+  --color-muted: var(--surface-muted);
+  --color-border: var(--surface-border);
+
+  --shadow-glow: 0 8px 30px --alpha(var(--color-brand-500) / 18%);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 :root {
-  color-scheme: light dark;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.5;
+  --surface-background: #f8fafc;
+  --surface-panel: #ffffff;
+  --surface-fg: #0f172a;
+  --surface-muted: #475569;
+  --surface-border: #e2e8f0;
+  color-scheme: light;
 }
 
-body {
-  margin: 0;
+.dark {
+  --surface-background: #0b1220;
+  --surface-panel: #0f1a2e;
+  --surface-fg: #e2e8f0;
+  --surface-muted: #94a3b8;
+  --surface-border: #1e293b;
+  color-scheme: dark;
 }
 
-main {
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: --alpha(var(--color-brand-400) / 30%);
+  }
 }
 
-code {
-  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+/* Honor reduced-motion everywhere: animations and route transitions collapse. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Subtle page-enter transition, disabled by the reduced-motion rule above. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

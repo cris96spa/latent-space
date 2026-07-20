@@ -186,7 +186,19 @@ behind the abstractions those sections require.
 - Build responsive layouts mobile-first. Avoid fixed dimensions that only work for one
   viewport.
 - Establish a small set of design tokens for color, spacing, typography, radii, and motion
-  before duplicating literal values across styles.
+  before duplicating literal values across styles. The chosen styling system is **Tailwind
+  CSS v4** (via `@tailwindcss/vite`); tokens live once in `frontend/src/index.css` under
+  `@theme` (a sky-blue `brand-*` scale, `attention-*`/`activation-*` viz accents, and
+  semantic `background`/`surface`/`fg`/`muted`/`border` colors that resolve to CSS variables
+  flipped per theme). Light is the default theme; dark is a `.dark` class on `<html>` toggled
+  by `ThemeToggle` and pre-applied by an inline script in `index.html` (keep the `ls-theme`
+  storage key in sync with `src/lib/theme.ts`). Fonts are self-hosted via
+  `@fontsource-variable` (Inter for body, JetBrains Mono for technical/token accents). Build
+  UI from the primitives in `frontend/src/components/` (`Button`, `ButtonLink`, `TextLink`,
+  `Card`, `SectionHeading`, `TokenChip`) rather than ad-hoc styles; the `TokenChip` is the
+  recurring token motif. Every text/background pair must meet WCAG AA — a light-blue palette
+  makes this easy to get wrong, so `brand-600` is large-text-only and CTAs/body accents use
+  `brand-700`.
 - Avoid unnecessary client-side JavaScript. Blog posts and core portfolio information
   should remain readable and linkable without interaction.
 

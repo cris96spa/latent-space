@@ -4,7 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cristian C. Spagnuolo — NLP engineer. Part portfolio, part lab notebook, part applied-ML performance art."
+    />
     <title>latent-space</title>
+    <script>
+      // Apply the stored (or system) theme before first paint to avoid a flash.
+      // Mirrors resolveInitialTheme() in src/lib/theme.ts; keep the key in sync.
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('ls-theme')
+          var theme =
+            stored || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          document.documentElement.classList.toggle('dark', theme === 'dark')
+        } catch (e) {
+          /* default light theme if storage/matchMedia is unavailable */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
