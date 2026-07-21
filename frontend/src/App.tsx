@@ -5,6 +5,7 @@ import { HomePage } from './pages/HomePage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ResumePage } from './pages/ResumePage'
+import { WritingPage } from './pages/WritingPage'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="projects/:publicIdentifier" element={<ProjectDetailPage />} />
         <Route path="resume" element={<ResumePage />} />
+        <Route path="writing" element={<WritingPage />} />
       </Route>
     </Routes>
   )
