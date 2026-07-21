@@ -1,7 +1,7 @@
 # latent-space
 
 latent-space is Cristian Spagnuolo's personal site: part portfolio, part lab notebook,
-part applied-ML performance art. It should answer "who is Cristian and what does he
+part applied-ML performance art. It should answer "Who is Cristian and what does he
 build?" in a voice that a PDF resume cannot.
 
 The product is a FastAPI backend and a Vite/React/TypeScript frontend. Some repository
@@ -28,7 +28,7 @@ written to impress a recruiter.
 
 Do not invent biography, roles, dates, outcomes, or technical claims. Use:
 
-- the resume at `src/static/Cristian_C_Spagnuolo_CV.pdf` for roles, dates, and credentials;
+- the resume at `frontend/public/Cristian_C_Spagnuolo_CV.pdf` for roles, dates, and credentials;
 - <https://github.com/cris96spa> for projects and activity;
 - <https://www.linkedin.com/in/cristian-c-spagnuolo/> for background and activity.
 
@@ -41,11 +41,22 @@ These are product requirements, not optional decoration.
 
 ### Forward-pass hero
 
-The landing page animates a prompt such as "who is Cristian?" through a stylized
-embedding -> attention -> MLP -> logits pipeline and streams the bio token by token. The
-current source is deterministic and client-side, but rendering must consume a small
+The landing page animates a prompt such as "Who is Cristian?" through the pipeline of a
+named real architecture (GPT-2 124M, in `features/forward-pass-hero/architecture.ts`) and
+streams the bio token by token. Phases follow real inference: tokenize, one parallel
+prefill pass that fills the KV cache, then one decode pass per token. Playback is
+scrubbable - play/pause, single-step, and a slider over the frames that have streamed.
+
+The current source is deterministic and client-side, but rendering must consume a small
 data-source interface so a real browser model or streamed response can replace it without
-rewriting the animation. Rendering components must not depend on the source being fake.
+rewriting the animation. Rendering components must not depend on the source being fake:
+`useForwardPass` buffers whatever the source yields and never asks it for a frame out of
+order, and only `frames()` may pace itself.
+
+Anything the diagram asserts must be checkable. Architecture numbers come from the
+published model config, token splits from the real GPT-2 pretokenizer regex, and the
+loss curves in `features/loss-curve/` from the Chinchilla fit. Where a shape is a
+modelling choice rather than a published result, say so in the docstring.
 
 ### Scripted chat
 
@@ -85,8 +96,8 @@ gate the bio, projects, or resume behind JavaScript or animation completion.
 ### Frontend
 
 - Use Vite, React, TypeScript, npm, oxlint, and React Router. Keep route components in
-  `pages/`, primitives in `components/`, cohesive behavior in `features/`, and small
-  framework-independent helpers in `lib/`.
+  `pages/`, primitives in `components/`, cohesive behavior in `features/`, hooks shared by
+  more than one feature in `hooks/`, and small framework-independent helpers in `lib/`.
 - Centralize backend calls and response types in `frontend/src/lib/api.ts`. Browser calls
   use `/api/*`; development and production proxies strip `/api` before forwarding to the
   backend.
@@ -95,9 +106,15 @@ gate the bio, projects, or resume behind JavaScript or animation completion.
 - Build mobile-first semantic HTML with keyboard navigation, visible focus, WCAG AA
   contrast, useful alternative text, and reduced-motion support.
 - Use Tailwind CSS v4 tokens defined in `frontend/src/index.css`. Preserve the established
-  sky-blue brand palette, visualization accents, semantic theme colors, self-hosted Inter
-  and JetBrains Mono fonts, and `ls-theme` contract between `index.html` and
-  `src/lib/theme.ts`.
+  sky-blue brand palette, visualization accents, the `sweep-*` chart series hues, the
+  off-brand `token-*` tokenizer highlight, semantic theme colors, self-hosted Inter and
+  JetBrains Mono fonts, and `ls-theme` contract between `index.html` and `src/lib/theme.ts`.
+- Check both themes before calling visual work done. A low-alpha wash of a mid-tone over a
+  light panel disappears entirely over a dark one, so tints need a `dark:` variant rather
+  than one opacity that "should" work for both.
+- Cristian has a red-green colour-vision deficiency. Never encode a distinction in hue
+  alone: separate states by lightness, shape, or an outline as well, and keep two tints
+  that must be told apart out of the same narrow hue band.
 - Reuse the primitives in `frontend/src/components/`; `TokenChip` is the recurring token
   motif. Use `brand-700` for CTA/body accents; `brand-600` is large-text-only.
 - Core portfolio content must remain readable and linkable without interaction.
@@ -105,16 +122,16 @@ gate the bio, projects, or resume behind JavaScript or animation completion.
 ## Authored content
 
 - Posts, projects, and chat answers are authored content, never inline component data.
-- Content metadata has a stable unique slug, title, summary, publication date, and
-  draft/published state. Published slugs and URLs are persistent; use a redirect if one
-  must move. Never expose drafts in production responses.
+- Content metadata has a stable unique public identifier, title, summary, publication
+  date, and draft/published state. Published public identifiers and URLs are persistent;
+  use a redirect if one must move. Never expose drafts in production responses.
 - Markdown with frontmatter lives under `content/` and is loaded by
-  `latent_space/services/content.py`. The frontmatter slug is authoritative and unique
-  within its directory.
+  `latent_space/services/content.py`. The filename-derived public identifier is
+  authoritative and unique within its directory.
 - Render rich text only in `latent_space/services/markdown.py` with `markdown-it-py`
   configured with `html=False`, followed by the `nh3` allowlist. The API returns sanitized
   HTML; React neither renders Markdown nor sanitizes source content.
-- Keep large binaries in `src/static/` or the asset pipeline.
+- Keep large binaries in `frontend/public/` or the frontend asset pipeline.
 
 ## Python style
 

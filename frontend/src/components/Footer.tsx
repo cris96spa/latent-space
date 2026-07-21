@@ -1,4 +1,5 @@
 import { EXTERNAL_LINKS } from '../lib/links'
+import { LinkIcon } from './LinkIcon'
 import { TextLink } from './TextLink'
 
 export function Footer() {
@@ -12,13 +13,28 @@ export function Footer() {
           <span className="text-brand-700 dark:text-brand-400">no weights were harmed</span>
         </p>
         <nav className="flex items-center gap-4">
-          <TextLink href={EXTERNAL_LINKS.github} target="_blank" rel="noreferrer noopener">
+          <TextLink
+            href={EXTERNAL_LINKS.github}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1.5"
+          >
+            <LinkIcon name="github" />
             GitHub
           </TextLink>
-          <TextLink href={EXTERNAL_LINKS.linkedin} target="_blank" rel="noreferrer noopener">
+          <TextLink
+            href={EXTERNAL_LINKS.linkedin}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1.5"
+          >
+            <LinkIcon name="linkedin" />
             LinkedIn
           </TextLink>
-          <TextLink href={EXTERNAL_LINKS.email}>Email</TextLink>
+          <TextLink href={EXTERNAL_LINKS.email} className="inline-flex items-center gap-1.5">
+            <LinkIcon name="email" />
+            Email
+          </TextLink>
         </nav>
       </div>
     </footer>

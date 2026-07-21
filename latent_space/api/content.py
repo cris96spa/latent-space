@@ -3,7 +3,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from latent_space.api.dependencies import get_content_service
-from latent_space.models.content import SLUG_PATTERN, ProjectDetail, ProjectSummary
+from latent_space.models.content import (
+    PUBLIC_IDENTIFIER_PATTERN,
+    PostSummary,
+    ProjectDetail,
+    ProjectSummary,
+)
 from latent_space.services.content import ContentService
 
 router = APIRouter(tags=["content"])
@@ -17,29 +22,42 @@ async def list_projects(
     return service.published_project_summaries()
 
 
-@router.get("/projects/{slug}")
+@router.get("/posts")
+async def list_posts(
+    service: Annotated[ContentService, Depends(get_content_service)],
+) -> list[PostSummary]:
+    """List published posts, most recently published first.
+
+    Each post is an outbound link to writing hosted elsewhere (Substack); there is no
+    detail route, so this list is the whole surface.
+    """
+    return service.published_post_summaries()
+
+
+@router.get("/projects/{public_identifier}")
 async def get_project(
-    slug: Annotated[str, Path(pattern=SLUG_PATTERN)],
+    public_identifier: Annotated[str, Path(pattern=PUBLIC_IDENTIFIER_PATTERN)],
     service: Annotated[ContentService, Depends(get_content_service)],
 ) -> ProjectDetail:
-    """Return one published project by slug.
+    """Return one published project by public identifier.
 
     Args:
-        slug: Persistent identifier of the requested project. A value that does
-            not match the slug format is rejected at the boundary with 422.
+        public_identifier: Persistent identifier of the requested project. A value
+            that does not match the identifier format is rejected at the boundary
+            with 422.
         service: Content service that owns published projects.
 
     Returns:
         The project's detail, including its rendered body.
 
     Raises:
-        HTTPException: 404 when no published project has the slug; a draft slug
-            is treated as absent.
+        HTTPException: 404 when no published project has the public identifier; a draft
+            public identifier is treated as absent.
     """
-    project = service.published_project_detail(slug)
+    project = service.published_project_detail(public_identifier)
     if project is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"No published project with slug '{slug}'.",
+            detail=f"No published project with public identifier '{public_identifier}'.",
         )
     return project

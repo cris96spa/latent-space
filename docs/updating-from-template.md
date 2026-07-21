@@ -11,7 +11,7 @@ The script links your project's history to the template's by temporarily
 grafting your first commit onto a known template reference commit, then
 squash-merges the template branch on top. Git therefore sees a real merge base
 and produces a diff of **only the template's changes since that reference
-point** — not its entire history.
+point** - not its entire history.
 
 The reference point is recorded in `pyproject.toml` so each run knows where the
 previous one left off:
