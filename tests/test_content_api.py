@@ -122,6 +122,12 @@ def test_get_draft_project_returns_404(client: TestClient):
     assert response.status_code == 404
 
 
+def test_get_project_with_malformed_identifier_returns_422(client: TestClient):
+    response = client.get("/projects/Not_A_Valid_Id")
+
+    assert response.status_code == 422
+
+
 def test_list_posts_returns_published_newest_first(client: TestClient):
     response = client.get("/posts")
 
