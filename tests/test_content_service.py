@@ -287,12 +287,17 @@ def test_service_excludes_drafts_and_prerenders_html():
 
 
 def test_published_projections_are_immutable():
-    service = ContentService([_project("alpha", date(2024, 1, 1))], [_chat("say-hi", 0)])
+    service = ContentService(
+        [_project("alpha", date(2024, 1, 1))],
+        [_chat("say-hi", 0)],
+        [_post("first-post", date(2024, 1, 1))],
+    )
 
     summary = service.published_project_summaries()[0]
     detail = service.published_project_detail("alpha")
     assert detail is not None
     response = service.chat_entries()[0]
+    post_summary = service.published_post_summaries()[0]
 
     with pytest.raises(ValidationError):
         summary.title = "mutated"
@@ -300,3 +305,5 @@ def test_published_projections_are_immutable():
         detail.title = "mutated"
     with pytest.raises(ValidationError):
         response.question = "mutated"
+    with pytest.raises(ValidationError):
+        post_summary.title = "mutated"
