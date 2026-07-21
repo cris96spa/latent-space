@@ -17,7 +17,7 @@ class YamlBaseSettings(BaseSettings):
     Use this for configuration that is singular per process (e.g. logging),
     where environment variables should be able to override the YAML file.
     For configs that can be instantiated many times from different files, use
-    `YamlBaseModel` instead — env vars are a flat, process-global namespace and
+    `YamlBaseModel` instead - env vars are a flat, process-global namespace and
     cannot represent per-instance overrides.
     """
 
@@ -66,7 +66,7 @@ class YamlBaseModel(BaseModel):
     same class can be instantiated many times from different files without the
     instances sharing a process-global env namespace. `from_yaml` reads
     `DEFAULT_CONFIG_PATH` when no path is given, or the provided path otherwise
-    — one load path, one precedence, with the disk read made explicit at the
+    - one load path, one precedence, with the disk read made explicit at the
     call site.
     """
 
