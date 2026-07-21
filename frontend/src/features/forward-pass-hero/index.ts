@@ -1,0 +1,1 @@
+export { ForwardPassHero } from './ForwardPassHero'

@@ -36,7 +36,7 @@ def render_markdown_to_safe_html(markdown_text: str) -> str:
     `html=False`, so raw HTML in the source is escaped rather than emitted (and
     its default link validation refuses `javascript:`/`data:` URLs); the output
     then passes through an `nh3` allowlist that guarantees only the formatting
-    tags in `_ALLOWED_HTML_TAGS` — and, for links, only `href`/`title` — can
+    tags in `_ALLOWED_HTML_TAGS` - and, for links, only `href`/`title` - can
     reach the browser even if the renderer's behavior changes.
     """
     rendered_html = _MARKDOWN_RENDERER.render(markdown_text)

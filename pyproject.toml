@@ -1,18 +1,15 @@
 [project]
-name = "latent-space"
+name = "latent_space"
 version = "0.0.1"
-description = "A template for Python projects"
+description = "Cristian Spagnuolo's personal site: portfolio, lab notebook, and applied-ML performance art."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [ { name = "Cristian Spagnuolo", email = "cristian.c.spagnuolo@gmail.com" } ]
 requires-python = ">=3.12"
 dependencies = [
-    "rich>=14.0.0",
     "pydantic>=2.11.7",
     "pydantic-settings>=2.10.1",
     "pyyaml>=6.0.2",
-    "polars>=1.4.0,<2.0.0",
-    "mlflow>=3.10.0,<3.20.0",
     "fastapi>=0.122.0,<0.123.0",
     "uvicorn[standard]>=0.38.0,<0.40.0",
     "markdown-it-py>=3.0.0,<5.0.0",
@@ -68,8 +65,8 @@ select = ["E", "W", "I", "F", "D", "C90", "PGH", "RUF", "DOC"]
 ignore = [
     "D10",     # D100-D107: missing docstrings in public modules, classes, methods, functions, packages, magic methods, nested classes, and __init__
     "RUF010",  # explicit-f-string-type-conversion: do not require explicit !r/!s/!a conversion flags in f-strings
-    "RUF067",  # non-empty-init-module: __init__ module should not contain any code — TODO: resolve and remove this ignore
-    "DOC201",  # docstring-missing-returns: return value is not documented in docstring — FIXME: this line should be removed to improve documentation quality. NOTE: it may cause several linter errors across the codebase.
+    "RUF067",  # non-empty-init-module: __init__ module should not contain any code - TODO: resolve and remove this ignore
+    "DOC201",  # docstring-missing-returns: return value is not documented in docstring - FIXME: this line should be removed to improve documentation quality. NOTE: it may cause several linter errors across the codebase.
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -79,14 +76,17 @@ convention = "google"
 "__init__.py" = ["F401"]
 
 [tool.pyright]
-include = ["latent-space", "tests", "utils"]
+include = ["latent_space", "tests", "utils"]
 typeCheckingMode = "basic"
 reportFunctionMemberAccess = true
 reportPossiblyUnboundVariable = true
 reportIncompatibleMethodOverride = true
 
+[tool.vercel]
+entrypoint = "asgi:app"
+
 [tool.hatch.build.targets.wheel]
-packages = ["latent-space"]
+packages = ["latent_space"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -117,5 +117,5 @@ ignore = [
     "DOC111", # Complains if `--arg-type-hints-in-docstring` is `False` but there are type hints in the docstring arg list
     "DOC501", # Handled by ruff DOC501 (missing Raises in docstring)
     "DOC502", # Handled by ruff DOC502 (documented exception not raised)
-    "DOC503", # Raises mismatch — covered by the combination of ruff DOC501+DOC502
+    "DOC503", # Raises mismatch - covered by the combination of ruff DOC501+DOC502
 ]

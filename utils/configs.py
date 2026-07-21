@@ -2,11 +2,10 @@ from pathlib import Path
 from typing import ClassVar, Self
 
 import yaml
-from pydantic import AnyHttpUrl, BaseModel, ConfigDict, Field
+from pydantic import BaseModel
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
-    SettingsConfigDict,
     YamlConfigSettingsSource,
 )
 
@@ -17,7 +16,7 @@ class YamlBaseSettings(BaseSettings):
     Use this for configuration that is singular per process (e.g. logging),
     where environment variables should be able to override the YAML file.
     For configs that can be instantiated many times from different files, use
-    `YamlBaseModel` instead — env vars are a flat, process-global namespace and
+    `YamlBaseModel` instead - env vars are a flat, process-global namespace and
     cannot represent per-instance overrides.
     """
 
@@ -66,7 +65,7 @@ class YamlBaseModel(BaseModel):
     same class can be instantiated many times from different files without the
     instances sharing a process-global env namespace. `from_yaml` reads
     `DEFAULT_CONFIG_PATH` when no path is given, or the provided path otherwise
-    — one load path, one precedence, with the disk read made explicit at the
+    - one load path, one precedence, with the disk read made explicit at the
     call site.
     """
 
@@ -107,50 +106,3 @@ class YamlBaseModel(BaseModel):
             yaml.safe_dump(self.model_dump(mode="json")),
             encoding="utf-8",
         )
-
-
-class GlobalConfig(YamlBaseSettings):
-    log_level: str = Field(description="Global logging level.", default="INFO")
-
-    model_config = SettingsConfigDict(
-        yaml_file="configs/global.yaml",
-        case_sensitive=False,
-        extra="allow",
-        yaml_file_encoding="utf-8",
-    )
-
-
-class BaseExperimentLoggerConfig(YamlBaseModel):
-    """Base configuration for experiment logger implementations.
-
-    Uses ``extra="allow"`` so that concrete-logger fields (e.g. MLflow's
-    ``tracking_uri``) are preserved when this base type is used as the
-    field type in command configs.  The command layer can then pass the
-    raw data to the concrete config class for full validation.
-    """
-
-    project_name: str = Field(description="Name of the project.")
-    experiment_name: str = Field(description="Name of the experiment.")
-    files_to_exclude_from_logging: list[str] = Field(
-        description="Shell wildcards for file names to exclude from logging.",
-        default_factory=list,
-    )
-
-    model_config = ConfigDict(extra="allow")
-
-
-class MlflowLoggerConfig(BaseExperimentLoggerConfig):
-    """Configuration for the MLflow logger implementation."""
-
-    DEFAULT_CONFIG_PATH: ClassVar[Path] = Path("configs/mlflow_logger.yaml")
-
-    tracking_uri: AnyHttpUrl = Field(description="MLflow tracking URI.")
-    trace: bool = Field(
-        description="Whether to enable MLflow OpenAI autologging.",
-        default=False,
-    )
-    run_name: str | None = Field(
-        description="Optional name for the MLflow run. If not provided, a "
-        "default name will be generated.",
-        default=None,
-    )

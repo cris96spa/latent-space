@@ -30,6 +30,23 @@
   --color-activation-400: #c084fc;
   --color-activation-500: #a855f7;
 
+  /* Tokenizer highlight. Deliberately off the brand hue: blue-on-blue boxes read as
+     links, and two tints of one blue are exactly the comparison red-green colour-vision
+     deficiency makes hardest. Amber stays visible under both common CVD types, and the
+     two steps below are separated by lightness as well as hue, so the alternation is
+     legible even if the hue is not. */
+  --color-token-tint: #f59e0b;
+  --color-token-edge: #b45309;
+
+  /* Ablation-sweep series: six hues that stay separable from each other on both
+     themes, saturated enough to read as thin 1px lines over light and dark panels. */
+  --color-sweep-1: #0ea5e9;
+  --color-sweep-2: #14b8a6;
+  --color-sweep-3: #84cc16;
+  --color-sweep-4: #f59e0b;
+  --color-sweep-5: #f43f5e;
+  --color-sweep-6: #a855f7;
+
   /* Semantic surface colors resolve to runtime variables that flip per theme
      (defined in :root / .dark below), so `bg-surface`/`text-fg` are theme-aware. */
   --color-background: var(--surface-background);
@@ -102,4 +119,144 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Forward-pass hero (task 07). All disabled by the reduced-motion rule above. */
+@keyframes ls-flow {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ls-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ls-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* A context token sliding into the window as the model conditions on it. */
+@keyframes ls-token-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The loss curve drawing itself in; the path sets pathLength="1". */
+@keyframes ls-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The sampled token falling out of the argmax bar toward the detokenized text.
+   Distance varies with the diagram layout, so the caller sets --ls-emit-distance. */
+@keyframes ls-emit {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(var(--ls-emit-distance, 200px));
+  }
+}
+
+/* Prose styling for the API's sanitized Markdown-rendered HTML: paragraphs, lists,
+   bold, links, and inline code. Shared by the scripted chat answers (`.ls-answer`,
+   task 08) and the project detail body (`.ls-prose`, task 10). */
+.ls-answer > * + *,
+.ls-prose > * + * {
+  margin-top: 0.6rem;
+}
+
+.ls-answer ul,
+.ls-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.ls-answer li + li,
+.ls-prose li + li {
+  margin-top: 0.3rem;
+}
+
+.ls-answer strong,
+.ls-prose strong {
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.ls-answer a,
+.ls-prose a {
+  color: var(--color-brand-700);
+  text-decoration: underline;
+}
+
+.dark .ls-answer a,
+.dark .ls-prose a {
+  color: var(--color-brand-300);
+}
+
+.ls-answer code,
+.ls-prose code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background-color: --alpha(var(--color-brand-500) / 12%);
+}
+
+/* Word-by-word reveal. Only while the container is `is-revealing` are un-reached words
+   hidden; a settled answer has no such class, so every word shows even if JS never runs
+   the reveal. The reduced-motion rule above disables the fade, so words snap in. */
+.ls-answer .ls-word {
+  transition: opacity 140ms ease-out;
+}
+
+.ls-answer.is-revealing .ls-word {
+  opacity: 0;
+}
+
+.ls-answer.is-revealing .ls-word.is-shown {
+  opacity: 1;
+}
+
+/* The blinking write-head cursor, pinned to the most-recently revealed word. */
+.ls-answer.is-revealing .ls-word.is-head::after {
+  content: '▍';
+  margin-left: 1px;
+  color: var(--color-brand-600);
+  animation: ls-cursor 1s step-end infinite;
+}
+
+.dark .ls-answer.is-revealing .ls-word.is-head::after {
+  color: var(--color-brand-400);
 }

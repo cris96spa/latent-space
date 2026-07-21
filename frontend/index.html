@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Cristian C. Spagnuolo — NLP engineer. Part portfolio, part lab notebook, part applied-ML performance art."
+      content="Cristian C. Spagnuolo - NLP engineer. Part portfolio, part lab notebook, part applied-ML performance art."
     />
     <title>latent-space</title>
     <script>
@@ -26,6 +26,25 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <!-- The forward-pass hero enhances this text; the bio must never depend on JS.
+           Mirror CANONICAL_BIO in src/features/forward-pass-hero/content.ts. -->
+      <main style="max-width: 40rem; margin: 2rem auto; padding: 0 1rem; font-family: sans-serif">
+        <h1>Who is Cristian?</h1>
+        <p>
+          Hi, I'm Cristian, and this is my latent space. I'm an NLP engineer at Artificialy in
+          Lugano, which mostly means I make large language models run faster, fit in less GPU
+          memory, and stop confidently inventing things - efficient inference, fine-tuning
+          (SFT, DPO, GRPO), and evals that catch the regression before the demo does. On my own
+          time I rebuilt GPT-2 from scratch in PyTorch, for the same reason other people
+          rebuild an engine in the garage: I wanted to know what every layer was actually
+          doing. Politecnico di Milano, 110/110 cum laude - and that is the last sentence here
+          that belongs on a resume. I have one of those, it is one click away, and it is far
+          less fun than this page. What I actually want is to spend the rest of my life looking
+          at training-loss curves.
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

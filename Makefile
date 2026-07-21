@@ -22,6 +22,9 @@ install-uv: # install uv tool
 install-dev: # install dev dependencies
 	uv sync --all-groups
 
+install-release: # install release dependencies
+	uv sync --group release
+
 install-test: # install test dependencies
 	uv sync --group test
 
@@ -41,7 +44,7 @@ lint-doc: # check the docstring style
 	uv run flake8 $(PROJECT_NAME) utils tests
 
 serve: # run the FastAPI app locally with autoreload
-	uv run uvicorn latent_space.app:create_app --factory --reload --host $(SERVE_HOST) --port $(SERVE_PORT)
+	uv run uvicorn latent_space.app:create_app --factory --reload --reload-include '*.py' --reload-include '*.md' --host $(SERVE_HOST) --port $(SERVE_PORT)
 
 doc: # create the project documentation; Build and visualize documentation through a local server
 	uv run properdocs serve -f properdocs.yml --dev-addr 0.0.0.0:$(DOC_PORT)
@@ -51,6 +54,22 @@ test: # launch the tests
 
 pre-commit: # run pre-commit hooks
 	uv run pre-commit run --all-files
+
+release: # release the next version based on commit messages
+	uv run semantic-release version --no-commit --no-tag
+	uv run python -m utils.release
+
+patch: # release a patch
+	uv run semantic-release version --no-commit --no-tag --patch
+	uv run python -m utils.release
+
+minor: # release a minor version
+	uv run semantic-release version --no-commit --no-tag --minor
+	uv run python -m utils.release
+
+major: # release a major version
+	uv run semantic-release version --no-commit --no-tag --major
+	uv run python -m utils.release
 
 fe-install: # install frontend dependencies
 	cd $(FRONTEND_DIR) && $(NPM) install
