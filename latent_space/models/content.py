@@ -74,6 +74,47 @@ class ProjectDetail(ProjectSummary):
     body_html: str = Field(description="Sanitized HTML rendered from the Markdown body.")
 
 
+class Post(BaseModel):
+    """An outbound link to writing published elsewhere (Substack).
+
+    A "link post": metadata only, no Markdown body. The canonical text lives at
+    `external_url`, so there is no `body_markdown` and no detail projection.
+    `public_identifier` is derived from the source file's stem by the loader, exactly as
+    for `Project`, so the filename and the URL cannot drift apart. Instances may be
+    drafts; excluding drafts is the content service's responsibility. Unknown frontmatter
+    keys are rejected so a typo fails loudly at load time.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    public_identifier: PublicIdentifier
+    title: str
+    summary: str
+    external_url: HttpUrl = Field(description="Absolute URL of the post on its host (Substack).")
+    tags: list[str] = Field(default_factory=list)
+    cover_image: str | None = None
+    draft: bool = False
+    published_at: date
+    updated_at: date | None = None
+
+
+class PostSummary(BaseModel):
+    """Post as returned in list responses: metadata for a card.
+
+    Drafts are excluded before this projection is built, so it carries no `draft` flag.
+    There is no post-detail projection: a link post's body lives at `external_url`.
+    """
+
+    public_identifier: PublicIdentifier
+    title: str
+    summary: str
+    external_url: HttpUrl
+    tags: list[str]
+    cover_image: str | None
+    published_at: date
+    updated_at: date | None
+
+
 class ChatEntry(BaseModel):
     """A preset question and its authored answer for the scripted chat.
 

@@ -3,14 +3,16 @@ from pathlib import Path
 
 import pytest
 
-from latent_space.models.content import ChatEntry, Project
+from latent_space.models.content import ChatEntry, Post, Project
 from latent_space.services.content import (
     ContentLoadError,
     ContentService,
     load_chat_entries_from_directory,
+    load_posts_from_directory,
     load_projects_from_directory,
     parse_frontmatter_document,
     sort_chat_entries,
+    sort_posts_newest_first,
     sort_projects_newest_first,
 )
 
@@ -33,6 +35,17 @@ def _chat(public_identifier: str, order: int, *, draft: bool = False) -> ChatEnt
         category="c",
         order=order,
         answer_markdown="answer",
+        draft=draft,
+    )
+
+
+def _post(public_identifier: str, published_at: date, *, draft: bool = False) -> Post:
+    return Post(
+        public_identifier=public_identifier,
+        title=public_identifier,
+        summary="summary",
+        external_url="https://cris.substack.com/p/one",
+        published_at=published_at,
         draft=draft,
     )
 
@@ -146,6 +159,50 @@ def test_missing_directory_returns_empty_list(tmp_path: Path):
     assert load_projects_from_directory(tmp_path / "absent") == []
 
 
+def test_load_posts_derives_public_identifier_and_ignores_body(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "posts",
+        "first-epoch.md",
+        "---\ntitle: First epoch\nsummary: s\n"
+        "external_url: https://cris.substack.com/p/first-epoch\n"
+        "published_at: 2026-01-02\n---\n",
+    )
+
+    posts = load_posts_from_directory(tmp_path / "posts")
+
+    assert len(posts) == 1
+    assert posts[0].public_identifier == "first-epoch"
+    assert str(posts[0].external_url) == "https://cris.substack.com/p/first-epoch"
+
+
+def test_load_posts_requires_external_url(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "posts",
+        "no-link.md",
+        "---\ntitle: No link\nsummary: s\npublished_at: 2026-01-02\n---\n",
+    )
+
+    with pytest.raises(ContentLoadError):
+        load_posts_from_directory(tmp_path / "posts")
+
+
+def test_load_posts_missing_directory_returns_empty_list(tmp_path: Path):
+    assert load_posts_from_directory(tmp_path / "absent") == []
+
+
+def test_sort_posts_newest_first_breaks_date_ties_by_public_identifier():
+    posts = [
+        _post("bravo", date(2026, 6, 1)),
+        _post("charlie", date(2025, 1, 1)),
+        _post("alpha", date(2025, 1, 1)),
+        _post("delta", date(2024, 12, 31)),
+    ]
+
+    ordered = sort_posts_newest_first(posts)
+
+    assert [post.public_identifier for post in ordered] == ["bravo", "alpha", "charlie", "delta"]
+
+
 def test_sort_projects_newest_first_breaks_date_ties_by_public_identifier():
     projects = [
         _project("bravo", date(2025, 6, 1)),
@@ -162,6 +219,20 @@ def test_sort_projects_newest_first_breaks_date_ties_by_public_identifier():
         "charlie",
         "delta",
     ]
+
+
+def test_service_publishes_posts_newest_first_excluding_drafts():
+    posts = [
+        _post("older", date(2025, 1, 1)),
+        _post("newer", date(2026, 1, 1)),
+        _post("hidden", date(2027, 1, 1), draft=True),
+    ]
+
+    service = ContentService([], [], posts)
+
+    summaries = service.published_post_summaries()
+    assert [summary.public_identifier for summary in summaries] == ["newer", "older"]
+    assert all(not hasattr(summary, "draft") for summary in summaries)
 
 
 def test_sort_chat_entries_by_order_then_public_identifier():
@@ -199,7 +270,7 @@ def test_service_excludes_drafts_and_prerenders_html():
         _chat("hidden", 1, draft=True),
     ]
 
-    service = ContentService(projects, chat_entries)
+    service = ContentService(projects, chat_entries, [])
 
     summaries = service.published_project_summaries()
     assert [summary.public_identifier for summary in summaries] == ["published-one"]

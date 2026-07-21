@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 from latent_space.api.dependencies import get_content_service
 from latent_space.app import create_app
 from latent_space.core.settings import AppSettings
-from latent_space.models.content import ChatEntry, Project
+from latent_space.models.content import ChatEntry, Post, Project
 from latent_space.services.content import ContentService
 
 
@@ -49,7 +49,32 @@ def _fixture_service() -> ContentService:
             answer_markdown="An *answer*.",
         ),
     ]
-    return ContentService(projects, chat_entries)
+    posts = [
+        Post(
+            public_identifier="warm-start",
+            title="Warm start",
+            summary="Notes on resuming a run.",
+            external_url="https://cris.substack.com/p/warm-start",
+            tags=["training"],
+            published_at=date(2025, 6, 1),
+        ),
+        Post(
+            public_identifier="second-epoch",
+            title="Second epoch",
+            summary="What changed the second time around.",
+            external_url="https://cris.substack.com/p/second-epoch",
+            published_at=date(2026, 2, 1),
+        ),
+        Post(
+            public_identifier="draft-post",
+            title="Draft post",
+            summary="not ready",
+            external_url="https://cris.substack.com/p/draft",
+            published_at=date(2027, 1, 1),
+            draft=True,
+        ),
+    ]
+    return ContentService(projects, chat_entries, posts)
 
 
 @pytest.fixture
@@ -95,6 +120,21 @@ def test_get_draft_project_returns_404(client: TestClient):
     response = client.get("/projects/secret")
 
     assert response.status_code == 404
+
+
+def test_list_posts_returns_published_newest_first(client: TestClient):
+    response = client.get("/posts")
+
+    assert response.status_code == 200
+    public_identifiers = [post["public_identifier"] for post in response.json()]
+    assert public_identifiers == ["second-epoch", "warm-start"]
+
+
+def test_list_posts_omits_draft_field_and_exposes_external_url(client: TestClient):
+    post = client.get("/posts").json()[0]
+
+    assert "draft" not in post
+    assert post["external_url"].startswith("https://cris.substack.com/p/")
 
 
 def test_list_chat_entries_returns_rendered_answers(client: TestClient):
