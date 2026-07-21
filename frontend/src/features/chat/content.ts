@@ -5,12 +5,13 @@
  * authored content served by the API; everything here is chrome.
  */
 export const CHAT_COPY = {
-  eyebrow: 'scripted · no live model',
+  eyebrow: 'scripted · just my opinionated answers',
+  /** The big section headline, mirroring the hero's `Who is Cristian?`. */
   title: 'Ask me things',
+  /** The chat's name, emphasized on its in-component title bar. */
+  name: 'Chat Cri-PT',
   intro:
-    "No live model back here - just a fixed set of answers I actually wrote, streamed like " +
-    "the real thing. Which means it's opinionated, and it can't hallucinate a job I never " +
-    'had. Pick one:',
+    "",
   composerLabel: 'Ask a question',
   composerPlaceholder: 'Ask something, or tap a prompt…',
   send: 'Send',
@@ -20,7 +21,7 @@ export const CHAT_COPY = {
   fallback:
     "That one's out of distribution. There's no live model back here - just answers I " +
     'actually wrote - so instead of bluffing, here is what I can actually talk about:',
-  userLabel: 'You',
+  userLabel: 'User',
   assistantLabel: 'Cristian',
 } as const
 
@@ -39,8 +40,14 @@ export const THINKING_HOOKS: Readonly<Record<string, string>> = {
   'teleport-mdp': 'truncating the horizon…',
   'most-overrated': 'denoising the hype…',
   'off-the-clock': 'unloading weights from VRAM…',
-  'can-i-see-your-resume': 'rendering résumé.tex → PDF…',
+  'can-i-see-your-resume': 'rendering resume.tex → PDF…',
 }
 
 /** The status line for a no-match fallback, where there is no entry to key on. */
 export const FALLBACK_HOOK = 'searching the context window…'
+
+/**
+ * The entry whose answer carries the interactive Plotly sweep attachment, and which the
+ * chat pre-loads as its opening turn. Kept here so the gating and the pre-load agree.
+ */
+export const ABLATION_SWEEP_SLUG = 'ablation-sweep'
