@@ -225,9 +225,9 @@ class ContentService:
     Constructed once from already-loaded projects and chat entries: it excludes
     drafts, orders the survivors deterministically, and pre-renders project
     bodies and chat answers to sanitized HTML. Rendering up front keeps request
-    handlers thin and makes any rendering failure surface at load time. The
-    published projections it returns are copies, so callers cannot mutate the
-    cached content.
+    handlers thin and makes any rendering failure surface at load time. Each
+    accessor returns a fresh list of frozen response models, so callers can
+    neither reorder the result nor mutate the cached content.
     """
 
     def __init__(
