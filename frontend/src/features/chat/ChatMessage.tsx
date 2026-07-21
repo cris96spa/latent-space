@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 
 import type { ChatEntry } from '../../lib/api'
 import { cn } from '../../lib/cn'
@@ -7,6 +7,18 @@ import { ResumeCard } from './ResumeCard'
 import { SuggestedPrompts } from './SuggestedPrompts'
 import type { ChatTurn } from './types'
 import { useTypedReveal } from './useTypedReveal'
+
+// Lazily loaded so Plotly stays in its own chunk, off the main bundle - it only downloads
+// when an answer that carries the sweep first renders.
+const AblationSweepPlot = lazy(() => import('../loss-curve/AblationSweepPlot'))
+
+function SweepPlotFallback() {
+  return (
+    <div className="mt-3 flex h-72 w-full items-center justify-center rounded-lg border border-border bg-background/60 font-mono text-xs text-muted sm:h-96">
+      plotting the sweep…
+    </div>
+  )
+}
 
 interface ChatMessageProps {
   turn: ChatTurn
@@ -66,6 +78,11 @@ export function ChatMessage({ turn, streaming, shown, onSuggestion }: ChatMessag
           )}
           <AnswerBody html={turn.revealHtml} streaming={streaming} shown={shown} />
           {turn.attachment === 'resume' && <ResumeCard />}
+          {turn.attachment === 'ablation-sweep' && (
+            <Suspense fallback={<SweepPlotFallback />}>
+              <AblationSweepPlot />
+            </Suspense>
+          )}
           {turn.variant === 'fallback' && turn.suggestions.length > 0 && (
             <SuggestedPrompts
               className="mt-3"

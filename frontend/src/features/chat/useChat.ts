@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { ChatEntry } from '../../lib/api'
 import { RESUME_PDF } from '../../lib/links'
-import { FALLBACK_HOOK, THINKING_HOOKS } from './content'
+import { ABLATION_SWEEP_SLUG, FALLBACK_HOOK, THINKING_HOOKS } from './content'
 import { htmlToPlainText, wrapWordsInHtml } from './revealHtml'
 import type {
+  AnswerAttachment,
   AnswerResolution,
   AnswerTurn,
   ChatResponder,
@@ -31,13 +32,25 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
+/**
+ * The rich attachment an answer carries, or `{}` for none. The sweep is keyed by slug
+ * because its plot is a component, not markup; the résumé follows whichever answer links
+ * its PDF, so that cue stays in the content rather than a second hardcoded slug.
+ */
+function attachmentFor(entry: { slug: string; answerHtml: string }): { attachment?: AnswerAttachment } {
+  if (entry.slug === ABLATION_SWEEP_SLUG) {
+    return { attachment: 'ablation-sweep' }
+  }
+  if (entry.answerHtml.includes(RESUME_PDF.path)) {
+    return { attachment: 'resume' }
+  }
+  return {}
+}
+
 /** Builds the assistant turn for a resolution, pre-wrapping its words for the reveal. */
 function buildAnswerTurn(id: string, resolution: AnswerResolution): AnswerTurn {
   if (resolution.kind === 'answer') {
     const wrapped = wrapWordsInHtml(resolution.entry.answerHtml)
-    // The résumé viewer attaches to whichever answer links the résumé PDF, so the cue
-    // follows the content rather than a hardcoded slug.
-    const linksResume = resolution.entry.answerHtml.includes(RESUME_PDF.path)
     return {
       id,
       role: 'assistant',
@@ -47,7 +60,7 @@ function buildAnswerTurn(id: string, resolution: AnswerResolution): AnswerTurn {
       plainText: htmlToPlainText(resolution.entry.answerHtml),
       suggestions: [],
       hook: THINKING_HOOKS[resolution.entry.slug],
-      ...(linksResume ? { attachment: 'resume' as const } : {}),
+      ...attachmentFor(resolution.entry),
     }
   }
   // The fallback message is plain text; wrap it in a paragraph so it reveals the same way.

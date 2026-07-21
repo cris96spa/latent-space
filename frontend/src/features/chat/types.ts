@@ -49,7 +49,7 @@ export interface AnswerTurn {
   readonly hook?: string
 }
 
-/** A non-text payload an answer can carry. Only the résumé exists today. */
-export type AnswerAttachment = 'resume'
+/** A rich, non-text payload rendered beneath an answer: the résumé, or the sweep plot. */
+export type AnswerAttachment = 'resume' | 'ablation-sweep'
 
 export type ChatTurn = UserTurn | AnswerTurn

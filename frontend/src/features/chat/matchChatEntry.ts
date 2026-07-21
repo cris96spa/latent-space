@@ -32,6 +32,11 @@ const CATEGORY_SYNONYMS: Readonly<Record<string, readonly string[]>> = {
     'eval', 'evals', 'evaluation', 'evaluate', 'good', 'benchmark', 'benchmarks', 'metric',
     'metrics', 'test', 'tests', 'regression', 'quality', 'perplexity', 'measure',
   ],
+  training: [
+    'training', 'train', 'loss', 'losses', 'curve', 'curves', 'sweep', 'ablation', 'ablations',
+    'hyperparameter', 'hyperparameters', 'hyperparams', 'scaling', 'chinchilla', 'tune', 'tuning',
+    'learning', 'rate', 'lr', 'converge', 'convergence',
+  ],
   research: [
     'thesis', 'teleport', 'teleportation', 'mdp', 'curriculum', 'rl', 'reinforcement',
     'research', 'master', 'masters', 'horizon',
