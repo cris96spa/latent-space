@@ -118,3 +118,48 @@ export async function getProject(publicIdentifier: string): Promise<ProjectDetai
   )
   return { ...toProject(wire), bodyHtml: wire.body_html }
 }
+
+/** A published post: an outbound link to writing hosted elsewhere (Substack). */
+export interface Post {
+  readonly publicIdentifier: string
+  readonly title: string
+  readonly summary: string
+  /** Absolute URL of the post on its host (Substack). */
+  readonly externalUrl: string
+  readonly tags: readonly string[]
+  readonly coverImage: string | null
+  /** ISO `YYYY-MM-DD`; the backend returns posts newest-first. */
+  readonly publishedAt: string
+  readonly updatedAt: string | null
+}
+
+/** Wire shape of a post: the backend serializes metadata in snake_case. */
+interface PostWire {
+  readonly public_identifier: string
+  readonly title: string
+  readonly summary: string
+  readonly external_url: string
+  readonly tags: readonly string[]
+  readonly cover_image: string | null
+  readonly published_at: string
+  readonly updated_at: string | null
+}
+
+function toPost(wire: PostWire): Post {
+  return {
+    publicIdentifier: wire.public_identifier,
+    title: wire.title,
+    summary: wire.summary,
+    externalUrl: wire.external_url,
+    tags: wire.tags,
+    coverImage: wire.cover_image,
+    publishedAt: wire.published_at,
+    updatedAt: wire.updated_at,
+  }
+}
+
+/** Fetches the published posts, most recently published first. */
+export async function getPosts(): Promise<Post[]> {
+  const posts = await fetchJson<PostWire[]>('/posts')
+  return posts.map(toPost)
+}
