@@ -6,6 +6,10 @@ export const EXTERNAL_LINKS = {
   gpt2Model: 'https://huggingface.co/openai-community/gpt2',
   /** Hoffmann et al. 2022, the scaling law the ablation sweep is plotted from. */
   chinchillaPaper: 'https://arxiv.org/abs/2203.15556',
+  // TODO(content): Cristian's Substack publication does not exist yet. This points at
+  // Substack's home so the "Follow" affordance is never dead; replace with the real
+  // publication URL (e.g. https://<name>.substack.com) when it exists.
+  substack: 'https://substack.com/',
 } as const
 
 /**
