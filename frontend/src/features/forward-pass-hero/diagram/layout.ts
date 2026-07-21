@@ -105,7 +105,7 @@ export const COMPACT_DIAGRAM_LAYOUT: DiagramLayout = {
 /**
  * A token as the diagram shows it: whitespace trimmed away (the SVG cannot show it
  * anyway), a middle dot standing in for whitespace-only tokens, and an ellipsis where
- * the column runs out of room. Layout, not content — the readable text is the bio.
+ * the column runs out of room. Layout, not content - the readable text is the bio.
  */
 export function tokenLabel(text: string, maxChars: number): string {
   const trimmed = text.trim()

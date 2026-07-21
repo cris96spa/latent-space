@@ -7,13 +7,13 @@ describe('pretokenizeText', () => {
     expect(pretokenizeText('who is Cristian?')).toEqual(['who', ' is', ' Cristian', '?'])
   })
 
-  it('splits contractions the way the Llama 3 pattern does', () => {
-    expect(pretokenizeText("Llama 3's tokenizer")).toEqual(['Llama', ' ', '3', "'s", ' tokenizer'])
+  it('splits contractions the way the GPT-2 pattern does', () => {
+    expect(pretokenizeText("GPT-2's tokenizer")).toEqual(['GPT', '-', '2', "'s", ' tokenizer'])
   })
 
-  it('groups digits in runs of at most three', () => {
-    expect(pretokenizeText('110110')).toEqual(['110', '110'])
-    expect(pretokenizeText('12345')).toEqual(['123', '45'])
+  it('keeps each run of digits together', () => {
+    expect(pretokenizeText('110110')).toEqual(['110110'])
+    expect(pretokenizeText('version 12345')).toEqual(['version', ' 12345'])
   })
 
   it('clusters punctuation and keeps a preceding space with it', () => {
@@ -22,7 +22,7 @@ describe('pretokenizeText', () => {
 
   it('is lossless, so the tokens rebuild the source exactly', () => {
     const sources = [
-      'GPT-2, 110/110 — cum laude.',
+      'GPT-2, 110/110 - cum laude.',
       "who is Cristian? He's an NLP engineer.",
       'trailing space ',
       '',

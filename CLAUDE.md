@@ -42,10 +42,10 @@ These are product requirements, not optional decoration.
 ### Forward-pass hero
 
 The landing page animates a prompt such as "who is Cristian?" through the pipeline of a
-named real architecture (Llama 3 8B, in `features/forward-pass-hero/architecture.ts`) and
+named real architecture (GPT-2 124M, in `features/forward-pass-hero/architecture.ts`) and
 streams the bio token by token. Phases follow real inference: tokenize, one parallel
 prefill pass that fills the KV cache, then one decode pass per token. Playback is
-scrubbable — play/pause, single-step, and a slider over the frames that have streamed.
+scrubbable - play/pause, single-step, and a slider over the frames that have streamed.
 
 The current source is deterministic and client-side, but rendering must consume a small
 data-source interface so a real browser model or streamed response can replace it without
@@ -54,7 +54,7 @@ rewriting the animation. Rendering components must not depend on the source bein
 order, and only `frames()` may pace itself.
 
 Anything the diagram asserts must be checkable. Architecture numbers come from the
-published model config, token splits from the real Llama 3 pretokenizer regex, and the
+published model config, token splits from the real GPT-2 pretokenizer regex, and the
 loss curves in `features/loss-curve/` from the Chinchilla fit. Where a shape is a
 modelling choice rather than a published result, say so in the docstring.
 

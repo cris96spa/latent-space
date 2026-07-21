@@ -9,7 +9,7 @@ export interface WrappedAnswer {
 }
 
 // Matches an HTML tag (`<strong>`, `</li>`, …). The answer HTML is nh3-sanitized
-// server-side, so any literal `<`/`>` in text is already an entity — a tag here is
+// server-side, so any literal `<`/`>` in text is already an entity - a tag here is
 // always a real element boundary, never stray text.
 const TAG_PATTERN = /<[^>]+>/g
 // Splits a text run into alternating word (non-space) and whitespace tokens, keeping
@@ -65,7 +65,7 @@ const HTML_ENTITIES: Readonly<Record<string, string>> = {
   '&#x27;': "'",
   '&nbsp;': ' ',
   '&hellip;': '…',
-  '&mdash;': '—',
+  '&mdash;': '-',
   '&ndash;': '–',
 }
 

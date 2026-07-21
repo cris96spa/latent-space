@@ -3,7 +3,7 @@ slug: image-distribution-drift-simulator
 title: Image Distribution Drift Simulator
 summary: >-
   A generator for synthetic distribution shift on image data, so a model's robustness gets
-  tested against drift you can dial in — instead of drift you find out about in production.
+  tested against drift you can dial in - instead of drift you find out about in production.
 stack:
   - Python
   - Polars
@@ -23,7 +23,7 @@ draft: false
 
 A tool that manufactures **synthetic distribution shift** on image datasets: take a clean
 distribution, perturb it in controlled, parameterized ways, and hand your model exactly the
-kind of drift it will eventually meet in the wild — except now you get to choose the dose.
+kind of drift it will eventually meet in the wild - except now you get to choose the dose.
 
 Used as a robustness harness, it improved **model-robustness testing by 22%**. The premise
 is boring and correct: a model's accuracy on the data you happened to collect tells you

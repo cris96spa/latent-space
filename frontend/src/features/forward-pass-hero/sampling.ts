@@ -23,8 +23,8 @@ const UINT32_RANGE = 2 ** 32
  *
  * The scripted forward pass needs values that look sampled but are identical on
  * every replay, every reload, and in server-rendered output, so it derives them
- * from stable string seeds instead of `Math.random`. For ASCII seeds — all this
- * module feeds it — the result matches the standard 32-bit FNV-1a test vectors.
+ * from stable string seeds instead of `Math.random`. For ASCII seeds - all this
+ * module feeds it - the result matches the standard 32-bit FNV-1a test vectors.
  */
 export function hashUnitInterval(seed: string): number {
   let hash = FNV_OFFSET_BASIS

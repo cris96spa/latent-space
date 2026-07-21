@@ -27,8 +27,8 @@ interface ContextLaneProps {
 /**
  * The left half of the diagram: the running context, newest at the bottom, and the
  * embedding vector each token turns into. Prompt and generated tokens are coloured
- * differently so the context visibly filling with the model's own output — the
- * autoregressive loop — is legible at a glance.
+ * differently so the context visibly filling with the model's own output - the
+ * autoregressive loop - is legible at a glance.
  */
 export function ContextLane({
   visibleContext,
@@ -58,7 +58,9 @@ export function ContextLane({
         fontSize={layout.labelSize}
         className={cn('font-mono', active ? 'fill-fg' : 'fill-muted')}
       >
-        {layout.verbose ? `embed · ${TARGET_MODEL.hiddenSize}` : 'embed'}
+        {layout.verbose
+          ? `token + position embed · ${TARGET_MODEL.hiddenSize}`
+          : 'token + pos'}
       </text>
 
       {visibleContext.map((token, slot) => {

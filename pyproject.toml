@@ -68,8 +68,8 @@ select = ["E", "W", "I", "F", "D", "C90", "PGH", "RUF", "DOC"]
 ignore = [
     "D10",     # D100-D107: missing docstrings in public modules, classes, methods, functions, packages, magic methods, nested classes, and __init__
     "RUF010",  # explicit-f-string-type-conversion: do not require explicit !r/!s/!a conversion flags in f-strings
-    "RUF067",  # non-empty-init-module: __init__ module should not contain any code — TODO: resolve and remove this ignore
-    "DOC201",  # docstring-missing-returns: return value is not documented in docstring — FIXME: this line should be removed to improve documentation quality. NOTE: it may cause several linter errors across the codebase.
+    "RUF067",  # non-empty-init-module: __init__ module should not contain any code - TODO: resolve and remove this ignore
+    "DOC201",  # docstring-missing-returns: return value is not documented in docstring - FIXME: this line should be removed to improve documentation quality. NOTE: it may cause several linter errors across the codebase.
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -117,5 +117,5 @@ ignore = [
     "DOC111", # Complains if `--arg-type-hints-in-docstring` is `False` but there are type hints in the docstring arg list
     "DOC501", # Handled by ruff DOC501 (missing Raises in docstring)
     "DOC502", # Handled by ruff DOC502 (documented exception not raised)
-    "DOC503", # Raises mismatch — covered by the combination of ruff DOC501+DOC502
+    "DOC503", # Raises mismatch - covered by the combination of ruff DOC501+DOC502
 ]

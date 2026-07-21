@@ -15,25 +15,40 @@ const STOP_WORDS: ReadonlySet<string> = new Set([
 // Extra vocabulary per category, so typed synonyms reach the right entry even when they
 // do not appear in the authored question. Most signal still comes from the question text.
 const CATEGORY_SYNONYMS: Readonly<Record<string, readonly string[]>> = {
-  now: ['now', 'current', 'currently', 'today', 'lately', 'working', 'building', 'doing'],
-  stack: [
-    'stack', 'tools', 'tooling', 'tech', 'technology', 'technologies', 'language', 'languages',
-    'framework', 'frameworks', 'library', 'libraries', 'using', 'use',
+  meta: ['why', 'portfolio', 'site', 'forward', 'pass', 'animate', 'different', 'normal'],
+  build: [
+    'gpt', 'gpt2', 'scratch', 'rebuild', 'rebuilt', 'build', 'built', 'implement',
+    'implemented', 'pytorch', 'karpathy',
   ],
-  projects: [
-    'project', 'projects', 'look', 'see', 'start', 'first', 'portfolio', 'built', 'show',
-    'best', 'proud', 'demo',
+  concepts: [
+    'attention', 'softmax', 'qkv', 'query', 'key', 'value', 'heads', 'transformer', 'explain',
   ],
-  work: [
+  inference: [
     'cheaper', 'cheap', 'cost', 'costs', 'faster', 'fast', 'speed', 'optimize', 'optimization',
-    'inference', 'quantization', 'quantize', 'gpu', 'memory', 'efficient', 'efficiency',
-    'latency', 'throughput', 'serving', 'llm', 'llms', 'model', 'models',
+    'inference', 'quantization', 'quantize', 'quantized', 'distillation', 'distill', 'fp8',
+    'int8', 'bf16', 'gpu', 'memory', 'efficient', 'latency', 'throughput', 'serving',
   ],
-  background: [
-    'background', 'who', 'about', 'story', 'history', 'experience', 'studied', 'study',
-    'education', 'degree', 'career', 'journey', 'bio',
+  evals: [
+    'eval', 'evals', 'evaluation', 'evaluate', 'good', 'benchmark', 'benchmarks', 'metric',
+    'metrics', 'test', 'tests', 'regression', 'quality', 'perplexity', 'measure',
   ],
-  meta: ['resume', 'cv', 'hire', 'hireable', 'hiring', 'contact', 'email', 'download', 'pdf'],
+  research: [
+    'thesis', 'teleport', 'teleportation', 'mdp', 'curriculum', 'rl', 'reinforcement',
+    'research', 'master', 'masters', 'horizon',
+  ],
+  opinion: [
+    'overrated', 'overhyped', 'hype', 'hyped', 'hot', 'take', 'opinion', 'unpopular',
+    'conscious', 'agi', 'bubble',
+  ],
+  human: [
+    'hobby', 'hobbies', 'life', 'fun', 'free', 'weekend', 'motorcycle', 'ride', 'riding',
+    'travel', 'game', 'games', 'videogame', 'videogames', 'anime', 'manga', 'food', 'gym',
+    'outside',
+  ],
+  resume: [
+    'resume', 'cv', 'hire', 'hireable', 'hiring', 'contact', 'email', 'download', 'pdf',
+    'career', 'experience',
+  ],
 }
 
 // Combining diacritical marks occupy U+0300–U+036F. NFD splits an accented letter into
@@ -74,7 +89,7 @@ function keywordsFor(entry: ChatEntry): Set<string> {
  * Maps free-text input to the closest chat entry by keyword overlap, or `null` when
  * nothing clears `MIN_MATCH_SCORE` (the caller then shows the in-voice fallback).
  *
- * Deliberately simple — good suggested prompts carry the primary path, and a real
+ * Deliberately simple - good suggested prompts carry the primary path, and a real
  * retrieval/LLM responder (task 15) is the answer to genuinely free-form questions.
  * Ties break toward the earlier entry, which the API already sorts by display order.
  */

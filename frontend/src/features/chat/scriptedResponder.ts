@@ -30,7 +30,7 @@ function resolve(
 /**
  * A `ChatResponder` with no live model: an exact lookup for a selected prompt, keyword
  * matching for typed text, and an in-voice fallback otherwise. It yields exactly one
- * resolution — the async-iterable shape exists only so a streaming `LlmChatResponder`
+ * resolution - the async-iterable shape exists only so a streaming `LlmChatResponder`
  * (task 15) can drop in without the chat shell changing.
  */
 export function createScriptedResponder(entries: readonly ChatEntry[]): ChatResponder {

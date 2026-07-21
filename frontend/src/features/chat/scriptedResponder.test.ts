@@ -5,10 +5,10 @@ import { createScriptedResponder } from './scriptedResponder'
 import type { AnswerResolution, ResponderInput } from './types'
 
 const ENTRIES: readonly ChatEntry[] = [
-  { slug: 'what-are-you-working-on', question: 'What are you working on these days?', category: 'now', answerHtml: '<p>Inference.</p>' },
-  { slug: 'whats-your-stack', question: "What's your stack?", category: 'stack', answerHtml: '<p>Python first.</p>' },
-  { slug: 'how-do-you-make-llms-cheaper', question: 'How do you make an LLM cheaper to run?', category: 'work', answerHtml: '<p>Quantize.</p>' },
-  { slug: 'can-i-see-your-resume', question: 'Can I see your résumé?', category: 'meta', answerHtml: '<p>Here.</p>' },
+  { slug: 'gpt2-from-scratch', question: 'What did rebuilding GPT-2 from scratch teach you?', category: 'build', answerHtml: '<p>Layer by layer.</p>' },
+  { slug: 'cheaper-inference', question: 'How do you actually make a model cheaper to run?', category: 'inference', answerHtml: '<p>Quantize first.</p>' },
+  { slug: 'most-overrated', question: 'What\'s the most overrated thing in ML right now?', category: 'opinion', answerHtml: '<p>Let us denoise.</p>' },
+  { slug: 'can-i-see-your-resume', question: 'Can I see your résumé?', category: 'resume', answerHtml: '<p>Here it is.</p>' },
 ]
 
 async function resolveOnce(input: ResponderInput): Promise<AnswerResolution> {
@@ -24,11 +24,11 @@ async function resolveOnce(input: ResponderInput): Promise<AnswerResolution> {
 
 describe('createScriptedResponder', () => {
   it('returns the authored answer for a selected prompt, by exact slug', async () => {
-    const resolution = await resolveOnce({ kind: 'prompt', slug: 'whats-your-stack' })
+    const resolution = await resolveOnce({ kind: 'prompt', slug: 'cheaper-inference' })
     expect(resolution.kind).toBe('answer')
     if (resolution.kind === 'answer') {
-      expect(resolution.entry.slug).toBe('whats-your-stack')
-      expect(resolution.entry.answerHtml).toContain('Python first')
+      expect(resolution.entry.slug).toBe('cheaper-inference')
+      expect(resolution.entry.answerHtml).toContain('Quantize')
     }
   })
 
@@ -41,7 +41,7 @@ describe('createScriptedResponder', () => {
   })
 
   it('falls back with suggestions when free text matches nothing', async () => {
-    const resolution = await resolveOnce({ kind: 'freeText', text: 'pineapple pizza opinions' })
+    const resolution = await resolveOnce({ kind: 'freeText', text: 'pineapple pizza please' })
     expect(resolution.kind).toBe('fallback')
     if (resolution.kind === 'fallback') {
       expect(resolution.suggestions.length).toBeGreaterThan(0)

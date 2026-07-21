@@ -10,10 +10,16 @@ export const PARAMETER_EXPONENT = 0.34
 export const DATA_COEFFICIENT = 410.7
 export const DATA_EXPONENT = 0.28
 
-/** Llama 3 8B: 8.03B parameters trained on just over 15T tokens. */
-export const MODEL_PARAMETERS = 8.03e9
-export const TRAINED_TOKENS = 15.0e12
-export const VOCABULARY_SIZE = 128256
+/** GPT-2's published 124M parameter budget and 50257-entry vocabulary. */
+export const MODEL_PARAMETERS = 124e6
+export const VOCABULARY_SIZE = 50257
+
+/**
+ * A round 10B-token horizon for the simulated sweep, not a claim about GPT-2's
+ * training corpus. The GPT-2 paper reports WebText in document count and bytes rather
+ * than an exact post-tokenization total, so the chart keeps this choice explicit.
+ */
+export const TRAINED_TOKENS = 10e9
 
 /** Where the plotted sweep starts. Much earlier and every run sits pinned at the ceiling. */
 export const WARMUP_TOKENS = 1e7
@@ -34,7 +40,7 @@ const FNV_PRIME = 16777619
  * power laws toward the irreducible entropy of the data, `IRREDUCIBLE_LOSS`.
  *
  * `dataPenalty` scales the data term only. A run whose hyperparameters are detuned
- * still converges to the same floor — it just needs proportionally more tokens to get
+ * still converges to the same floor - it just needs proportionally more tokens to get
  * there, which is exactly what multiplying `B` by a constant greater than 1 encodes.
  * That is the one modelling choice here that Hoffmann et al. do not supply.
  */
@@ -61,8 +67,8 @@ export function asymptoticLoss(parameterCount: number): number {
 
 /**
  * Loss at initialisation: a model with untrained weights puts uniform mass over the
- * vocabulary, so its cross-entropy is `ln(vocabularySize)` — about 11.76 nats for
- * Llama 3's 128256 tokens. No run may be drawn above this ceiling.
+ * vocabulary, so its cross-entropy is `ln(vocabularySize)` — about 10.83 nats for
+ * GPT-2's 50257 tokens. No run may be drawn above this ceiling.
  */
 export function initialLoss(vocabularySize: number): number {
   return Math.log(vocabularySize)
@@ -81,14 +87,14 @@ export interface SweepFamily {
  * The ordering is the only qualitative claim being made, and it is the uncontroversial
  * one: learning rate is the knob a language-model run is most sensitive to, and
  * auxiliary regularisers such as z-loss are the least. Every band starts at a penalty
- * of 1 — a well-set knob costs nothing — so the runs fan upward from a shared floor
+ * of 1 - a well-set knob costs nothing - so the runs fan upward from a shared floor
  * rather than sitting in arbitrarily stacked lanes.
  */
 export const SWEEP_FAMILIES: readonly SweepFamily[] = [
   { id: 'learning-rate', label: 'learning rate', worstDataPenalty: 2.7 },
   { id: 'batch-size', label: 'batch size', worstDataPenalty: 2.15 },
   { id: 'warmup', label: 'warmup', worstDataPenalty: 1.78 },
-  { id: 'rope-theta', label: 'rope θ', worstDataPenalty: 1.5 },
+  { id: 'dropout', label: 'dropout', worstDataPenalty: 1.5 },
   { id: 'weight-decay', label: 'weight decay', worstDataPenalty: 1.3 },
   { id: 'z-loss', label: 'z-loss', worstDataPenalty: 1.14 },
 ]
@@ -122,7 +128,7 @@ function jitter(seed: string): number {
  *
  * Each point is the scaling-law prediction for this run's data penalty, clamped to the
  * untrained ceiling, plus a deterministic wobble scaled by the distance still left to
- * fall — noisy early where batches disagree, quiet late where the curve has flattened.
+ * fall - noisy early where batches disagree, quiet late where the curve has flattened.
  * The wobble is cosmetic; the trend is the published fit.
  */
 export function sampleRun(dataPenalty: number, seed: string, sampleCount: number): LossSample[] {

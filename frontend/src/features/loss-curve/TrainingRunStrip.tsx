@@ -43,11 +43,11 @@ export function TrainingRunStrip() {
           I want to look at training losses for the rest of my life
         </h2>
         <p className="text-sm text-muted">
-          {SWEEP_FAMILIES.length * RUNS_PER_FAMILY} runs of an 8B model, one hue per knob, each
-          swept from well-tuned to visibly regretted. Detuning does not change where a run ends
-          up — {floor.toFixed(2)} nats, the entropy of the data, is not negotiable — it changes
-          how many tokens you burn getting there. Tune the learning rate first; the top band is
-          not an accident.
+          {SWEEP_FAMILIES.length * RUNS_PER_FAMILY} simulated runs at GPT-2's 124M-parameter
+          budget, one hue per knob, each swept from well-tuned to visibly regretted. Detuning
+          does not change where a run ends up — its {floor.toFixed(2)}-nat finite-model floor is
+          not negotiable — it changes how many tokens you burn getting there. Tune the learning
+          rate first; the top band is not an accident.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export function TrainingRunStrip() {
       </ul>
 
       <p className="font-mono text-xs text-muted">
-        baseline · {baselineLoss.toFixed(2)} nats after 15T tokens
+        baseline · {baselineLoss.toFixed(2)} nats after 10B modeled tokens
       </p>
     </section>
   )

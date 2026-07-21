@@ -11,7 +11,7 @@ interface SuggestedPromptsProps {
 }
 
 /**
- * The suggested-prompt chips — the primary way into the chat. Each is a real button, so
+ * The suggested-prompt chips - the primary way into the chat. Each is a real button, so
  * it is keyboard-operable and focusable for free. Distinguished from the transcript by
  * shape (pills) and position, not colour, and the brand accent only appears on
  * hover/focus so a resting chip never reads as a link.

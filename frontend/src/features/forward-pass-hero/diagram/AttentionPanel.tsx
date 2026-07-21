@@ -45,10 +45,10 @@ function strongestEdgesPerHead(edges: readonly AttentionEdge[]): AttentionEdge[]
 }
 
 /**
- * Grouped-query attention: Q/K/V projections with RoPE applied to Q and K, a head ×
- * key heatmap for the heads there is room to draw, fan lines from the loudest keys
- * back to the tokens they come from, and the KV cache underneath. Each heatmap row is
- * one head's softmax, so cell opacity is its weight relative to that head's own peak.
+ * GPT-2 multi-head attention: Q/K/V projections, a head × key heatmap for the heads
+ * there is room to draw, fan lines from the loudest keys back to their tokens, and the
+ * KV cache underneath. Each heatmap row is one head's softmax, so cell opacity is its
+ * weight relative to that head's own peak.
  */
 export function AttentionPanel({
   edges,
@@ -85,7 +85,7 @@ export function AttentionPanel({
             fontSize={layout.labelSize}
             className={cn('font-mono', qkvActive ? 'fill-fg' : 'fill-muted')}
           >
-            qkv + rope
+            qkv
           </text>
           {QKV_LABELS.map((label, projection) => {
             const stackWidth = 22
@@ -157,7 +157,7 @@ export function AttentionPanel({
         className={cn('font-mono', attentionActive ? 'fill-fg' : 'fill-muted')}
       >
         {layout.verbose
-          ? `gqa · ${TARGET_MODEL.queryHeadCount} q / ${TARGET_MODEL.keyValueHeadCount} kv heads`
+          ? `mha · ${TARGET_MODEL.queryHeadCount} heads`
           : 'attention'}
       </text>
 

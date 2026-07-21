@@ -29,7 +29,7 @@ const RESTING_FRAME = idleFrame()
  * Drives a `ForwardPassSource` for React.
  *
  * Responsibilities are split so the two can move at different speeds. A *producer*
- * consumes the source as fast as it yields and appends to a buffer — it never adds
+ * consumes the source as fast as it yields and appends to a buffer - it never adds
  * delay of its own, so frames from a real streamed source arrive at network speed and
  * frames from the scripted source arrive at once. A *player* then walks `position`
  * along that buffer at `frameDelayMs`, and that is what pause, scrub and single-step
