@@ -22,6 +22,9 @@ install-uv: # install uv tool
 install-dev: # install dev dependencies
 	uv sync --all-groups
 
+install-release: # install release dependencies
+	uv sync --group release
+
 install-test: # install test dependencies
 	uv sync --group test
 
@@ -51,6 +54,22 @@ test: # launch the tests
 
 pre-commit: # run pre-commit hooks
 	uv run pre-commit run --all-files
+
+release: # release the next version based on commit messages
+	uv run semantic-release version --no-commit --no-tag
+	uv run python -m utils.release
+
+patch: # release a patch
+	uv run semantic-release version --no-commit --no-tag --patch
+	uv run python -m utils.release
+
+minor: # release a minor version
+	uv run semantic-release version --no-commit --no-tag --minor
+	uv run python -m utils.release
+
+major: # release a major version
+	uv run semantic-release version --no-commit --no-tag --major
+	uv run python -m utils.release
 
 fe-install: # install frontend dependencies
 	cd $(FRONTEND_DIR) && $(NPM) install
