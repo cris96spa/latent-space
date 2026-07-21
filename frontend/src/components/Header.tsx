@@ -9,7 +9,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link to="/" className="inline-flex items-baseline gap-2" aria-label="latent-space, home">
+        <Link to="/" className="inline-flex items-center gap-2" aria-label="latent-space, home">
+          <img src="/favicon.png" alt="" aria-hidden="true" className="size-7" />
           <span className="font-mono text-sm text-brand-500" aria-hidden="true">
             {'>_'}
           </span>
