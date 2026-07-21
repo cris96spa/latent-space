@@ -5,7 +5,7 @@ import { getChatEntries, type ChatEntry } from '../../lib/api'
 import { usePrefersReducedMotion } from '../../hooks/useMediaQuery'
 import { ChatComposer } from './ChatComposer'
 import { ChatTranscript } from './ChatTranscript'
-import { ABLATION_SWEEP_SLUG, CHAT_COPY } from './content'
+import { ABLATION_SWEEP_PUBLIC_IDENTIFIER, CHAT_COPY } from './content'
 import { createScriptedResponder } from './scriptedResponder'
 import { SuggestedPrompts } from './SuggestedPrompts'
 import { useChat } from './useChat'
@@ -62,7 +62,9 @@ export function ChatSection() {
     if (load.status !== 'ready' || preloadedRef.current) {
       return
     }
-    const sweep = entries.find((entry) => entry.slug === ABLATION_SWEEP_SLUG)
+    const sweep = entries.find(
+      (entry) => entry.publicIdentifier === ABLATION_SWEEP_PUBLIC_IDENTIFIER,
+    )
     if (sweep) {
       preloadedRef.current = true
       askPrompt(sweep)
@@ -81,7 +83,6 @@ export function ChatSection() {
         >
           {CHAT_COPY.title}
         </h2>
-        <p className="text-sm text-muted">{CHAT_COPY.intro}</p>
       </div>
 
       {load.status === 'loading' && <p className="text-muted">{CHAT_COPY.loading}</p>}

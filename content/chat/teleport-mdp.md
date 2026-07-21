@@ -1,5 +1,4 @@
 ---
-slug: teleport-mdp
 question: What's the "Teleport MDP" (your thesis) about?
 category: research
 order: 6

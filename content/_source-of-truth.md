@@ -8,7 +8,7 @@
 > "Source material").
 >
 > **Sources.**
-> - `[CV]` - `src/static/Cristian_C_Spagnuolo_CV.pdf` (canonical for roles, dates, metrics).
+> - `[CV]` - `frontend/public/Cristian_C_Spagnuolo_CV.pdf` (canonical for roles, dates, metrics).
 >   CV footer dates the document "June 26, 2026".
 > - `[GH]` - <https://github.com/cris96spa> public profile + REST API (pulled 2026-07-20).
 > - `[LI]` - <https://www.linkedin.com/in/cristian-c-spagnuolo/> (not machine-readable here;

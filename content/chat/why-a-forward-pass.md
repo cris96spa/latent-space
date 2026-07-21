@@ -1,5 +1,4 @@
 ---
-slug: why-a-forward-pass
 question: Why is this a forward pass and not a normal portfolio?
 category: meta
 order: 1

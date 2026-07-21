@@ -1,5 +1,4 @@
 ---
-slug: hackapizza
 title: Hackapizza 2025 — Cosmic Pizza RAG Agent
 summary: >-
   2nd place at Hackapizza 2025 (IBM Studios, Milano): a RAG agent that answers "what can I

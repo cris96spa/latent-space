@@ -1,5 +1,4 @@
 ---
-slug: most-overrated
 question: What's the most overrated thing in ML right now?
 category: opinion
 order: 7

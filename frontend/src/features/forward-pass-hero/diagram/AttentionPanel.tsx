@@ -1,7 +1,7 @@
 import { cn } from '../../../lib/cn'
 import { TARGET_MODEL } from '../architecture'
 import { ATTENTION_HEADS } from '../frames'
-import { hashUnitInterval } from '../sampling'
+import { hashUnitInterval } from '../../../lib/hash'
 import type { AttentionEdge, ContextToken } from '../types'
 import { centerX, contextRowY, rightX, type DiagramLayout } from './layout'
 

@@ -1,7 +1,7 @@
 ---
-slug: ablation-sweep
 question: How much do hyperparameters actually matter?
 category: training
+attachment: ablation-sweep
 order: 10
 draft: false
 ---

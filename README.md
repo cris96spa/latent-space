@@ -1,119 +1,62 @@
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square&logo=github)](https://cris96spa.github.io/latent-space/)
 
-# Python Repository Template
+# latent-space
 
-The ultimate 2026 Python repository template. Simple, fast, customizable, and ready to use.
+Cristian Spagnuolo's personal site: part portfolio, part lab notebook, part applied-ML
+performance art. It answers "Who is Cristian and what does he build?" in a voice a PDF
+resume cannot.
 
-## 🎯 Core Features
+The product is a **FastAPI** backend that loads, validates, sanitizes, and serves authored
+content, and a **Vite / React / TypeScript** frontend that owns routing and presentation.
+Two signature experiences carry the site: a forward-pass hero that streams the bio through a
+GPT-2 pipeline, and a scripted chat over preset questions and authored answers.
 
-### Development Tools
+See [`CLAUDE.md`](CLAUDE.md) for the architecture, content, and voice conventions.
 
-- 📦 UV - Ultra-fast Python package manager
-- 🚀 Make - Command runner
-- 💅 Ruff - Lightning-fast linter and formatter
-- 🧪 Pytest - Testing framework with fixtures and plugins
-- 🧾 Rich - Elegant logging via standard `logging` module
+## Layout
 
-### Infrastructure
-
-- 🛫 Pre-commit hooks
-- 🐳 Docker support with multi-stage builds
-- 🔄 GitHub Actions CI/CD pipeline
-
-
-## Usage
-
-The template is based on [UV](https://docs.astral.sh/) as package manager and [Make](https://www.gnu.org/software/make/) as command runner. You need to have both installed in your system to use this template.
-
-Once you have those, you can run
-
-```bash
-make dev
+```
+latent_space/      FastAPI app: api routers, models, services (content loading + markdown)
+content/           Authored Markdown-with-frontmatter (projects, chat answers)
+frontend/          Vite/React SPA (features/, components/, pages/, lib/)
+utils/             Repository-wide infrastructure (settings base classes, release, docs)
+tests/             Backend tests, mirroring latent_space/
 ```
 
-to create a virtual environment and install all the dependencies, including the development ones, and set up pre-commit hooks. If instead you want to install only production dependencies, you can run
+## Getting started
+
+The backend uses [uv](https://docs.astral.sh/uv/) as package manager and
+[Make](https://www.gnu.org/software/make/) as command runner; the frontend uses npm. Run
+`make help` for the full target list.
 
 ```bash
-make install
+make dev          # backend venv + all dev deps + pre-commit hooks
+make fe-install   # frontend dependencies
 ```
 
-You can see all available targets with:
+### Running locally
 
 ```bash
-make help
+make serve        # FastAPI with autoreload on :8000
+make fe-dev       # Vite dev server on :5173, proxying /api to the backend
 ```
 
-### Formatting, Linting and Testing
+The frontend calls `/api/*`; the dev proxy strips `/api` before forwarding to the backend.
 
-You can configure Ruff by editing the `[tool.ruff]` section in `pyproject.toml`.
-
-Format your code:
+### Checks
 
 ```bash
-make format
-```
-
-Run linters:
-
-```bash
-make lint
-```
-
-Check formatting without modifying files:
-
-```bash
-make format-check
-```
-
-### Executing
-
-The code is a simple hello world example, which just requires a number as input. It will output the sum of the provided number with a random number.
-You can run the code with:
-
-```bash
-uv run python main.py --number 5
+make format-check lint lint-doc test   # backend
+make fe-lint fe-test fe-build          # frontend
 ```
 
 ### Docker
 
-The template includes a multi-stage Dockerfile, which produces an image with the code and the dependencies installed. You can build the image with:
-
-```bash
-docker build -t latent-space .
-```
-
-### Documentation
-
-Build and serve the documentation locally:
-
-```bash
-make doc
-```
-
-### Github Actions
-
-The template includes two Github Actions workflows.
-
-The first one runs tests and linters on every push on the main and dev branches. You can find the workflow file in `.github/workflows/main-list-test.yml`.
-
-The second one is triggered on every tag push and can also be triggered manually. It builds the distribution and uploads it to PyPI. You can find the workflow file in `.github/workflows/publish.yaml`.
+`docker compose up --build` builds the backend image and an nginx edge that serves the
+built frontend and proxies `/api` to the backend.
 
 ## Configuration
 
-The template separates configuration into two kinds, each with its own base class in `utils/configs.py`:
-
-- **Process settings** - `YamlBaseSettings`, layered over the environment so environment variables can override the YAML file. Best for singular, per-process settings such as the global log level.
-- **Instance configs** - `YamlBaseModel`, plain data models loaded explicitly from a file. The same class can be loaded many times from different files, with no shared environment state between instances.
-
-### Default path with per-instance override
-
-Instance configs are loaded through `from_yaml`. A config class may set a `DEFAULT_CONFIG_PATH`, which is used whenever no path is given - so the common case takes no arguments, while any case that needs a different file simply passes one:
-
-```python
-from utils.configs import MlflowLoggerConfig
-
-config = MlflowLoggerConfig.from_yaml()                      # default file
-config = MlflowLoggerConfig.from_yaml("configs/other.yaml")  # this instance only
-```
-
-Classes without a `DEFAULT_CONFIG_PATH` require an explicit path.
+Process settings use `YamlBaseSettings` (`utils/configs.py`), layered over the environment
+so `LATENT_SPACE_`-prefixed variables override the YAML file in `configs/app.yaml`. For
+YAML documents loaded explicitly by path, `YamlBaseModel` is the base class.

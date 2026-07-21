@@ -1,5 +1,4 @@
 ---
-slug: teleport-mdp
 title: Teleport MDPs — Curriculum Learning for RL
 summary: >-
   Master's thesis at Politecnico di Milano: a formal framework - the Teleport MDP - that

@@ -1,33 +1,38 @@
 from datetime import date
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
-SLUG_PATTERN = r"^[a-z0-9]+(?:-[a-z0-9]+)*$"
+PUBLIC_IDENTIFIER_PATTERN = r"^[a-z0-9]+(?:-[a-z0-9]+)*$"
 
-Slug = Annotated[
+PublicIdentifier = Annotated[
     str,
     Field(
-        pattern=SLUG_PATTERN,
+        pattern=PUBLIC_IDENTIFIER_PATTERN,
         description="Lowercase, hyphen-separated persistent identifier used in URLs.",
     ),
 ]
+
+# A rich, non-text widget rendered beneath a chat answer. Declared in the answer's
+# frontmatter so the mapping lives with the content, not in the frontend.
+AnswerAttachment = Literal["resume", "ablation-sweep"]
 
 
 class Project(BaseModel):
     """A portfolio project loaded from a Markdown-with-frontmatter file.
 
     Frontmatter carries the metadata; the Markdown body becomes `body_markdown`.
-    `slug` is the persistent public identifier and must equal the source file's
-    stem - the loader enforces this so filenames and URLs cannot drift apart.
-    Instances may be drafts; excluding drafts from published output is the
-    content service's responsibility, not this model's. Unknown frontmatter keys
-    are rejected so a typo fails loudly at load time instead of being ignored.
+    `public_identifier` is the persistent public identifier: the loader derives it from the
+    source file's stem rather than the frontmatter, so the filename and the URL
+    are one thing and cannot drift apart. Instances may be drafts; excluding
+    drafts from published output is the content service's responsibility, not
+    this model's. Unknown frontmatter keys are rejected so a typo fails loudly at
+    load time instead of being ignored.
     """
 
     model_config = ConfigDict(extra="forbid")
 
-    slug: Slug
+    public_identifier: PublicIdentifier
     title: str
     summary: str
     stack: list[str] = Field(
@@ -51,7 +56,7 @@ class ProjectSummary(BaseModel):
     `draft` flag.
     """
 
-    slug: str
+    public_identifier: PublicIdentifier
     title: str
     summary: str
     stack: list[str]
@@ -75,14 +80,19 @@ class ChatEntry(BaseModel):
     Authored as content (frontmatter question/metadata, Markdown-body answer)
     rather than inline component strings, so a later retrieval- or LLM-backed
     mode can reuse the same questions and answers without touching the UI.
+    `public_identifier` is derived from the filename stem by the loader, as for `Project`.
     `order` gives a deterministic display sequence within the chat.
     """
 
     model_config = ConfigDict(extra="forbid")
 
-    slug: Slug
+    public_identifier: PublicIdentifier
     question: str
     category: str
+    attachment: AnswerAttachment | None = Field(
+        default=None,
+        description="Rich widget rendered beneath the answer, e.g. the resume viewer.",
+    )
     order: int = Field(ge=0, description="Ascending display order within the chat.")
     draft: bool = False
     answer_markdown: str = Field(description="Markdown source of the authored answer.")
@@ -91,7 +101,8 @@ class ChatEntry(BaseModel):
 class ChatEntryResponse(BaseModel):
     """Chat entry as returned by the API: the answer rendered to safe HTML."""
 
-    slug: str
+    public_identifier: PublicIdentifier
     question: str
     category: str
+    attachment: AnswerAttachment | None = None
     answer_html: str = Field(description="Sanitized HTML rendered from the answer Markdown.")

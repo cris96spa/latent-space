@@ -4,20 +4,26 @@ export interface HealthStatus {
   status: string
 }
 
+/** A rich, non-text widget an answer carries, declared in its frontmatter. */
+export type AnswerAttachment = 'resume' | 'ablation-sweep'
+
 /** A scripted-chat question and its authored answer, ready to render. */
 export interface ChatEntry {
-  readonly slug: string
+  readonly publicIdentifier: string
   readonly question: string
   readonly category: string
+  /** Rich widget rendered beneath the answer, or `null` for a plain answer. */
+  readonly attachment: AnswerAttachment | null
   /** Server-sanitized HTML; the frontend renders it as-is and never sanitizes. */
   readonly answerHtml: string
 }
 
 /** Wire shape of a chat entry: the backend serializes `answer_html` in snake_case. */
 interface ChatEntryWire {
-  readonly slug: string
+  readonly public_identifier: string
   readonly question: string
   readonly category: string
+  readonly attachment: AnswerAttachment | null
   readonly answer_html: string
 }
 
@@ -37,16 +43,17 @@ export function getHealth(): Promise<HealthStatus> {
 export async function getChatEntries(): Promise<ChatEntry[]> {
   const entries = await fetchJson<ChatEntryWire[]>('/chat/entries')
   return entries.map((entry) => ({
-    slug: entry.slug,
+    publicIdentifier: entry.public_identifier,
     question: entry.question,
     category: entry.category,
+    attachment: entry.attachment,
     answerHtml: entry.answer_html,
   }))
 }
 
 /** A portfolio project as listed on the index: metadata without the body. */
 export interface Project {
-  readonly slug: string
+  readonly publicIdentifier: string
   readonly title: string
   readonly summary: string
   readonly stack: readonly string[]
@@ -67,7 +74,7 @@ export interface ProjectDetail extends Project {
 
 /** Wire shape of a project: the backend serializes metadata in snake_case. */
 interface ProjectWire {
-  readonly slug: string
+  readonly public_identifier: string
   readonly title: string
   readonly summary: string
   readonly stack: readonly string[]
@@ -85,7 +92,7 @@ interface ProjectDetailWire extends ProjectWire {
 
 function toProject(wire: ProjectWire): Project {
   return {
-    slug: wire.slug,
+    publicIdentifier: wire.public_identifier,
     title: wire.title,
     summary: wire.summary,
     stack: wire.stack,
@@ -104,8 +111,10 @@ export async function getProjects(): Promise<Project[]> {
   return projects.map(toProject)
 }
 
-/** Fetches one published project by slug, including its rendered body. Rejects on 404. */
-export async function getProject(slug: string): Promise<ProjectDetail> {
-  const wire = await fetchJson<ProjectDetailWire>(`/projects/${encodeURIComponent(slug)}`)
+/** Fetches one published project by public identifier, including its body. Rejects on 404. */
+export async function getProject(publicIdentifier: string): Promise<ProjectDetail> {
+  const wire = await fetchJson<ProjectDetailWire>(
+    `/projects/${encodeURIComponent(publicIdentifier)}`,
+  )
   return { ...toProject(wire), bodyHtml: wire.body_html }
 }

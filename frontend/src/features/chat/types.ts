@@ -1,8 +1,10 @@
-import type { ChatEntry } from '../../lib/api'
+import type { AnswerAttachment, ChatEntry } from '../../lib/api'
+
+export type { AnswerAttachment }
 
 /** What the user asked, as the responder sees it: a chip is exact, typed text is matched. */
 export type ResponderInput =
-  | { readonly kind: 'prompt'; readonly slug: string }
+  | { readonly kind: 'prompt'; readonly publicIdentifier: string }
   | { readonly kind: 'freeText'; readonly text: string }
 
 /** The responder's answer to one input: a matched entry, or the no-match fallback. */
@@ -48,8 +50,5 @@ export interface AnswerTurn {
   /** The realistic "thinking" status line shown above the answer as it streams. */
   readonly hook?: string
 }
-
-/** A rich, non-text payload rendered beneath an answer: the résumé, or the sweep plot. */
-export type AnswerAttachment = 'resume' | 'ablation-sweep'
 
 export type ChatTurn = UserTurn | AnswerTurn

@@ -1,5 +1,4 @@
 ---
-slug: image-distribution-drift-simulator
 title: Image Distribution Drift Simulator
 summary: >-
   A generator for synthetic distribution shift on image data, so a model's robustness gets

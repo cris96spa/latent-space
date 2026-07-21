@@ -1,5 +1,4 @@
 ---
-slug: python-repo-template
 title: Python Repo Template
 summary: >-
   My opinionated Python starter - uv, Ruff, pytest, Docker, CI/CD, and auto-generated docs -

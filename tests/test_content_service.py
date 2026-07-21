@@ -7,6 +7,7 @@ from latent_space.models.content import ChatEntry, Project
 from latent_space.services.content import (
     ContentLoadError,
     ContentService,
+    load_chat_entries_from_directory,
     load_projects_from_directory,
     parse_frontmatter_document,
     sort_chat_entries,
@@ -14,10 +15,10 @@ from latent_space.services.content import (
 )
 
 
-def _project(slug: str, published_at: date, *, draft: bool = False) -> Project:
+def _project(public_identifier: str, published_at: date, *, draft: bool = False) -> Project:
     return Project(
-        slug=slug,
-        title=slug,
+        public_identifier=public_identifier,
+        title=public_identifier,
         summary="summary",
         published_at=published_at,
         body_markdown="body",
@@ -25,9 +26,9 @@ def _project(slug: str, published_at: date, *, draft: bool = False) -> Project:
     )
 
 
-def _chat(slug: str, order: int, *, draft: bool = False) -> ChatEntry:
+def _chat(public_identifier: str, order: int, *, draft: bool = False) -> ChatEntry:
     return ChatEntry(
-        slug=slug,
+        public_identifier=public_identifier,
         question="q",
         category="c",
         order=order,
@@ -58,53 +59,94 @@ def test_parse_frontmatter_requires_closing_delimiter():
         parse_frontmatter_document("---\ntitle: Hi\nbody with no close")
 
 
-def test_loads_valid_project(tmp_path: Path):
+def test_public_identifier_is_derived_from_filename(tmp_path: Path):
     _write_project_file(
         tmp_path / "projects",
-        "alpha.md",
-        "---\nslug: alpha\ntitle: Alpha\nsummary: s\npublished_at: 2024-01-01\n---\nBody **x**.",
+        "alpha-project.md",
+        "---\ntitle: Alpha\nsummary: s\npublished_at: 2024-01-01\n---\nBody **x**.",
     )
 
     projects = load_projects_from_directory(tmp_path / "projects")
 
     assert len(projects) == 1
-    assert projects[0].slug == "alpha"
+    assert projects[0].public_identifier == "alpha-project"
     assert projects[0].body_markdown == "Body **x**."
 
 
-def test_missing_required_field_fails_loudly(tmp_path: Path):
+def test_authored_public_identifier_in_frontmatter_is_rejected(tmp_path: Path):
     _write_project_file(
         tmp_path / "projects",
         "alpha.md",
-        "---\nslug: alpha\ntitle: Alpha\npublished_at: 2024-01-01\n---\nBody.",
+        "---\npublic_identifier: something-else\ntitle: Alpha\n"
+        "summary: s\npublished_at: 2024-01-01\n---\nB.",
+    )
+
+    with pytest.raises(ContentLoadError, match="public_identifier is derived from the filename"):
+        load_projects_from_directory(tmp_path / "projects")
+
+
+def test_non_public_identifier_filename_fails_loudly(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "projects",
+        "Bad Name.md",
+        "---\ntitle: Bad\nsummary: s\npublished_at: 2024-01-01\n---\nBody.",
     )
 
     with pytest.raises(ContentLoadError):
         load_projects_from_directory(tmp_path / "projects")
 
 
-def test_duplicate_slug_fails_loudly(tmp_path: Path):
-    directory = tmp_path / "projects"
+def test_missing_required_field_fails_loudly(tmp_path: Path):
     _write_project_file(
-        directory,
-        "one.md",
-        "---\nslug: dup\ntitle: One\nsummary: s\npublished_at: 2024-01-01\n---\nBody.",
-    )
-    _write_project_file(
-        directory,
-        "two.md",
-        "---\nslug: dup\ntitle: Two\nsummary: s\npublished_at: 2024-01-02\n---\nBody.",
+        tmp_path / "projects",
+        "alpha.md",
+        "---\ntitle: Alpha\npublished_at: 2024-01-01\n---\nBody.",
     )
 
-    with pytest.raises(ContentLoadError, match="duplicate project slug 'dup'"):
-        load_projects_from_directory(directory)
+    with pytest.raises(ContentLoadError):
+        load_projects_from_directory(tmp_path / "projects")
+
+
+def test_chat_attachment_loads_from_frontmatter(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "chat",
+        "sweep.md",
+        "---\nquestion: q\ncategory: c\norder: 0\nattachment: ablation-sweep\n---\nBody.",
+    )
+
+    entries = load_chat_entries_from_directory(tmp_path / "chat")
+
+    assert entries[0].attachment == "ablation-sweep"
+
+
+def test_chat_without_attachment_defaults_to_none(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "chat",
+        "plain.md",
+        "---\nquestion: q\ncategory: c\norder: 0\n---\nBody.",
+    )
+
+    entries = load_chat_entries_from_directory(tmp_path / "chat")
+
+    assert entries[0].attachment is None
+
+
+def test_unknown_attachment_value_fails_loudly(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "chat",
+        "bad.md",
+        "---\nquestion: q\ncategory: c\norder: 0\nattachment: not-a-widget\n---\nBody.",
+    )
+
+    with pytest.raises(ContentLoadError):
+        load_chat_entries_from_directory(tmp_path / "chat")
 
 
 def test_missing_directory_returns_empty_list(tmp_path: Path):
     assert load_projects_from_directory(tmp_path / "absent") == []
 
 
-def test_sort_projects_newest_first_breaks_date_ties_by_slug():
+def test_sort_projects_newest_first_breaks_date_ties_by_public_identifier():
     projects = [
         _project("bravo", date(2025, 6, 1)),
         _project("charlie", date(2024, 1, 1)),
@@ -114,10 +156,15 @@ def test_sort_projects_newest_first_breaks_date_ties_by_slug():
 
     ordered = sort_projects_newest_first(projects)
 
-    assert [project.slug for project in ordered] == ["bravo", "alpha", "charlie", "delta"]
+    assert [project.public_identifier for project in ordered] == [
+        "bravo",
+        "alpha",
+        "charlie",
+        "delta",
+    ]
 
 
-def test_sort_chat_entries_by_order_then_slug():
+def test_sort_chat_entries_by_order_then_public_identifier():
     entries = [
         _chat("z-last", 2),
         _chat("mid-b", 1),
@@ -127,13 +174,13 @@ def test_sort_chat_entries_by_order_then_slug():
 
     ordered = sort_chat_entries(entries)
 
-    assert [entry.slug for entry in ordered] == ["first", "mid-a", "mid-b", "z-last"]
+    assert [entry.public_identifier for entry in ordered] == ["first", "mid-a", "mid-b", "z-last"]
 
 
 def test_service_excludes_drafts_and_prerenders_html():
     projects = [
         Project(
-            slug="published-one",
+            public_identifier="published-one",
             title="Published One",
             summary="s",
             published_at=date(2024, 1, 1),
@@ -143,7 +190,7 @@ def test_service_excludes_drafts_and_prerenders_html():
     ]
     chat_entries = [
         ChatEntry(
-            slug="visible",
+            public_identifier="visible",
             question="q",
             category="c",
             order=0,
@@ -154,7 +201,8 @@ def test_service_excludes_drafts_and_prerenders_html():
 
     service = ContentService(projects, chat_entries)
 
-    assert [summary.slug for summary in service.published_project_summaries()] == ["published-one"]
+    summaries = service.published_project_summaries()
+    assert [summary.public_identifier for summary in summaries] == ["published-one"]
     detail = service.published_project_detail("published-one")
     assert detail is not None
     assert "<strong>hi</strong>" in detail.body_html
@@ -162,5 +210,5 @@ def test_service_excludes_drafts_and_prerenders_html():
     assert service.published_project_detail("unknown") is None
 
     responses = service.chat_entries()
-    assert [response.slug for response in responses] == ["visible"]
+    assert [response.public_identifier for response in responses] == ["visible"]
     assert "<em>yes</em>" in responses[0].answer_html

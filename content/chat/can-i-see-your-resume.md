@@ -1,7 +1,7 @@
 ---
-slug: can-i-see-your-resume
 question: Can I see your resume?
 category: resume
+attachment: resume
 order: 9
 draft: false
 ---

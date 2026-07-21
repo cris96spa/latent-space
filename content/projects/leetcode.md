@@ -1,5 +1,4 @@
 ---
-slug: leetcode
 title: LeetCode / NeetCode 250
 summary: >-
   A running notebook of algorithm solutions in Python, with a self-updating progress table
