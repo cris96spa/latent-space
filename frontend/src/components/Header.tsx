@@ -24,6 +24,12 @@ export function Header() {
           >
             Projects
           </Link>
+          <Link
+            to="/resume"
+            className="font-medium text-fg transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+          >
+            Résumé
+          </Link>
           <TextLink
             href={EXTERNAL_LINKS.github}
             target="_blank"

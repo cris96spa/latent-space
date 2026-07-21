@@ -6,7 +6,7 @@ import { TokenChip } from '../components/TokenChip'
 import { buttonClassName } from '../components/button-variants'
 import { ChatSection } from '../features/chat'
 import { ForwardPassHero } from '../features/forward-pass-hero'
-import { EXTERNAL_LINKS, RESUME_PDF } from '../lib/links'
+import { EXTERNAL_LINKS } from '../lib/links'
 
 const STACK_TOKENS = ['PyTorch', 'vLLM', 'TensorRT', 'FastAPI', 'Docker', 'MLflow', 'uv']
 
@@ -24,9 +24,9 @@ export function HomePage() {
         </SectionHeading>
 
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={RESUME_PDF.path} target="_blank" rel="noreferrer noopener">
+          <Link to="/resume" className={buttonClassName('primary')}>
             The résumé →
-          </ButtonLink>
+          </Link>
           <Link to="/projects" className={buttonClassName('ghost')}>
             The projects →
           </Link>
