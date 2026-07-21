@@ -18,6 +18,12 @@ export function Header() {
           </span>
         </Link>
         <nav className="flex items-center gap-4 text-sm">
+          <Link
+            to="/projects"
+            className="font-medium text-fg transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+          >
+            Projects
+          </Link>
           <TextLink
             href={EXTERNAL_LINKS.github}
             target="_blank"
