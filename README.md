@@ -55,6 +55,27 @@ make fe-lint fe-test fe-build          # frontend
 `docker compose up --build` builds the backend image and an nginx edge that serves the
 built frontend and proxies `/api` to the backend.
 
+## Deploy
+
+The site deploys on **Vercel** as a single project using
+[Vercel Services](https://vercel.com/docs/services):
+
+- a static **Vite** frontend service (`frontend/`), and
+- the **FastAPI** app as a native Python function — `asgi.py` mounts `create_app()` under
+  `/api`, so the browser keeps calling the relative `/api/*` prefix and the app's routers
+  stay unprefixed. Dependencies install from `pyproject.toml` + `uv.lock` (no
+  `requirements.txt`).
+
+Routing lives in `vercel.json`: `/api/*` → the backend service, everything else → the static
+frontend with client-side-routing fallback.
+
+**One-time setup:** enable the **Services** and **Python runtime** permissions (both Beta) on
+the Vercel account/team, import the repo, and set the project framework to **Services**.
+Vercel's Git integration then deploys on push and creates per-PR previews.
+
+The `Dockerfile` / `docker-compose.yml` and the GHCR image workflow remain for local dev and
+for an alternate container host; they are not used by the Vercel deploy.
+
 ## Configuration
 
 Process settings use `YamlBaseSettings` (`utils/configs.py`), layered over the environment
