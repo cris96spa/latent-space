@@ -19,7 +19,7 @@ class Project(BaseModel):
 
     Frontmatter carries the metadata; the Markdown body becomes `body_markdown`.
     `slug` is the persistent public identifier and must equal the source file's
-    stem — the loader enforces this so filenames and URLs cannot drift apart.
+    stem - the loader enforces this so filenames and URLs cannot drift apart.
     Instances may be drafts; excluding drafts from published output is the
     content service's responsibility, not this model's. Unknown frontmatter keys
     are rejected so a typo fails loudly at load time instead of being ignored.
