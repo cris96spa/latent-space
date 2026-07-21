@@ -1,0 +1,130 @@
+name: Version Bump and Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Semantic version bump type
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  bump-and-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚧 Require main branch
+        run: |
+          if [[ "${GITHUB_REF_NAME}" != "main" ]]; then
+            echo "This workflow must run from main. Current ref: ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: 🧮 Compute next version
+        id: next_version
+        env:
+          RELEASE_TYPE: ${{ inputs.release_type }}
+        run: |
+          python <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          import tomllib
+
+          release_type = os.environ["RELEASE_TYPE"]
+          if release_type not in {"patch", "minor", "major"}:
+              raise SystemExit(f"Unsupported release type: {release_type}")
+
+          pyproject_path = Path("pyproject.toml")
+          pyproject_text = pyproject_path.read_text(encoding="utf-8")
+          pyproject_data = tomllib.loads(pyproject_text)
+          current_version = pyproject_data["project"]["version"]
+
+          match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", current_version)
+          if not match:
+              raise SystemExit(
+                  f"Current version '{current_version}' is not in 'X.Y.Z' semver format"
+              )
+
+          major, minor, patch = (int(part) for part in match.groups())
+          if release_type == "patch":
+              patch += 1
+          elif release_type == "minor":
+              minor += 1
+              patch = 0
+          else:
+              major += 1
+              minor = 0
+              patch = 0
+
+          next_version = f"{major}.{minor}.{patch}"
+          next_version_line = f'version = "{next_version}"'
+
+          updated_text, replacements = re.subn(
+              r"(?m)^version\s*=\s*\"\d+\.\d+\.\d+\"$",
+              next_version_line,
+              pyproject_text,
+              count=1,
+          )
+          if replacements != 1:
+              raise SystemExit("Could not update project version in pyproject.toml")
+
+          pyproject_path.write_text(updated_text, encoding="utf-8")
+
+          output_path = Path(os.environ["GITHUB_OUTPUT"])
+          with output_path.open("a", encoding="utf-8") as output_file:
+              output_file.write(f"version={next_version}\n")
+              output_file.write(f"tag=v{next_version}\n")
+
+          print(f"Current version: {current_version}")
+          print(f"Next version: {next_version}")
+          PY
+
+      - name: 🏷️ Verify tag does not already exist
+        env:
+          NEXT_TAG: ${{ steps.next_version.outputs.tag }}
+        run: |
+          git fetch --tags --force
+          if git rev-parse "$NEXT_TAG" >/dev/null 2>&1; then
+            echo "Tag $NEXT_TAG already exists. Aborting."
+            exit 1
+          fi
+
+      - name: 💾 Commit version bump
+        env:
+          NEXT_TAG: ${{ steps.next_version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add pyproject.toml
+          git commit -m "chore(release): bump version to $NEXT_TAG"
+
+      - name: 🚀 Push commit and tag
+        env:
+          NEXT_TAG: ${{ steps.next_version.outputs.tag }}
+        run: |
+          git push origin main
+          git tag "$NEXT_TAG"
+          git push origin "$NEXT_TAG"

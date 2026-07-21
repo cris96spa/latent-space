@@ -2,11 +2,13 @@ from datetime import date
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
 from latent_space.models.content import ChatEntry, Project
 from latent_space.services.content import (
     ContentLoadError,
     ContentService,
+    load_chat_entries_from_directory,
     load_projects_from_directory,
     parse_frontmatter_document,
     sort_chat_entries,
@@ -83,21 +85,26 @@ def test_missing_required_field_fails_loudly(tmp_path: Path):
         load_projects_from_directory(tmp_path / "projects")
 
 
-def test_duplicate_slug_fails_loudly(tmp_path: Path):
-    directory = tmp_path / "projects"
+def test_project_slug_must_match_filename_stem(tmp_path: Path):
     _write_project_file(
-        directory,
+        tmp_path / "projects",
         "one.md",
-        "---\nslug: dup\ntitle: One\nsummary: s\npublished_at: 2024-01-01\n---\nBody.",
-    )
-    _write_project_file(
-        directory,
-        "two.md",
-        "---\nslug: dup\ntitle: Two\nsummary: s\npublished_at: 2024-01-02\n---\nBody.",
+        "---\nslug: other\ntitle: One\nsummary: s\npublished_at: 2024-01-01\n---\nBody.",
     )
 
-    with pytest.raises(ContentLoadError, match="duplicate project slug 'dup'"):
-        load_projects_from_directory(directory)
+    with pytest.raises(ContentLoadError, match="does not match filename"):
+        load_projects_from_directory(tmp_path / "projects")
+
+
+def test_chat_slug_must_match_filename_stem(tmp_path: Path):
+    _write_project_file(
+        tmp_path / "chat",
+        "hello.md",
+        "---\nslug: other\nquestion: q\ncategory: c\norder: 0\n---\nAnswer.",
+    )
+
+    with pytest.raises(ContentLoadError, match="does not match filename"):
+        load_chat_entries_from_directory(tmp_path / "chat")
 
 
 def test_missing_directory_returns_empty_list(tmp_path: Path):
@@ -164,3 +171,19 @@ def test_service_excludes_drafts_and_prerenders_html():
     responses = service.chat_entries()
     assert [response.slug for response in responses] == ["visible"]
     assert "<em>yes</em>" in responses[0].answer_html
+
+
+def test_published_projections_are_immutable():
+    service = ContentService([_project("alpha", date(2024, 1, 1))], [_chat("say-hi", 0)])
+
+    summary = service.published_project_summaries()[0]
+    detail = service.published_project_detail("alpha")
+    assert detail is not None
+    response = service.chat_entries()[0]
+
+    with pytest.raises(ValidationError):
+        summary.title = "mutated"
+    with pytest.raises(ValidationError):
+        detail.title = "mutated"
+    with pytest.raises(ValidationError):
+        response.question = "mutated"
