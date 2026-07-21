@@ -1,5 +1,5 @@
 [project]
-name = "latent-space"
+name = "latent_space"
 version = "0.0.1"
 description = "Cristian Spagnuolo's personal site: portfolio, lab notebook, and applied-ML performance art."
 readme = "README.md"
@@ -76,14 +76,17 @@ convention = "google"
 "__init__.py" = ["F401"]
 
 [tool.pyright]
-include = ["latent-space", "tests", "utils"]
+include = ["latent_space", "tests", "utils"]
 typeCheckingMode = "basic"
 reportFunctionMemberAccess = true
 reportPossiblyUnboundVariable = true
 reportIncompatibleMethodOverride = true
 
+[tool.vercel]
+entrypoint = "asgi:app"
+
 [tool.hatch.build.targets.wheel]
-packages = ["latent-space"]
+packages = ["latent_space"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
