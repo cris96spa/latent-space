@@ -10,8 +10,6 @@ export const CHAT_COPY = {
   title: 'Ask me things',
   /** The chat's name, emphasized on its in-component title bar. */
   name: 'Chat Cri-PT',
-  intro:
-    "",
   composerLabel: 'Ask a question',
   composerPlaceholder: 'Ask something, or tap a prompt…',
   send: 'Send',
@@ -26,7 +24,7 @@ export const CHAT_COPY = {
 } as const
 
 /**
- * A short, realistic status line streamed before each answer, keyed by entry slug - the
+ * A short, realistic status line streamed before each answer, keyed by entry public identifier - the
  * "thinking" beat. Each names a real step from that answer's topic (quantization,
  * softmax, the résumé compile), so it is nerdy but never fake. Chrome, not content, which
  * is why it lives here rather than in the authored files.
@@ -47,7 +45,8 @@ export const THINKING_HOOKS: Readonly<Record<string, string>> = {
 export const FALLBACK_HOOK = 'searching the context window…'
 
 /**
- * The entry whose answer carries the interactive Plotly sweep attachment, and which the
- * chat pre-loads as its opening turn. Kept here so the gating and the pre-load agree.
+ * The entry the chat pre-loads as its opening turn. Which widget its answer renders is
+ * declared in the content frontmatter (`attachment`), not here; this public identifier only
+ * picks the opener.
  */
-export const ABLATION_SWEEP_SLUG = 'ablation-sweep'
+export const ABLATION_SWEEP_PUBLIC_IDENTIFIER = 'ablation-sweep'

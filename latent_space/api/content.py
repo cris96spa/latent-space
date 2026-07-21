@@ -17,28 +17,28 @@ async def list_projects(
     return service.published_project_summaries()
 
 
-@router.get("/projects/{slug}")
+@router.get("/projects/{public_identifier}")
 async def get_project(
-    slug: str,
+    public_identifier: str,
     service: Annotated[ContentService, Depends(get_content_service)],
 ) -> ProjectDetail:
-    """Return one published project by slug.
+    """Return one published project by public identifier.
 
     Args:
-        slug: Persistent identifier of the requested project.
+        public_identifier: Persistent identifier of the requested project.
         service: Content service that owns published projects.
 
     Returns:
         The project's detail, including its rendered body.
 
     Raises:
-        HTTPException: 404 when no published project has the slug; a draft slug
-            is treated as absent.
+        HTTPException: 404 when no published project has the public identifier; a draft
+            public identifier is treated as absent.
     """
-    project = service.published_project_detail(slug)
+    project = service.published_project_detail(public_identifier)
     if project is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"No published project with slug '{slug}'.",
+            detail=f"No published project with public identifier '{public_identifier}'.",
         )
     return project

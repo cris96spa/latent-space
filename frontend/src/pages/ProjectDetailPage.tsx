@@ -12,22 +12,22 @@ type LoadState =
   | { readonly status: 'notfound' }
 
 /**
- * A single project at its persistent slug URL. The body is the API's server-sanitized
- * HTML, rendered as-is (React never renders Markdown or sanitizes - CLAUDE.md). Any
- * fetch failure, including a 404 for an unknown or draft slug, lands on the in-voice
- * not-found state with a way back to the index.
+ * A single project at its persistent public-identifier URL. The body is the API's
+ * server-sanitized HTML, rendered as-is (React never renders Markdown or sanitizes -
+ * CLAUDE.md). Any fetch failure, including a 404 for an unknown or draft public
+ * identifier, lands on the in-voice not-found state with a way back to the index.
  */
 export function ProjectDetailPage() {
-  const { slug } = useParams<{ slug: string }>()
+  const { publicIdentifier } = useParams<{ publicIdentifier: string }>()
   const [load, setLoad] = useState<LoadState>({ status: 'loading' })
 
   useEffect(() => {
-    if (!slug) {
+    if (!publicIdentifier) {
       return
     }
     let active = true
     setLoad({ status: 'loading' })
-    getProject(slug)
+    getProject(publicIdentifier)
       .then((project) => {
         if (active) {
           setLoad({ status: 'ready', project })
@@ -41,7 +41,7 @@ export function ProjectDetailPage() {
     return () => {
       active = false
     }
-  }, [slug])
+  }, [publicIdentifier])
 
   return (
     <article className="mx-auto max-w-3xl space-y-8">
@@ -58,7 +58,7 @@ export function ProjectDetailPage() {
         <div className="space-y-3">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Out of distribution</h1>
           <p className="text-muted">
-            Nothing published answers to &ldquo;{slug}&rdquo; &mdash; it may have moved, or never
+            Nothing published answers to &ldquo;{publicIdentifier}&rdquo; &mdash; it may have moved, or never
             existed. Head <Link to="/projects" className="text-brand-700 underline dark:text-brand-300">back to the ones that do</Link>.
           </p>
         </div>

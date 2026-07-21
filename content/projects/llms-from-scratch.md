@@ -1,5 +1,4 @@
 ---
-slug: llms-from-scratch
 title: LLMs from Scratch
 summary: >-
   GPT-2 rebuilt from the tensor up in PyTorch - tokenizer, embeddings, attention,

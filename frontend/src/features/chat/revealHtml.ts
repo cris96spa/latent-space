@@ -53,23 +53,19 @@ function wrapTextRun(text: string, nextIndex: () => number): string {
   })
 }
 
-// The entities the Markdown + nh3 pipeline can emit into answer text. Decoded so the
-// sr-only copy a screen reader announces reads as characters, not `&#x27;`.
+// The only entities the Markdown (commonmark, html=false) + nh3 pipeline emits into
+// answer text. Authored `&` is escaped to `&amp;`, so no author-written entity survives;
+// dashes, quotes, apostrophes, and ellipses all arrive as literal Unicode and need no
+// decoding. Decoded here so the sr-only copy a screen reader announces reads as
+// characters. The pattern is derived from the table so the two cannot drift.
 const HTML_ENTITIES: Readonly<Record<string, string>> = {
   '&amp;': '&',
   '&lt;': '<',
   '&gt;': '>',
-  '&quot;': '"',
-  '&apos;': "'",
-  '&#39;': "'",
-  '&#x27;': "'",
   '&nbsp;': ' ',
-  '&hellip;': '…',
-  '&mdash;': '-',
-  '&ndash;': '–',
 }
 
-const ENTITY_PATTERN = /&(?:amp|lt|gt|quot|apos|#39|#x27|nbsp|hellip|mdash|ndash);/g
+const ENTITY_PATTERN = new RegExp(Object.keys(HTML_ENTITIES).join('|'), 'g')
 
 /** Strips tags, decodes common entities, and collapses whitespace to plain text. */
 export function htmlToPlainText(html: string): string {

@@ -1,5 +1,4 @@
 ---
-slug: off-the-clock
 question: What do you do when you're not staring at loss curves?
 category: human
 order: 8

@@ -1,3 +1,5 @@
+import { hashUnitInterval } from '../../lib/hash'
+
 /**
  * Chinchilla scaling-law coefficients, from Hoffmann et al. 2022, "Training
  * Compute-Optimal Large Language Models", the parametric fit
@@ -31,8 +33,6 @@ const NOISE_AMPLITUDE = 0.035
  * sawtooth that reads as a rendering fault rather than as batch-to-batch variance.
  */
 const NOISE_HEADROOM_CAP = 1.2
-const FNV_OFFSET_BASIS = 2166136261
-const FNV_PRIME = 16777619
 
 /**
  * Predicted cross-entropy for a model of `parameterCount` parameters trained on
@@ -114,13 +114,9 @@ export interface AblationRun {
   readonly samples: readonly LossSample[]
 }
 
+/** Deterministic wobble in `[-1, 1)` from a stable string seed. */
 function jitter(seed: string): number {
-  let hash = FNV_OFFSET_BASIS
-  for (let position = 0; position < seed.length; position++) {
-    hash ^= seed.charCodeAt(position)
-    hash = Math.imul(hash, FNV_PRIME)
-  }
-  return ((hash >>> 0) / 2 ** 32) * 2 - 1
+  return hashUnitInterval(seed) * 2 - 1
 }
 
 /**

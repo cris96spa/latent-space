@@ -31,7 +31,7 @@ export function SuggestedPrompts({
       <div className="flex flex-wrap gap-x-2.5 gap-y-2">
         {entries.map((entry) => (
           <button
-            key={entry.slug}
+            key={entry.publicIdentifier}
             type="button"
             onClick={() => onSelect(entry)}
             className={cn(

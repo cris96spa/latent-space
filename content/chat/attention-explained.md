@@ -1,5 +1,4 @@
 ---
-slug: attention-explained
 question: Explain attention without the hand-waving.
 category: concepts
 order: 3

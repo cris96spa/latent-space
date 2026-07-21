@@ -14,7 +14,7 @@ from latent_space.services.content import ContentService
 def _fixture_service() -> ContentService:
     projects = [
         Project(
-            slug="alpha",
+            public_identifier="alpha",
             title="Alpha",
             summary="A summary",
             stack=["Python"],
@@ -24,14 +24,14 @@ def _fixture_service() -> ContentService:
             body_markdown="Alpha **body**.",
         ),
         Project(
-            slug="bravo",
+            public_identifier="bravo",
             title="Bravo",
             summary="B summary",
             published_at=date(2025, 1, 1),
             body_markdown="Bravo body.",
         ),
         Project(
-            slug="secret",
+            public_identifier="secret",
             title="Secret",
             summary="hidden",
             published_at=date(2026, 1, 1),
@@ -41,9 +41,10 @@ def _fixture_service() -> ContentService:
     ]
     chat_entries = [
         ChatEntry(
-            slug="say-hi",
+            public_identifier="say-hi",
             question="Q?",
             category="now",
+            attachment="resume",
             order=0,
             answer_markdown="An *answer*.",
         ),
@@ -63,8 +64,8 @@ def test_list_projects_returns_published_newest_first(client: TestClient):
     response = client.get("/projects")
 
     assert response.status_code == 200
-    slugs = [project["slug"] for project in response.json()]
-    assert slugs == ["bravo", "alpha"]
+    public_identifiers = [project["public_identifier"] for project in response.json()]
+    assert public_identifiers == ["bravo", "alpha"]
 
 
 def test_list_projects_omits_body_and_draft_fields(client: TestClient):
@@ -103,4 +104,5 @@ def test_list_chat_entries_returns_rendered_answers(client: TestClient):
     entries = response.json()
     assert len(entries) == 1
     assert entries[0]["question"] == "Q?"
+    assert entries[0]["attachment"] == "resume"
     assert "<em>answer</em>" in entries[0]["answer_html"]

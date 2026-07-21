@@ -25,7 +25,7 @@ class ContentLoadError(RuntimeError):
     """Raised when authored content on disk is malformed, invalid, or ambiguous.
 
     Loading raises rather than skipping a bad file so a missing required field
-    or a duplicate slug fails the process at load time instead of silently
+    or a duplicate public identifier fails the process at load time instead of silently
     serving partial or wrong content (CLAUDE.md content conventions).
     """
 
@@ -63,11 +63,36 @@ def parse_frontmatter_document(text: str) -> tuple[dict[str, object], str]:
     raise ContentLoadError("frontmatter block is not terminated by a closing '---'")
 
 
+def _public_identifier_from_filename(path: Path, metadata: dict[str, object]) -> str:
+    """Return the public identifier for `path`, guarding the single-source-of-truth rule.
+
+    The public identifier is the filename stem, never the frontmatter, so filenames and URLs
+    cannot drift apart. Uniqueness within the directory is guaranteed by the
+    filesystem: two files cannot share a stem.
+
+    Args:
+        path: Content file whose stem becomes the public identifier.
+        metadata: Parsed frontmatter; must not declare its own `public_identifier`.
+
+    Returns:
+        The filename stem.
+
+    Raises:
+        ContentLoadError: If the frontmatter declares a `public_identifier` key, which
+            would introduce a second, competing identifier.
+    """
+    if "public_identifier" in metadata:
+        raise ContentLoadError(
+            f"'{path.name}': public_identifier is derived from the filename; "
+            "remove the 'public_identifier' key from the frontmatter"
+        )
+    return path.stem
+
+
 def load_projects_from_directory(directory: Path) -> list[Project]:
     """Load and validate every project file in `directory`.
 
-    The authoritative identifier is each file's frontmatter `slug`, which must be
-    unique across the directory.
+    Each project's public identifier is its filename stem (see `_public_identifier_from_filename`).
 
     Args:
         directory: Directory scanned for project Markdown files.
@@ -78,23 +103,20 @@ def load_projects_from_directory(directory: Path) -> list[Project]:
 
     Raises:
         ContentLoadError: On a malformed file, a schema validation failure, or a
-            duplicate slug.
+            frontmatter that declares its own `public_identifier`.
     """
     if not directory.is_dir():
         return []
 
     projects: list[Project] = []
-    seen_slugs: set[str] = set()
     for path in sorted(directory.glob(f"*{CONTENT_FILE_SUFFIX}")):
         metadata, body = parse_frontmatter_document(path.read_text(encoding="utf-8"))
+        metadata["public_identifier"] = _public_identifier_from_filename(path, metadata)
         metadata["body_markdown"] = body
         try:
             project = Project.model_validate(metadata)
         except ValidationError as error:
             raise ContentLoadError(f"invalid project content in '{path.name}': {error}") from error
-        if project.slug in seen_slugs:
-            raise ContentLoadError(f"duplicate project slug '{project.slug}' in '{path.name}'")
-        seen_slugs.add(project.slug)
         projects.append(project)
     return projects
 
@@ -102,7 +124,8 @@ def load_projects_from_directory(directory: Path) -> list[Project]:
 def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
     """Load and validate every chat-entry file in `directory`.
 
-    Same authoritative-slug uniqueness rule as `load_projects_from_directory`.
+    Each entry's public identifier is its filename stem, exactly as for projects (see
+    `_public_identifier_from_filename`).
 
     Args:
         directory: Directory scanned for chat-entry Markdown files.
@@ -113,23 +136,20 @@ def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
 
     Raises:
         ContentLoadError: On a malformed file, a schema validation failure, or a
-            duplicate slug.
+            frontmatter that declares its own `public_identifier`.
     """
     if not directory.is_dir():
         return []
 
     entries: list[ChatEntry] = []
-    seen_slugs: set[str] = set()
     for path in sorted(directory.glob(f"*{CONTENT_FILE_SUFFIX}")):
         metadata, body = parse_frontmatter_document(path.read_text(encoding="utf-8"))
+        metadata["public_identifier"] = _public_identifier_from_filename(path, metadata)
         metadata["answer_markdown"] = body
         try:
             entry = ChatEntry.model_validate(metadata)
         except ValidationError as error:
             raise ContentLoadError(f"invalid chat content in '{path.name}': {error}") from error
-        if entry.slug in seen_slugs:
-            raise ContentLoadError(f"duplicate chat entry slug '{entry.slug}' in '{path.name}'")
-        seen_slugs.add(entry.slug)
         entries.append(entry)
     return entries
 
@@ -137,18 +157,18 @@ def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
 def sort_projects_newest_first(projects: Iterable[Project]) -> list[Project]:
     """Order projects for display, most recently published first.
 
-    Ranking rule: descending `published_at`; ties are broken by ascending `slug`
+    Ranking rule: descending `published_at`; ties are broken by ascending `public_identifier`
     so the ordering is total and independent of filesystem iteration order.
-    Implemented as a stable sort by slug followed by a stable reverse sort by
-    date, which leaves same-date projects in ascending-slug order.
+    Implemented as a stable sort by public identifier followed by a stable reverse sort by
+    date, which leaves same-date projects in ascending-public-identifier order.
     """
-    by_slug_ascending = sorted(projects, key=lambda project: project.slug)
-    return sorted(by_slug_ascending, key=lambda project: project.published_at, reverse=True)
+    by_public_identifier = sorted(projects, key=lambda project: project.public_identifier)
+    return sorted(by_public_identifier, key=lambda project: project.published_at, reverse=True)
 
 
 def sort_chat_entries(entries: Iterable[ChatEntry]) -> list[ChatEntry]:
-    """Order chat entries by ascending `order`, ties broken by ascending `slug`."""
-    return sorted(entries, key=lambda entry: (entry.order, entry.slug))
+    """Order chat entries by ascending `order`, ties broken by ascending `public_identifier`."""
+    return sorted(entries, key=lambda entry: (entry.order, entry.public_identifier))
 
 
 class ContentService:
@@ -168,7 +188,7 @@ class ContentService:
         )
         self._project_summaries = [self._to_summary(project) for project in published_projects]
         self._project_details = {
-            project.slug: self._to_detail(project) for project in published_projects
+            project.public_identifier: self._to_detail(project) for project in published_projects
         }
         published_chat = sort_chat_entries(entry for entry in chat_entries if not entry.draft)
         self._chat_responses = [self._to_chat_response(entry) for entry in published_chat]
@@ -183,12 +203,12 @@ class ContentService:
     def published_project_summaries(self) -> list[ProjectSummary]:
         return list(self._project_summaries)
 
-    def published_project_detail(self, slug: str) -> ProjectDetail | None:
-        """Return the published project with `slug`, or `None` if there is none.
+    def published_project_detail(self, public_identifier: str) -> ProjectDetail | None:
+        """Return the published project with `public_identifier`, or `None` if there is none.
 
-        Drafts are absent from the index, so a draft slug also returns `None`.
+        Drafts are absent from the index, so a draft public identifier also returns `None`.
         """
-        return self._project_details.get(slug)
+        return self._project_details.get(public_identifier)
 
     def chat_entries(self) -> list[ChatEntryResponse]:
         return list(self._chat_responses)
@@ -207,8 +227,9 @@ class ContentService:
     @staticmethod
     def _to_chat_response(entry: ChatEntry) -> ChatEntryResponse:
         return ChatEntryResponse(
-            slug=entry.slug,
+            public_identifier=entry.public_identifier,
             question=entry.question,
             category=entry.category,
+            attachment=entry.attachment,
             answer_html=render_markdown_to_safe_html(entry.answer_markdown),
         )

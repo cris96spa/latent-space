@@ -33,9 +33,9 @@ describe('wrapWordsInHtml', () => {
   })
 
   it('keeps an entity inside a single word intact', () => {
-    const { html, wordCount } = wrapWordsInHtml('<p>it&#x27;s</p>')
+    const { html, wordCount } = wrapWordsInHtml('<p>R&amp;D</p>')
     expect(wordCount).toBe(1)
-    expect(html).toContain('it&#x27;s')
+    expect(html).toContain('R&amp;D')
   })
 })
 
@@ -44,7 +44,12 @@ describe('htmlToPlainText', () => {
     expect(htmlToPlainText('<ul>\n<li>a</li>\n<li>b</li>\n</ul>')).toBe('a b')
   })
 
-  it('decodes the entities the Markdown pipeline emits', () => {
-    expect(htmlToPlainText('<p>it&#x27;s &amp; that</p>')).toBe("it's & that")
+  it('decodes the entities the Markdown pipeline emits and leaves literal Unicode alone', () => {
+    // markdown-it + nh3 only ever emit &amp; &lt; &gt; &nbsp;; dashes, quotes, and
+    // apostrophes arrive as literal characters and must pass through untouched.
+    expect(htmlToPlainText('<p>SFT &amp; DPO, a &lt; b, one&nbsp;space</p>')).toBe(
+      'SFT & DPO, a < b, one space',
+    )
+    expect(htmlToPlainText("<p>fast — really, it's fine</p>")).toBe("fast — really, it's fine")
   })
 })

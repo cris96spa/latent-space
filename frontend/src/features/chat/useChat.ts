@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { ChatEntry } from '../../lib/api'
-import { RESUME_PDF } from '../../lib/links'
-import { ABLATION_SWEEP_SLUG, FALLBACK_HOOK, THINKING_HOOKS } from './content'
+import { FALLBACK_HOOK, THINKING_HOOKS } from './content'
 import { htmlToPlainText, wrapWordsInHtml } from './revealHtml'
 import type {
   AnswerAttachment,
@@ -33,18 +32,12 @@ function escapeHtml(text: string): string {
 }
 
 /**
- * The rich attachment an answer carries, or `{}` for none. The sweep is keyed by slug
- * because its plot is a component, not markup; the résumé follows whichever answer links
- * its PDF, so that cue stays in the content rather than a second hardcoded slug.
+ * The rich attachment an answer carries, or `{}` for none. Declared in the answer's
+ * frontmatter and served on the entry, so which widget shows is content, not a match
+ * against the rendered HTML or a hardcoded public identifier.
  */
-function attachmentFor(entry: { slug: string; answerHtml: string }): { attachment?: AnswerAttachment } {
-  if (entry.slug === ABLATION_SWEEP_SLUG) {
-    return { attachment: 'ablation-sweep' }
-  }
-  if (entry.answerHtml.includes(RESUME_PDF.path)) {
-    return { attachment: 'resume' }
-  }
-  return {}
+function attachmentFor(entry: ChatEntry): { attachment?: AnswerAttachment } {
+  return entry.attachment ? { attachment: entry.attachment } : {}
 }
 
 /** Builds the assistant turn for a resolution, pre-wrapping its words for the reveal. */
@@ -59,7 +52,7 @@ function buildAnswerTurn(id: string, resolution: AnswerResolution): AnswerTurn {
       wordCount: wrapped.wordCount,
       plainText: htmlToPlainText(resolution.entry.answerHtml),
       suggestions: [],
-      hook: THINKING_HOOKS[resolution.entry.slug],
+      hook: THINKING_HOOKS[resolution.entry.publicIdentifier],
       ...attachmentFor(resolution.entry),
     }
   }
@@ -128,7 +121,8 @@ export function useChat(responder: ChatResponder, reducedMotion: boolean): ChatC
   )
 
   const askPrompt = useCallback(
-    (entry: ChatEntry) => ask({ kind: 'prompt', slug: entry.slug }, entry.question),
+    (entry: ChatEntry) =>
+      ask({ kind: 'prompt', publicIdentifier: entry.publicIdentifier }, entry.question),
     [ask],
   )
 

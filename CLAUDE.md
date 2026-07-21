@@ -28,7 +28,7 @@ written to impress a recruiter.
 
 Do not invent biography, roles, dates, outcomes, or technical claims. Use:
 
-- the resume at `src/static/Cristian_C_Spagnuolo_CV.pdf` for roles, dates, and credentials;
+- the resume at `frontend/public/Cristian_C_Spagnuolo_CV.pdf` for roles, dates, and credentials;
 - <https://github.com/cris96spa> for projects and activity;
 - <https://www.linkedin.com/in/cristian-c-spagnuolo/> for background and activity.
 
@@ -122,16 +122,16 @@ gate the bio, projects, or resume behind JavaScript or animation completion.
 ## Authored content
 
 - Posts, projects, and chat answers are authored content, never inline component data.
-- Content metadata has a stable unique slug, title, summary, publication date, and
-  draft/published state. Published slugs and URLs are persistent; use a redirect if one
-  must move. Never expose drafts in production responses.
+- Content metadata has a stable unique public identifier, title, summary, publication
+  date, and draft/published state. Published public identifiers and URLs are persistent;
+  use a redirect if one must move. Never expose drafts in production responses.
 - Markdown with frontmatter lives under `content/` and is loaded by
-  `latent_space/services/content.py`. The frontmatter slug is authoritative and unique
-  within its directory.
+  `latent_space/services/content.py`. The filename-derived public identifier is
+  authoritative and unique within its directory.
 - Render rich text only in `latent_space/services/markdown.py` with `markdown-it-py`
   configured with `html=False`, followed by the `nh3` allowlist. The API returns sanitized
   HTML; React neither renders Markdown nor sanitizes source content.
-- Keep large binaries in `src/static/` or the asset pipeline.
+- Keep large binaries in `frontend/public/` or the frontend asset pipeline.
 
 ## Python style
 

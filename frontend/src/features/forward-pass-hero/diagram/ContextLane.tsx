@@ -1,6 +1,6 @@
 import { cn } from '../../../lib/cn'
+import { hashUnitInterval } from '../../../lib/hash'
 import { TARGET_MODEL } from '../architecture'
-import { hashUnitInterval } from '../sampling'
 import type { ContextToken } from '../types'
 import { centerX, contextRowY, rightX, tokenLabel, type DiagramLayout } from './layout'
 

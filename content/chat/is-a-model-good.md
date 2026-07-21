@@ -1,5 +1,4 @@
 ---
-slug: is-a-model-good
 question: How do you know a model is actually good?
 category: evals
 order: 5

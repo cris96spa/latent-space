@@ -1,5 +1,4 @@
 ---
-slug: gpt2-from-scratch
 question: What did rebuilding GPT-2 from scratch teach you?
 category: build
 order: 2

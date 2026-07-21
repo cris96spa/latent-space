@@ -1,5 +1,4 @@
 ---
-slug: cheaper-inference
 question: How do you actually make a model cheaper to run?
 category: inference
 order: 4

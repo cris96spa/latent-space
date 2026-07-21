@@ -70,7 +70,7 @@ export function ProjectsPage() {
       {load.status === 'ready' && load.projects.length > 0 && (
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {load.projects.map((project) => (
-            <li key={project.slug}>
+            <li key={project.publicIdentifier}>
               <ProjectCard project={project} />
             </li>
           ))}

@@ -1,5 +1,4 @@
 ---
-slug: latent-space
 title: latent-space (this site)
 summary: >-
   The site rendering this sentence. A FastAPI + React portfolio that animates a GPT-2 forward

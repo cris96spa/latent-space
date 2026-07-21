@@ -1,4 +1,5 @@
-import { hashUnitInterval, softmax } from './sampling'
+import { hashUnitInterval } from '../../lib/hash'
+import { softmax } from './sampling'
 import type {
   AttentionEdge,
   ContextToken,

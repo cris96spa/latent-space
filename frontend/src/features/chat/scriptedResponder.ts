@@ -10,11 +10,11 @@ const FALLBACK_SUGGESTION_COUNT = 3
 function resolve(
   input: ResponderInput,
   entries: readonly ChatEntry[],
-  bySlug: ReadonlyMap<string, ChatEntry>,
+  byPublicIdentifier: ReadonlyMap<string, ChatEntry>,
 ): AnswerResolution {
   const entry =
     input.kind === 'prompt'
-      ? (bySlug.get(input.slug) ?? null)
+      ? (byPublicIdentifier.get(input.publicIdentifier) ?? null)
       : matchChatEntry(input.text, entries)
 
   if (entry) {
@@ -34,14 +34,14 @@ function resolve(
  * (task 15) can drop in without the chat shell changing.
  */
 export function createScriptedResponder(entries: readonly ChatEntry[]): ChatResponder {
-  const bySlug = new Map(entries.map((entry) => [entry.slug, entry]))
+  const byPublicIdentifier = new Map(entries.map((entry) => [entry.publicIdentifier, entry]))
 
   return {
     async *respond(input: ResponderInput, signal?: AbortSignal) {
       if (signal?.aborted) {
         return
       }
-      yield resolve(input, entries, bySlug)
+      yield resolve(input, entries, byPublicIdentifier)
     },
   }
 }
