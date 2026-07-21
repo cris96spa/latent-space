@@ -189,36 +189,44 @@
   }
 }
 
-/* Scripted chat (task 08): prose styling for the API's sanitized answer HTML. The
-   answer is Markdown-rendered, so it can carry lists, bold, links, and inline code. */
-.ls-answer > * + * {
+/* Prose styling for the API's sanitized Markdown-rendered HTML: paragraphs, lists,
+   bold, links, and inline code. Shared by the scripted chat answers (`.ls-answer`,
+   task 08) and the project detail body (`.ls-prose`, task 10). */
+.ls-answer > * + *,
+.ls-prose > * + * {
   margin-top: 0.6rem;
 }
 
-.ls-answer ul {
+.ls-answer ul,
+.ls-prose ul {
   list-style: disc;
   padding-left: 1.25rem;
 }
 
-.ls-answer li + li {
+.ls-answer li + li,
+.ls-prose li + li {
   margin-top: 0.3rem;
 }
 
-.ls-answer strong {
+.ls-answer strong,
+.ls-prose strong {
   font-weight: 600;
   color: var(--color-fg);
 }
 
-.ls-answer a {
+.ls-answer a,
+.ls-prose a {
   color: var(--color-brand-700);
   text-decoration: underline;
 }
 
-.dark .ls-answer a {
+.dark .ls-answer a,
+.dark .ls-prose a {
   color: var(--color-brand-300);
 }
 
-.ls-answer code {
+.ls-answer code,
+.ls-prose code {
   padding: 0.05rem 0.3rem;
   border-radius: 0.25rem;
   font-family: var(--font-mono);
