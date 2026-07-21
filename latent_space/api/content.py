@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from latent_space.api.dependencies import get_content_service
-from latent_space.models.content import ProjectDetail, ProjectSummary
+from latent_space.models.content import SLUG_PATTERN, ProjectDetail, ProjectSummary
 from latent_space.services.content import ContentService
 
 router = APIRouter(tags=["content"])
@@ -19,13 +19,14 @@ async def list_projects(
 
 @router.get("/projects/{slug}")
 async def get_project(
-    slug: str,
+    slug: Annotated[str, Path(pattern=SLUG_PATTERN)],
     service: Annotated[ContentService, Depends(get_content_service)],
 ) -> ProjectDetail:
     """Return one published project by slug.
 
     Args:
-        slug: Persistent identifier of the requested project.
+        slug: Persistent identifier of the requested project. A value that does
+            not match the slug format is rejected at the boundary with 422.
         service: Content service that owns published projects.
 
     Returns:

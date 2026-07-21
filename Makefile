@@ -63,3 +63,6 @@ fe-build: # build the frontend production bundle into frontend/dist
 
 fe-lint: # lint the frontend with oxlint
 	cd $(FRONTEND_DIR) && $(NPM) run lint
+
+fe-test: # run the frontend unit tests with Vitest
+	cd $(FRONTEND_DIR) && $(NPM) run test
