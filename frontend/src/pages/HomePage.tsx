@@ -1,3 +1,4 @@
+import { ChatSection } from '../features/chat'
 import { ForwardPassHero } from '../features/forward-pass-hero'
 import { TrainingRunStrip } from '../features/loss-curve'
 import { TokenChip } from '../components/TokenChip'
@@ -10,6 +11,8 @@ export function HomePage() {
       <ForwardPassHero />
 
       <TrainingRunStrip />
+
+      <ChatSection />
 
       <section className="space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
