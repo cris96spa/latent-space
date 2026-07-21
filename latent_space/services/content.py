@@ -25,8 +25,9 @@ class ContentLoadError(RuntimeError):
     """Raised when authored content on disk is malformed, invalid, or ambiguous.
 
     Loading raises rather than skipping a bad file so a missing required field
-    or a duplicate slug fails the process at load time instead of silently
-    serving partial or wrong content (CLAUDE.md content conventions).
+    or a slug that disagrees with its filename fails the process at load time
+    instead of silently serving partial or wrong content (CLAUDE.md content
+    conventions).
     """
 
 
@@ -66,8 +67,9 @@ def parse_frontmatter_document(text: str) -> tuple[dict[str, object], str]:
 def load_projects_from_directory(directory: Path) -> list[Project]:
     """Load and validate every project file in `directory`.
 
-    The authoritative identifier is each file's frontmatter `slug`, which must be
-    unique across the directory.
+    Each project's `slug` must equal its filename stem, so filenames and public
+    URLs cannot drift apart. The filesystem then guarantees slug uniqueness
+    within the directory, since two files cannot share a stem.
 
     Args:
         directory: Directory scanned for project Markdown files.
@@ -78,13 +80,12 @@ def load_projects_from_directory(directory: Path) -> list[Project]:
 
     Raises:
         ContentLoadError: On a malformed file, a schema validation failure, or a
-            duplicate slug.
+            `slug` that does not match its filename stem.
     """
     if not directory.is_dir():
         return []
 
     projects: list[Project] = []
-    seen_slugs: set[str] = set()
     for path in sorted(directory.glob(f"*{CONTENT_FILE_SUFFIX}")):
         metadata, body = parse_frontmatter_document(path.read_text(encoding="utf-8"))
         metadata["body_markdown"] = body
@@ -92,9 +93,11 @@ def load_projects_from_directory(directory: Path) -> list[Project]:
             project = Project.model_validate(metadata)
         except ValidationError as error:
             raise ContentLoadError(f"invalid project content in '{path.name}': {error}") from error
-        if project.slug in seen_slugs:
-            raise ContentLoadError(f"duplicate project slug '{project.slug}' in '{path.name}'")
-        seen_slugs.add(project.slug)
+        if project.slug != path.stem:
+            raise ContentLoadError(
+                f"project slug '{project.slug}' does not match filename stem "
+                f"'{path.stem}' in '{path.name}'"
+            )
         projects.append(project)
     return projects
 
@@ -102,7 +105,7 @@ def load_projects_from_directory(directory: Path) -> list[Project]:
 def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
     """Load and validate every chat-entry file in `directory`.
 
-    Same authoritative-slug uniqueness rule as `load_projects_from_directory`.
+    Same filename-stem slug rule as `load_projects_from_directory`.
 
     Args:
         directory: Directory scanned for chat-entry Markdown files.
@@ -113,13 +116,12 @@ def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
 
     Raises:
         ContentLoadError: On a malformed file, a schema validation failure, or a
-            duplicate slug.
+            `slug` that does not match its filename stem.
     """
     if not directory.is_dir():
         return []
 
     entries: list[ChatEntry] = []
-    seen_slugs: set[str] = set()
     for path in sorted(directory.glob(f"*{CONTENT_FILE_SUFFIX}")):
         metadata, body = parse_frontmatter_document(path.read_text(encoding="utf-8"))
         metadata["answer_markdown"] = body
@@ -127,9 +129,11 @@ def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
             entry = ChatEntry.model_validate(metadata)
         except ValidationError as error:
             raise ContentLoadError(f"invalid chat content in '{path.name}': {error}") from error
-        if entry.slug in seen_slugs:
-            raise ContentLoadError(f"duplicate chat entry slug '{entry.slug}' in '{path.name}'")
-        seen_slugs.add(entry.slug)
+        if entry.slug != path.stem:
+            raise ContentLoadError(
+                f"chat entry slug '{entry.slug}' does not match filename stem "
+                f"'{path.stem}' in '{path.name}'"
+            )
         entries.append(entry)
     return entries
 
@@ -157,9 +161,9 @@ class ContentService:
     Constructed once from already-loaded projects and chat entries: it excludes
     drafts, orders the survivors deterministically, and pre-renders project
     bodies and chat answers to sanitized HTML. Rendering up front keeps request
-    handlers thin and makes any rendering failure surface at load time. The
-    published projections it returns are copies, so callers cannot mutate the
-    cached content.
+    handlers thin and makes any rendering failure surface at load time. Each
+    accessor returns a fresh list of frozen response models, so callers can
+    neither reorder the result nor mutate the cached content.
     """
 
     def __init__(self, projects: list[Project], chat_entries: list[ChatEntry]) -> None:
