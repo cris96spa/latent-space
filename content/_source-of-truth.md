@@ -92,22 +92,37 @@ repos, or supply blurbs here so the projects page and chat don't guess.
   reproduces synthetic distribution shift, improving model-robustness testing by **22%**.
   Stack: Python, Polars, Torch, Plotly, TorchVision, PIL. `[CV]` → repo `image_drift_generator`
   (Python) `[GH]`.
-- **Master's thesis - Curriculum Learning for Reinforcement Learning** (PoliMi, advisor
-  Prof. Marcello Restelli), 02/2023 – 07/2024. Novel Curriculum Learning framework for RL
-  built on Policy Gradient Methods (PPO), deriving algorithms that progressively scale task
-  difficulty to solve sparse-reward problems where standard RL fails. Stack: Python, PyTorch,
-  NumPy, Gymnasium, PPO. `[CV]` → likely relates to repos `TMDP` (Jupyter) and/or
-  `teleportMPD` (Python) `[GH]`. `TODO(content: needs-cristian)` - confirm which repo(s) back
-  the thesis and whether to feature them.
+- **Master's thesis - Teleport MDPs / Curriculum Learning for RL** (PoliMi, advisor
+  Prof. Marcello Restelli; with Dr. Alberto Maria Metelli and Dr. Luca Sabbioni), 02/2023 –
+  07/2024. Curriculum Learning framework for RL built on Policy Gradient Methods (PPO): the
+  **Teleport MDP** formalism adds a teleport mechanism (rate τ, distribution ξ,
+  `P_τ = (1−τ)P + τξ`) that truncates the horizon; annealing τ→0 is the curriculum. Exact
+  algorithm TMPI (impractical) plus Static/Dynamic teleport schedules; beat vanilla on Frozen
+  Lake and River Swim. Stack: Python, PyTorch, NumPy, Gymnasium, PPO. `[CV]` → **backed by
+  repo `teleportMPD` (Python)** `[GH]`, README + docs at
+  <https://cris96spa.github.io/teleportMPD/> (confirmed by Cristian 2026-07-21). Featured as
+  project `teleport-mdp` (was `curriculum-learning-rl`).
 
-Other public repos `[GH]` (not on the CV; here for completeness, not necessarily featured):
-`python-repo-template` (fork, the Python template Cristian mirrors), `Evaluator` (fork -
-"scalable, reproducible evaluation of AI models and benchmarks"), `LeetCode`, `portfolio`
-(older CSS personal portfolio - the thing this site replaces), `ACT-Project`, `NodeCloud`.
+Other public repos `[GH]`: `Evaluator` (fork - "scalable, reproducible evaluation of AI
+models and benchmarks"), `portfolio` (older CSS personal portfolio - the thing this site
+replaces), `ACT-Project`, `NodeCloud`.
 
-`TODO(content: needs-cristian)` - **featured projects**: confirm the front-and-center set.
-Proposed default: LLMs-from-scratch, Image Distribution Drift Simulator, the pricing/PPO and
-SQL/regulatory agents from work (with employer permission), and the thesis.
+**Featured project set** (confirmed by Cristian 2026-07-21 - "add these to the list"):
+LLMs-from-scratch, Image Distribution Drift Simulator, `teleport-mdp` (thesis), plus four
+added from their public repos/READMEs:
+- **latent-space** - this site. FastAPI + React portfolio. Repo `latent-space` `[GH]`. No
+  live demo URL yet (host/domain undecided, CLAUDE.md).
+- **python-repo-template** - fork Cristian maintains; uv/Ruff/pytest/Docker/CI + MkDocs
+  auto-docs (the API-doc-generator lineage from work `[CV]`). Repo `python-repo-template`
+  `[GH]`, docs <https://cris96spa.github.io/python-repo-template/>.
+- **LeetCode** - Python solutions, self-updating NeetCode-250 progress table. Repo `LeetCode`
+  `[GH]`, docs <https://cris96spa.github.io/LeetCode/>. Exact solved-count is script-generated
+  and drifts, so content says "north of a hundred" rather than a brittle number.
+- **hackapizza** - fork of the challenge repo; the solution (RAG + LangGraph + Neo4j
+  knowledge graph + LLM-generated Cypher) is Cristian's. **2nd place, Hackapizza 2025, IBM
+  Studios Milano** `[CV]`. Repo `hackapizza` `[GH]`.
+Still available if wanted: the pricing/PPO and SQL/regulatory agents from work (need employer
+permission, confidentiality `TODO` below).
 `TODO(content: needs-cristian)` - are the **Artificialy / MLcube work items** OK to describe
 publicly with their metrics, or should any be generalized / omitted for confidentiality?
 
@@ -142,7 +157,7 @@ and the `<noscript>` block in `frontend/index.html` mirror it verbatim.
 > DPO, GRPO), and evals that catch the regression before the demo does. On my own time I
 > rebuilt GPT-2 from scratch in PyTorch, for the same reason other people rebuild an engine
 > in the garage: I wanted to know what every layer was actually doing. Politecnico di
-> Milano, 110/110 cum laude - and that is the last sentence here that belongs on a résumé.
+> Milano, 110/110 cum laude - and that is the last sentence here that belongs on a resume.
 > I have one of those, it is one click away, and it is far less fun than this page. What I
 > actually want is to spend the rest of my life looking at training-loss curves.
 
@@ -156,6 +171,6 @@ and the `<noscript>` block in `frontend/index.html` mirror it verbatim.
 - [ ] Publish phone number? (default: no)
 - [ ] Publish exact location (Lugano)? (default: city-level ok)
 - [ ] OK to state Artificialy/MLcube achievements with their metrics publicly?
-- [ ] Featured-projects set confirmed?
+- [x] Featured-projects set confirmed? (2026-07-21: 7 projects - see Projects section)
 - [ ] Canonical bio wording + humor level signed off?
 - [ ] Set GitHub descriptions on featured repos (or provide blurbs here)?
