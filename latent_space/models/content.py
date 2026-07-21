@@ -48,8 +48,12 @@ class ProjectSummary(BaseModel):
     """Project as returned in list responses: metadata without the body.
 
     Drafts are excluded before this projection is built, so it carries no
-    `draft` flag.
+    `draft` flag. Frozen so the content service can hand out its cached
+    instances without a caller mutating shared state; `ProjectDetail` inherits
+    the same immutability.
     """
+
+    model_config = ConfigDict(frozen=True)
 
     slug: str
     title: str
@@ -89,7 +93,13 @@ class ChatEntry(BaseModel):
 
 
 class ChatEntryResponse(BaseModel):
-    """Chat entry as returned by the API: the answer rendered to safe HTML."""
+    """Chat entry as returned by the API: the answer rendered to safe HTML.
+
+    Frozen so the content service can return its cached instances directly
+    without a caller mutating shared state.
+    """
+
+    model_config = ConfigDict(frozen=True)
 
     slug: str
     question: str

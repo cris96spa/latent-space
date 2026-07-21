@@ -96,6 +96,12 @@ def test_get_draft_project_returns_404(client: TestClient):
     assert response.status_code == 404
 
 
+def test_get_project_with_malformed_slug_returns_422(client: TestClient):
+    response = client.get("/projects/Not_A_Slug")
+
+    assert response.status_code == 422
+
+
 def test_list_chat_entries_returns_rendered_answers(client: TestClient):
     response = client.get("/chat/entries")
 
