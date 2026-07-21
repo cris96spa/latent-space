@@ -2,6 +2,7 @@ from datetime import date
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
 from latent_space.models.content import ChatEntry, Post, Project
 from latent_space.services.content import (
@@ -283,3 +284,19 @@ def test_service_excludes_drafts_and_prerenders_html():
     responses = service.chat_entries()
     assert [response.public_identifier for response in responses] == ["visible"]
     assert "<em>yes</em>" in responses[0].answer_html
+
+
+def test_published_projections_are_immutable():
+    service = ContentService([_project("alpha", date(2024, 1, 1))], [_chat("say-hi", 0)])
+
+    summary = service.published_project_summaries()[0]
+    detail = service.published_project_detail("alpha")
+    assert detail is not None
+    response = service.chat_entries()[0]
+
+    with pytest.raises(ValidationError):
+        summary.title = "mutated"
+    with pytest.raises(ValidationError):
+        detail.title = "mutated"
+    with pytest.raises(ValidationError):
+        response.question = "mutated"

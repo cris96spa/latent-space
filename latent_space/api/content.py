@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from latent_space.api.dependencies import get_content_service
 from latent_space.models.content import PostSummary, ProjectDetail, ProjectSummary
