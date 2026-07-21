@@ -12,11 +12,11 @@ export function ResumeCard() {
       <object
         data={`${RESUME_PDF.path}#view=FitH`}
         type="application/pdf"
-        aria-label="Résumé PDF preview"
-        className="h-96 w-full rounded-md border border-border bg-surface"
+        aria-label="Resume PDF preview"
+        className="h-[70vh] min-h-[24rem] w-full rounded-md border border-border bg-surface"
       >
         <p className="p-4 text-sm text-muted">
-          Your browser won't preview the PDF inline - the buttons below still have you
+          Your browser won't preview the PDF inline - the button below still has you
           covered.
         </p>
       </object>
@@ -29,14 +29,6 @@ export function ResumeCard() {
         >
           <span aria-hidden="true">↓</span>
           Download PDF
-        </a>
-        <a
-          href={RESUME_PDF.path}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="text-sm text-brand-700 underline dark:text-brand-300"
-        >
-          Open in a new tab
         </a>
       </div>
     </div>

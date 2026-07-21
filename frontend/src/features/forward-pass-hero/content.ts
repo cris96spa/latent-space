@@ -18,6 +18,6 @@ export const CANONICAL_BIO =
   'DPO, GRPO), and evals that catch the regression before the demo does. On my own time I ' +
   'rebuilt GPT-2 from scratch in PyTorch, for the same reason other people rebuild an engine ' +
   'in the garage: I wanted to know what every layer was actually doing. Politecnico di ' +
-  'Milano, 110/110 cum laude - and that is the last sentence here that belongs on a résumé. ' +
+  'Milano, 110/110 cum laude - and that is the last sentence here that belongs on a resume. ' +
   "I have one of those, it is one click away, and it is far less fun than this page. What I " +
   'actually want is to spend the rest of my life looking at training-loss curves.'

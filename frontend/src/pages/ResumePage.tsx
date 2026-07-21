@@ -30,10 +30,10 @@ export function ResumePage() {
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">
           the formal version
         </p>
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Résumé</h1>
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Resume</h1>
         <p className="text-muted">
-          Roles, dates, and the 110/110 &mdash; the part that belongs on a résumé. Less fun than
-          the rest of this site, but occasionally load-bearing.
+          Roles, dates, and grades... less fun than
+          the rest of this site.
         </p>
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <a
@@ -43,26 +43,18 @@ export function ResumePage() {
           >
             <span aria-hidden="true">↓</span> Download PDF
           </a>
-          <a
-            href={RESUME_PDF.path}
-            target="_blank"
-            rel="noreferrer noopener"
-            className={buttonClassName('ghost')}
-          >
-            Open in a new tab
-          </a>
         </div>
       </header>
 
       <object
         data={`${RESUME_PDF.path}#view=FitH`}
         type="application/pdf"
-        aria-label="Résumé PDF preview"
+        aria-label="Resume PDF preview"
         className="h-[75vh] min-h-96 w-full rounded-xl border border-border bg-surface"
       >
         <p className="p-6 text-sm text-muted">
-          Your browser won&rsquo;t preview the PDF inline &mdash; the download and new-tab links
-          above still have you covered.
+          Your browser won&rsquo;t preview the PDF inline - the download link above still
+          has you covered.
         </p>
       </object>
 
@@ -71,8 +63,8 @@ export function ResumePage() {
           Get in touch
         </h2>
         <p className="text-muted">
-          A role, a collaboration, or just to say the loss curve looks nice &mdash; the inbox is
-          open for pull requests. Based in Lugano, Switzerland.
+          A role, a collaboration, or just to say the loss curve looks nice. Please just not ask for an updated resume!
+          Based in Lugano, Switzerland.
         </p>
         <ul className="space-y-2.5">
           {CONTACT_LINKS.map((link) => (
