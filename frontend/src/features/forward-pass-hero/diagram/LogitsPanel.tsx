@@ -24,7 +24,7 @@ interface LogitsPanelProps {
 /**
  * The output end: unembedding, the softmax over the top-k candidates, and the token
  * that wins. The winning row is the argmax, and the sampled token literally falls out
- * of it toward the detokenized text below, which is the whole point of the diagram —
+ * of it toward the detokenized text below, which is the whole point of the diagram -
  * the prose on the page is what came out of this bar.
  */
 export function LogitsPanel({

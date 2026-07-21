@@ -42,7 +42,7 @@ function NormMarker({ x, y, height }: { x: number; y: number; height: number }) 
         fontSize={9}
         className="fill-muted font-mono"
       >
-        rms
+        ln
       </text>
     </g>
   )
@@ -50,11 +50,11 @@ function NormMarker({ x, y, height }: { x: number; y: number; height: number }) 
 
 /**
  * Decorative (aria-hidden) SVG of one pass through the target model: context and
- * embeddings on the left, a transformer block in the middle (RMSNorm, grouped-query
- * attention, residual add, RMSNorm, SwiGLU, residual add), the softmax on the right,
- * and a lane along the bottom carrying the sampled token both down into the visible
- * text and back into the context that conditions the next step. Everything it draws
- * comes from the current `frame`; the accessible bio lives outside this component.
+ * embeddings on the left, a GPT-2 transformer block in the middle (LayerNorm,
+ * multi-head attention, residual add, LayerNorm, GELU MLP, residual add), softmax on
+ * the right, and a lane along the bottom carrying the sampled token both down into the
+ * visible text and back into the context that conditions the next step. Everything it
+ * draws comes from the current `frame`; the accessible bio lives outside this component.
  */
 export function PipelineDiagram({
   frame,

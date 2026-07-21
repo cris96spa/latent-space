@@ -35,8 +35,8 @@ export function MlpPanel({ activations, layout, active }: MlpPanelProps) {
         className={cn('font-mono', active ? 'fill-fg' : 'fill-muted')}
       >
         {layout.verbose
-          ? `swiglu · ${TARGET_MODEL.hiddenSize} → ${TARGET_MODEL.feedForwardSize}`
-          : 'swiglu'}
+          ? `gelu · ${TARGET_MODEL.hiddenSize} → ${TARGET_MODEL.feedForwardSize}`
+          : 'gelu'}
       </text>
 
       {[0, 2].map((column) => (

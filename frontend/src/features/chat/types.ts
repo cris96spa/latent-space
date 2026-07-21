@@ -45,6 +45,8 @@ export interface AnswerTurn {
   readonly suggestions: readonly ChatEntry[]
   /** A rich attachment rendered beneath the answer text, e.g. the résumé viewer. */
   readonly attachment?: AnswerAttachment
+  /** The realistic "thinking" status line shown above the answer as it streams. */
+  readonly hook?: string
 }
 
 /** A non-text payload an answer can carry. Only the résumé exists today. */

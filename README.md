@@ -102,12 +102,12 @@ The second one is triggered on every tag push and can also be triggered manually
 
 The template separates configuration into two kinds, each with its own base class in `utils/configs.py`:
 
-- **Process settings** — `YamlBaseSettings`, layered over the environment so environment variables can override the YAML file. Best for singular, per-process settings such as the global log level.
-- **Instance configs** — `YamlBaseModel`, plain data models loaded explicitly from a file. The same class can be loaded many times from different files, with no shared environment state between instances.
+- **Process settings** - `YamlBaseSettings`, layered over the environment so environment variables can override the YAML file. Best for singular, per-process settings such as the global log level.
+- **Instance configs** - `YamlBaseModel`, plain data models loaded explicitly from a file. The same class can be loaded many times from different files, with no shared environment state between instances.
 
 ### Default path with per-instance override
 
-Instance configs are loaded through `from_yaml`. A config class may set a `DEFAULT_CONFIG_PATH`, which is used whenever no path is given — so the common case takes no arguments, while any case that needs a different file simply passes one:
+Instance configs are loaded through `from_yaml`. A config class may set a `DEFAULT_CONFIG_PATH`, which is used whenever no path is given - so the common case takes no arguments, while any case that needs a different file simply passes one:
 
 ```python
 from utils.configs import MlflowLoggerConfig

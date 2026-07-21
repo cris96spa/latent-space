@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { ChatEntry } from '../../lib/api'
 import { RESUME_PDF } from '../../lib/links'
+import { FALLBACK_HOOK, THINKING_HOOKS } from './content'
 import { htmlToPlainText, wrapWordsInHtml } from './revealHtml'
 import type {
   AnswerResolution,
@@ -13,7 +14,7 @@ import type {
 } from './types'
 
 /** Milliseconds each word waits before the next appears while an answer streams. */
-const WORD_REVEAL_MS = 24
+const WORD_REVEAL_MS = 18
 
 export interface ChatController {
   readonly turns: readonly ChatTurn[]
@@ -45,6 +46,7 @@ function buildAnswerTurn(id: string, resolution: AnswerResolution): AnswerTurn {
       wordCount: wrapped.wordCount,
       plainText: htmlToPlainText(resolution.entry.answerHtml),
       suggestions: [],
+      hook: THINKING_HOOKS[resolution.entry.slug],
       ...(linksResume ? { attachment: 'resume' as const } : {}),
     }
   }
@@ -58,6 +60,7 @@ function buildAnswerTurn(id: string, resolution: AnswerResolution): AnswerTurn {
     wordCount: wrapped.wordCount,
     plainText: resolution.message,
     suggestions: resolution.suggestions,
+    hook: FALLBACK_HOOK,
   }
 }
 
@@ -65,7 +68,7 @@ function buildAnswerTurn(id: string, resolution: AnswerResolution): AnswerTurn {
  * Owns the transcript and the reveal player. `ask` appends the user's turn, consumes the
  * responder's stream, and appends the assistant turn; a player then walks `shownWords`
  * up to that turn's `wordCount`. The responder is consumed as an async iterable and the
- * reveal never runs ahead of what has arrived, mirroring the hero — so a streaming
+ * reveal never runs ahead of what has arrived, mirroring the hero - so a streaming
  * `LlmChatResponder` (task 15) works through the same path. Under reduced motion the
  * answer is fully revealed at once and nothing animates.
  */

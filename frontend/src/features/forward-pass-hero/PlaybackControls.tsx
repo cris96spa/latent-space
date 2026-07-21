@@ -6,7 +6,7 @@ const PHASE_CAPTIONS: Record<ForwardPassPhase, string> = {
   tokenize: 'splitting the prompt into tokens',
   prefill: 'one parallel pass over every prompt position, filling the KV cache',
   decode: 'one pass per token, reusing the cache',
-  complete: 'done — the KV cache is warm and nobody paid for a GPU',
+  complete: 'done - the KV cache is warm and nobody paid for a GPU',
 }
 
 /**

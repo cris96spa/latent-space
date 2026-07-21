@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { ButtonLink } from '../../components/ButtonLink'
+import { LinkIcon } from '../../components/LinkIcon'
 import { TextLink } from '../../components/TextLink'
 import { EXTERNAL_LINKS } from '../../lib/links'
 import { TARGET_MODEL } from './architecture'
@@ -32,7 +33,7 @@ export function ForwardPassHero() {
       <div className="space-y-4">
         <p className="font-mono text-xs tracking-widest text-muted uppercase">
           <TextLink
-            href={EXTERNAL_LINKS.llamaModel}
+            href={EXTERNAL_LINKS.gpt2Model}
             target="_blank"
             rel="noreferrer noopener"
             className="font-mono"
@@ -45,9 +46,9 @@ export function ForwardPassHero() {
           who is <span className="text-brand-600 dark:text-brand-400">Cristian</span>?
         </h1>
         <p className="max-w-2xl text-sm text-muted">
-          The prompt is split by Llama 3's tokenizer, prefilled in one pass, then decoded a token
-          at a time. Every box below is a token, and the answer is literally what fell out of the
-          softmax. Scrub it if you want to catch the model mid-thought.
+          The prompt is split by GPT-2's pretokenizer, prefilled in one pass, then decoded a chunk
+          at a time. The answer is scripted; the transformer plumbing is not. Scrub it if you want
+          to catch the model mid-thought.
         </p>
       </div>
 
@@ -78,7 +79,7 @@ export function ForwardPassHero() {
 
         <div className="space-y-2 border-t border-border bg-background/40 p-4 sm:p-6">
           <p className="font-mono text-[11px] text-muted" aria-hidden="true">
-            detokenized output · one box, one token
+            detokenized output · one box, one pretoken chunk
           </p>
           <StreamingBio frame={frame} streaming={status === 'running'} />
         </div>
@@ -92,6 +93,7 @@ export function ForwardPassHero() {
 
       <div className="flex flex-wrap gap-3">
         <ButtonLink href={EXTERNAL_LINKS.github} target="_blank" rel="noreferrer noopener">
+          <LinkIcon name="github" />
           Read the source
         </ButtonLink>
         <ButtonLink
@@ -100,6 +102,7 @@ export function ForwardPassHero() {
           target="_blank"
           rel="noreferrer noopener"
         >
+          <LinkIcon name="linkedin" />
           The formal narrative
         </ButtonLink>
       </div>

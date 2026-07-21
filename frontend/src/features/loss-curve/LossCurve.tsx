@@ -52,9 +52,8 @@ const NARROW_PLOT: PlotBox = {
 const TOKEN_TICKS: readonly { readonly tokens: number; readonly label: string }[] = [
   { tokens: 1e7, label: '10M' },
   { tokens: 1e8, label: '100M' },
+  { tokens: 1e9, label: '1B' },
   { tokens: 1e10, label: '10B' },
-  { tokens: 1e12, label: '1T' },
-  { tokens: 1e13, label: '10T' },
 ]
 const LOSS_TICKS: readonly number[] = [2, 4, 6, 8, 10]
 
@@ -87,7 +86,7 @@ const NARROW_PATHS = SWEEP.map((run) => pathFor(run.samples, NARROW_PLOT))
  * The ablation sweep: one line per run, one hue per hyperparameter, all of them
  * bending toward the same floor because no amount of tuning buys you past the entropy
  * of the data. Curves come from the Chinchilla fit with a per-run data penalty, so the
- * fan is a prediction rather than a drawing. Decorative — the legend and the copy
+ * fan is a prediction rather than a drawing. Decorative - the legend and the copy
  * beside it carry the same information as text.
  */
 export function LossCurve({ compact }: { compact: boolean }) {
@@ -203,4 +202,3 @@ export function LossCurve({ compact }: { compact: boolean }) {
     </svg>
   )
 }
-

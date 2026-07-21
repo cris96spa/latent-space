@@ -4,7 +4,7 @@ import { RESUME_PDF } from '../../lib/links'
  * The résumé shown inline in a chat answer: an embedded PDF preview with a download
  * button and an open-in-new-tab link. The `<object>` renders the PDF where the browser
  * supports it; where it does not (often mobile), the fallback content inside it appears,
- * and the buttons below work regardless — so the résumé is always reachable.
+ * and the buttons below work regardless - so the résumé is always reachable.
  */
 export function ResumeCard() {
   return (
@@ -16,7 +16,7 @@ export function ResumeCard() {
         className="h-96 w-full rounded-md border border-border bg-surface"
       >
         <p className="p-4 text-sm text-muted">
-          Your browser won't preview the PDF inline — the buttons below still have you
+          Your browser won't preview the PDF inline - the buttons below still have you
           covered.
         </p>
       </object>
