@@ -188,3 +188,67 @@
     transform: translateY(var(--ls-emit-distance, 200px));
   }
 }
+
+/* Scripted chat (task 08): prose styling for the API's sanitized answer HTML. The
+   answer is Markdown-rendered, so it can carry lists, bold, links, and inline code. */
+.ls-answer > * + * {
+  margin-top: 0.6rem;
+}
+
+.ls-answer ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.ls-answer li + li {
+  margin-top: 0.3rem;
+}
+
+.ls-answer strong {
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+.ls-answer a {
+  color: var(--color-brand-700);
+  text-decoration: underline;
+}
+
+.dark .ls-answer a {
+  color: var(--color-brand-300);
+}
+
+.ls-answer code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background-color: --alpha(var(--color-brand-500) / 12%);
+}
+
+/* Word-by-word reveal. Only while the container is `is-revealing` are un-reached words
+   hidden; a settled answer has no such class, so every word shows even if JS never runs
+   the reveal. The reduced-motion rule above disables the fade, so words snap in. */
+.ls-answer .ls-word {
+  transition: opacity 140ms ease-out;
+}
+
+.ls-answer.is-revealing .ls-word {
+  opacity: 0;
+}
+
+.ls-answer.is-revealing .ls-word.is-shown {
+  opacity: 1;
+}
+
+/* The blinking write-head cursor, pinned to the most-recently revealed word. */
+.ls-answer.is-revealing .ls-word.is-head::after {
+  content: '▍';
+  margin-left: 1px;
+  color: var(--color-brand-600);
+  animation: ls-cursor 1s step-end infinite;
+}
+
+.dark .ls-answer.is-revealing .ls-word.is-head::after {
+  color: var(--color-brand-400);
+}
