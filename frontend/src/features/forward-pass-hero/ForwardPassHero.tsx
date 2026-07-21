@@ -1,11 +1,9 @@
 import { useMemo } from 'react'
 
-import { ButtonLink } from '../../components/ButtonLink'
-import { LinkIcon } from '../../components/LinkIcon'
 import { TextLink } from '../../components/TextLink'
 import { EXTERNAL_LINKS } from '../../lib/links'
 import { TARGET_MODEL } from './architecture'
-import { CANONICAL_BIO } from './content'
+import { CANONICAL_BIO, HERO_PROMPT } from './content'
 import { PipelineDiagram } from './PipelineDiagram'
 import { PlaybackControls } from './PlaybackControls'
 import { StreamingBio } from './StreamingBio'
@@ -43,16 +41,21 @@ export function ForwardPassHero() {
           · scripted · greedy decoding
         </p>
         <h1 id="hero-heading" className="text-4xl font-semibold tracking-tight sm:text-6xl">
-          who is <span className="text-brand-600 dark:text-brand-400">Cristian</span>?
+          Who is <span className="text-brand-600 dark:text-brand-400">Cristian</span>?
         </h1>
-        <p className="max-w-2xl text-sm text-muted">
-          The prompt is split by GPT-2's pretokenizer, prefilled in one pass, then decoded a chunk
-          at a time. The answer is scripted; the transformer plumbing is not. Scrub it if you want
-          to catch the model mid-thought.
-        </p>
+        <p className="max-w-2xl text-sm text-muted">Let&rsquo;s ask GPT-2.</p>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-surface/60 shadow-glow">
+        <div className="border-b border-border p-3 sm:p-4" aria-hidden="true">
+          <div className="flex items-center gap-2.5 rounded-lg border border-border bg-background/50 px-3 py-2">
+            <span className="shrink-0 font-mono text-[11px] tracking-widest text-brand-700 uppercase dark:text-brand-400">
+              prompt
+            </span>
+            <span className="truncate font-mono text-sm text-fg">{HERO_PROMPT}</span>
+          </div>
+        </div>
+
         <div
           className="flex items-center justify-between gap-3 border-b border-border px-4 py-2 font-mono text-[11px] text-muted"
           aria-hidden="true"
@@ -69,12 +72,17 @@ export function ForwardPassHero() {
             {frame.activeStage ? ` · ${frame.activeStage}` : ''}
           </span>
           <span>
-            kv {frame.kvCacheLength}/{TARGET_MODEL.contextLength} · {TARGET_MODEL.blockCount} blocks
+            kv cache {frame.kvCacheLength}/{TARGET_MODEL.contextLength} ctx ·{' '}
+            {TARGET_MODEL.blockCount} blocks
           </span>
         </div>
 
         <div className="p-3 sm:p-5">
           <PipelineDiagram frame={frame} layout={layout} />
+        </div>
+
+        <div className="border-t border-border p-4 sm:p-6">
+          <PlaybackControls playback={playback} />
         </div>
 
         <div className="space-y-2 border-t border-border bg-background/40 p-4 sm:p-6">
@@ -83,29 +91,9 @@ export function ForwardPassHero() {
           </p>
           <StreamingBio frame={frame} streaming={status === 'running'} />
         </div>
-
-        <div className="border-t border-border p-4 sm:p-6">
-          <PlaybackControls playback={playback} />
-        </div>
       </div>
 
       <p className="sr-only">{CANONICAL_BIO}</p>
-
-      <div className="flex flex-wrap gap-3">
-        <ButtonLink href={EXTERNAL_LINKS.github} target="_blank" rel="noreferrer noopener">
-          <LinkIcon name="github" />
-          Read the source
-        </ButtonLink>
-        <ButtonLink
-          variant="ghost"
-          href={EXTERNAL_LINKS.linkedin}
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <LinkIcon name="linkedin" />
-          The formal narrative
-        </ButtonLink>
-      </div>
     </section>
   )
 }

@@ -1,4 +1,4 @@
-export const HERO_PROMPT = 'who is Cristian?'
+export const HERO_PROMPT = 'Who is Cristian?'
 
 /**
  * The string the hero streams token by token.

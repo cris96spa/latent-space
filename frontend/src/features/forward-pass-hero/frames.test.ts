@@ -28,7 +28,7 @@ const OUTPUT = toTokens('Hi there')
 const VOCABULARY = buildDistractorVocabulary(OUTPUT)
 
 describe('attentionEdgesForStep', () => {
-  const context = toContext('who is Cristian?')
+  const context = toContext('Who is Cristian?')
   const edges = attentionEdgesForStep(context, context.length - 1, 0)
 
   it('emits one weight per head per key in the window', () => {

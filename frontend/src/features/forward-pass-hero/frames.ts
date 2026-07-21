@@ -99,7 +99,10 @@ export const ATTENTION_HEADS: readonly AttentionHeadSpec[] = [
   {
     index: 1,
     label: 'proper-noun',
-    salience: (token) => (isProperNoun(token) ? PROPER_NOUN_SALIENCE : BACKGROUND_SALIENCE),
+    // A sentence-initial capital (context position 0, e.g. "Who") is grammar, not a
+    // name, so the head skips it and lands on the actual proper noun.
+    salience: (token) =>
+      isProperNoun(token) && token.index > 0 ? PROPER_NOUN_SALIENCE : BACKGROUND_SALIENCE,
   },
   {
     index: 2,

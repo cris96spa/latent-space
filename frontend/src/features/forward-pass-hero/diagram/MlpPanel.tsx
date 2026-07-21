@@ -72,16 +72,6 @@ export function MlpPanel({ activations, layout, active }: MlpPanelProps) {
           }}
         />
       ))}
-
-      <text
-        x={centerX(layout.mlp)}
-        y={hiddenTop + hiddenHeight + 18}
-        textAnchor="middle"
-        fontSize={layout.labelSize - 1}
-        className="fill-muted font-mono"
-      >
-        {TARGET_MODEL.feedForwardActivation}
-      </text>
     </g>
   )
 }

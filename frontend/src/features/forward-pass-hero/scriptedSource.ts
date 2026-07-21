@@ -39,7 +39,7 @@ export function createScriptedForwardPassSource(
   }
 }
 
-/** The canonical landing-page source: "who is Cristian?" streaming the bio. */
+/** The canonical landing-page source: "Who is Cristian?" streaming the bio. */
 export function createHeroForwardPassSource(): ForwardPassSource {
   return createScriptedForwardPassSource({ prompt: HERO_PROMPT, output: CANONICAL_BIO })
 }
