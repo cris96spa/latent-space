@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from latent_space.api.dependencies import get_content_service
-from latent_space.models.content import ProjectDetail, ProjectSummary
+from latent_space.models.content import PostSummary, ProjectDetail, ProjectSummary
 from latent_space.services.content import ContentService
 
 router = APIRouter(tags=["content"])
@@ -15,6 +15,18 @@ async def list_projects(
 ) -> list[ProjectSummary]:
     """List published projects, most recently published first."""
     return service.published_project_summaries()
+
+
+@router.get("/posts")
+async def list_posts(
+    service: Annotated[ContentService, Depends(get_content_service)],
+) -> list[PostSummary]:
+    """List published posts, most recently published first.
+
+    Each post is an outbound link to writing hosted elsewhere (Substack); there is no
+    detail route, so this list is the whole surface.
+    """
+    return service.published_post_summaries()
 
 
 @router.get("/projects/{public_identifier}")

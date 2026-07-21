@@ -7,11 +7,14 @@ from pydantic import ValidationError
 from latent_space.constants import (
     CHAT_CONTENT_SUBDIRECTORY,
     CONTENT_FILE_SUFFIX,
+    POSTS_CONTENT_SUBDIRECTORY,
     PROJECTS_CONTENT_SUBDIRECTORY,
 )
 from latent_space.models.content import (
     ChatEntry,
     ChatEntryResponse,
+    Post,
+    PostSummary,
     Project,
     ProjectDetail,
     ProjectSummary,
@@ -154,6 +157,51 @@ def load_chat_entries_from_directory(directory: Path) -> list[ChatEntry]:
     return entries
 
 
+def load_posts_from_directory(directory: Path) -> list[Post]:
+    """Load and validate every post file in `directory`.
+
+    A post is a link to writing published elsewhere: frontmatter metadata only. Any
+    Markdown body is ignored, since the canonical text lives at the post's `external_url`.
+    Each post's public identifier is its filename stem (see
+    `_public_identifier_from_filename`).
+
+    Args:
+        directory: Directory scanned for post Markdown files.
+
+    Returns:
+        The validated posts, including drafts; an empty list when the directory does not
+        exist, since absent content is not an error.
+
+    Raises:
+        ContentLoadError: On a malformed file, a schema validation failure, or a
+            frontmatter that declares its own `public_identifier`.
+    """
+    if not directory.is_dir():
+        return []
+
+    posts: list[Post] = []
+    for path in sorted(directory.glob(f"*{CONTENT_FILE_SUFFIX}")):
+        metadata, _ = parse_frontmatter_document(path.read_text(encoding="utf-8"))
+        metadata["public_identifier"] = _public_identifier_from_filename(path, metadata)
+        try:
+            post = Post.model_validate(metadata)
+        except ValidationError as error:
+            raise ContentLoadError(f"invalid post content in '{path.name}': {error}") from error
+        posts.append(post)
+    return posts
+
+
+def sort_posts_newest_first(posts: Iterable[Post]) -> list[Post]:
+    """Order posts for display, most recently published first.
+
+    Same ranking as projects: descending `published_at`, ties broken by ascending
+    `public_identifier`, so the order is total and independent of filesystem iteration
+    order.
+    """
+    by_public_identifier = sorted(posts, key=lambda post: post.public_identifier)
+    return sorted(by_public_identifier, key=lambda post: post.published_at, reverse=True)
+
+
 def sort_projects_newest_first(projects: Iterable[Project]) -> list[Project]:
     """Order projects for display, most recently published first.
 
@@ -182,7 +230,12 @@ class ContentService:
     cached content.
     """
 
-    def __init__(self, projects: list[Project], chat_entries: list[ChatEntry]) -> None:
+    def __init__(
+        self,
+        projects: list[Project],
+        chat_entries: list[ChatEntry],
+        posts: list[Post],
+    ) -> None:
         published_projects = sort_projects_newest_first(
             project for project in projects if not project.draft
         )
@@ -192,13 +245,16 @@ class ContentService:
         }
         published_chat = sort_chat_entries(entry for entry in chat_entries if not entry.draft)
         self._chat_responses = [self._to_chat_response(entry) for entry in published_chat]
+        published_posts = sort_posts_newest_first(post for post in posts if not post.draft)
+        self._post_summaries = [self._to_post_summary(post) for post in published_posts]
 
     @classmethod
     def from_content_root(cls, content_root: Path) -> "ContentService":
         """Load, validate, and build the service from a content root directory."""
         projects = load_projects_from_directory(content_root / PROJECTS_CONTENT_SUBDIRECTORY)
         chat_entries = load_chat_entries_from_directory(content_root / CHAT_CONTENT_SUBDIRECTORY)
-        return cls(projects, chat_entries)
+        posts = load_posts_from_directory(content_root / POSTS_CONTENT_SUBDIRECTORY)
+        return cls(projects, chat_entries, posts)
 
     def published_project_summaries(self) -> list[ProjectSummary]:
         return list(self._project_summaries)
@@ -210,12 +266,19 @@ class ContentService:
         """
         return self._project_details.get(public_identifier)
 
+    def published_post_summaries(self) -> list[PostSummary]:
+        return list(self._post_summaries)
+
     def chat_entries(self) -> list[ChatEntryResponse]:
         return list(self._chat_responses)
 
     @staticmethod
     def _to_summary(project: Project) -> ProjectSummary:
         return ProjectSummary.model_validate(project.model_dump(exclude={"draft", "body_markdown"}))
+
+    @staticmethod
+    def _to_post_summary(post: Post) -> PostSummary:
+        return PostSummary.model_validate(post.model_dump(exclude={"draft"}))
 
     @staticmethod
     def _to_detail(project: Project) -> ProjectDetail:
