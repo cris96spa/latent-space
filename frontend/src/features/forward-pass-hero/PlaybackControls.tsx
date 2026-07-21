@@ -26,7 +26,7 @@ export function PlaybackControls({ playback }: { playback: ForwardPassPlayback }
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <Button variant="ghost" onClick={togglePlay} disabled={disabled}>
-          {status === 'complete' ? 'Play again' : playing ? 'Pause' : 'Play'}
+          {status === 'complete' ? 'Play' : playing ? 'Pause' : 'Play'}
         </Button>
         <Button variant="ghost" onClick={() => stepBy(-1)} disabled={disabled || position <= 0}>
           ◀ Step

@@ -58,9 +58,7 @@ export function ContextLane({
         fontSize={layout.labelSize}
         className={cn('font-mono', active ? 'fill-fg' : 'fill-muted')}
       >
-        {layout.verbose
-          ? `token + position embed · ${TARGET_MODEL.hiddenSize}`
-          : 'token + pos'}
+        {layout.verbose ? `token + pos · ${TARGET_MODEL.hiddenSize}` : 'embed'}
       </text>
 
       {visibleContext.map((token, slot) => {

@@ -4,7 +4,7 @@ import { pretokenizeText } from './tokenize'
 
 describe('pretokenizeText', () => {
   it('keeps leading spaces attached to their word', () => {
-    expect(pretokenizeText('who is Cristian?')).toEqual(['who', ' is', ' Cristian', '?'])
+    expect(pretokenizeText('Who is Cristian?')).toEqual(['Who', ' is', ' Cristian', '?'])
   })
 
   it('splits contractions the way the GPT-2 pattern does', () => {
@@ -23,7 +23,7 @@ describe('pretokenizeText', () => {
   it('is lossless, so the tokens rebuild the source exactly', () => {
     const sources = [
       'GPT-2, 110/110 - cum laude.',
-      "who is Cristian? He's an NLP engineer.",
+      "Who is Cristian? He's an NLP engineer.",
       'trailing space ',
       '',
     ]

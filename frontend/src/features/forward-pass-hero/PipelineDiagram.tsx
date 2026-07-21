@@ -37,12 +37,14 @@ function NormMarker({ x, y, height }: { x: number; y: number; height: number }) 
       />
       <text
         x={x + 4}
-        y={y + height / 2 + 12}
+        y={y}
         textAnchor="middle"
-        fontSize={9}
-        className="fill-muted font-mono"
+        dominantBaseline="central"
+        fontSize={8}
+        transform={`rotate(-90 ${x + 4} ${y})`}
+        className="fill-fg font-mono"
       >
-        ln
+        l-norm
       </text>
     </g>
   )
