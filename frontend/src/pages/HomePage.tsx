@@ -1,14 +1,56 @@
-import { Link } from 'react-router-dom'
-
-import { ButtonLink } from '../components/ButtonLink'
-import { SectionHeading } from '../components/SectionHeading'
 import { TokenChip } from '../components/TokenChip'
-import { buttonClassName } from '../components/button-variants'
 import { ChatSection } from '../features/chat'
 import { ForwardPassHero } from '../features/forward-pass-hero'
-import { EXTERNAL_LINKS } from '../lib/links'
+import { SkillsRadarSection } from '../features/skills-radar'
 
-const STACK_TOKENS = ['PyTorch', 'vLLM', 'TensorRT', 'FastAPI', 'Docker', 'MLflow', 'uv']
+// The active vocabulary: the languages, frameworks, and infrastructure Cristian reaches for
+// most, grounded in the CV skills section. Edit here when the CV's skills change.
+const VOCABULARY_TOKENS = [
+  'Python',
+  'Java',
+  'C++',
+  'C',
+  'Assembly',
+  'SQL',
+  'PyTorch',
+  'TensorFlow',
+  'scikit-learn',
+  'NumPy',
+  'Pandas',
+  'Polars',
+  'Matplotlib',
+  'Plotly',
+  'Gymnasium',
+  'Hugging Face',
+  'LangChain',
+  'LangGraph',
+  'vLLM',
+  'TensorRT',
+  'MLflow',
+  'Ollama',
+  'OpenAI',
+  'Gemini',
+  'Vertex AI',
+  'Mistral',
+  'Qwen',
+  'DeepSeek',
+  'FastAPI',
+  'Django',
+  'Docker',
+  'Docker Compose',
+  'Traefik',
+  'uv',
+  'Make',
+  'Git',
+  'GitHub',
+  'GCP',
+  'AWS',
+  'Azure',
+  'Firebase',
+  'MongoDB',
+  'Neo4j',
+  'Node-RED',
+]
 
 export function HomePage() {
   return (
@@ -17,40 +59,26 @@ export function HomePage() {
 
       <ChatSection />
 
-      <section className="space-y-6">
-        <SectionHeading eyebrow="next tokens" title="Keep decoding">
-          The hero streamed the short version, and the box above answers the follow-ups. The
-          rest is one click away.
-        </SectionHeading>
-
-        <div className="flex flex-wrap gap-3">
-          <Link to="/resume" className={buttonClassName('primary')}>
-            The résumé →
-          </Link>
-          <Link to="/projects" className={buttonClassName('ghost')}>
-            The projects →
-          </Link>
-          <ButtonLink variant="ghost" href={EXTERNAL_LINKS.email}>
-            Say hello →
-          </ButtonLink>
+      <section aria-labelledby="vocabulary-heading" className="space-y-6">
+        <div className="max-w-2xl space-y-3">
+          <p className="font-mono text-xs uppercase tracking-widest text-muted">vocabulary</p>
+          <h2
+            id="vocabulary-heading"
+            className="text-4xl font-semibold tracking-tight sm:text-5xl"
+          >
+            Tokens in the vocabulary
+          </h2>
         </div>
 
-        <p className="text-sm text-muted">
-          Fair warning: the résumé is far less fun than this page.
-        </p>
+        <ul className="flex flex-wrap gap-2" aria-label="Skills and tooling">
+          {VOCABULARY_TOKENS.map((token) => (
+            <li key={token}>
+              <TokenChip tone="neutral">{token}</TokenChip>
+            </li>
+          ))}
+        </ul>
 
-        <div className="space-y-3 pt-2">
-          <p className="font-mono text-xs uppercase tracking-widest text-muted">
-            tokens in the vocabulary
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {STACK_TOKENS.map((token) => (
-              <TokenChip key={token} tone="neutral">
-                {token}
-              </TokenChip>
-            ))}
-          </div>
-        </div>
+        <SkillsRadarSection />
       </section>
     </div>
   )
