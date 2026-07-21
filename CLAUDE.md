@@ -1,7 +1,7 @@
 # latent-space
 
 latent-space is Cristian Spagnuolo's personal site: part portfolio, part lab notebook,
-part applied-ML performance art. It should answer "who is Cristian and what does he
+part applied-ML performance art. It should answer "Who is Cristian and what does he
 build?" in a voice that a PDF resume cannot.
 
 The product is a FastAPI backend and a Vite/React/TypeScript frontend. Some repository
@@ -41,7 +41,7 @@ These are product requirements, not optional decoration.
 
 ### Forward-pass hero
 
-The landing page animates a prompt such as "who is Cristian?" through the pipeline of a
+The landing page animates a prompt such as "Who is Cristian?" through the pipeline of a
 named real architecture (GPT-2 124M, in `features/forward-pass-hero/architecture.ts`) and
 streams the bio token by token. Phases follow real inference: tokenize, one parallel
 prefill pass that fills the KV cache, then one decode pass per token. Playback is

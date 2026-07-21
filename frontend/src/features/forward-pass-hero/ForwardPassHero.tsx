@@ -38,12 +38,11 @@ export function ForwardPassHero() {
           >
             {TARGET_MODEL.label}
           </TextLink>{' '}
-          · scripted · greedy decoding
+          · greedy decoding
         </p>
         <h1 id="hero-heading" className="text-4xl font-semibold tracking-tight sm:text-6xl">
           Who is <span className="text-brand-600 dark:text-brand-400">Cristian</span>?
         </h1>
-        <p className="max-w-2xl text-sm text-muted">Let&rsquo;s ask GPT-2.</p>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-surface/60 shadow-glow">
@@ -87,7 +86,7 @@ export function ForwardPassHero() {
 
         <div className="space-y-2 border-t border-border bg-background/40 p-4 sm:p-6">
           <p className="font-mono text-[11px] text-muted" aria-hidden="true">
-            detokenized output · one box, one pretoken chunk
+            detokenized output
           </p>
           <StreamingBio frame={frame} streaming={status === 'running'} />
         </div>

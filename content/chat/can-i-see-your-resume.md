@@ -1,6 +1,6 @@
 ---
 slug: can-i-see-your-resume
-question: Can I see your résumé?
+question: Can I see your resume?
 category: resume
 order: 9
 draft: false
