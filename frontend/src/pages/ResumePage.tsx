@@ -62,7 +62,7 @@ export function ResumePage() {
 
       <section aria-labelledby="contact-heading" className="max-w-2xl space-y-4">
         <h2 id="contact-heading" className="text-2xl font-semibold tracking-tight">
-          Open an issue
+          Get in touch
         </h2>
         <p className="text-muted">
           A role, a collaboration, or just to say the loss curve looks nice. Based in Lugano,
