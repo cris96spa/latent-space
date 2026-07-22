@@ -69,7 +69,7 @@ export function VocabularySection() {
             <li key={token.label} className="group relative">
               <TokenChip
                 tone="neutral"
-                aria-label={`${token.label} — GPT-2 token IDs ${ids}`}
+                aria-label={`${token.label} - GPT-2 token IDs ${ids}`}
               >
                 {showingIds ? ids : token.label}
               </TokenChip>

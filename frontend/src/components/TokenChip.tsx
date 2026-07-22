@@ -23,6 +23,9 @@ interface TokenChipProps {
 /**
  * The recurring "token" motif: a monospace pill that carries the ML metaphor
  * visually across tags, tech stacks, and the forward-pass hero (task 07).
+ *
+ * When a caller passes `aria-label`, the chip takes `role="img"` so assistive tech exposes
+ * that name - a plain (generic) span does not reliably surface `aria-label`.
  */
 export function TokenChip({
   children,
@@ -35,6 +38,7 @@ export function TokenChip({
     <span
       title={title}
       aria-label={ariaLabel}
+      role={ariaLabel ? 'img' : undefined}
       className={cn(
         'inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-xs',
         TONE_CLASSES[tone],
