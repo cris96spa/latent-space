@@ -12,7 +12,7 @@ export function Footer() {
           © {year} Cristian C. Spagnuolo ·{' '}
           <span className="text-brand-700 dark:text-brand-400">no weights were harmed</span>
         </p>
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-4" aria-label="Social">
           <TextLink
             href={EXTERNAL_LINKS.github}
             target="_blank"
