@@ -15,14 +15,14 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Card className="flex h-full flex-col gap-4 transition-colors hover:border-brand-300">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold tracking-tight">
+        <h2 className="text-lg font-semibold tracking-tight">
           <Link
             to={`/projects/${project.publicIdentifier}`}
             className="text-fg transition-colors hover:text-brand-700 dark:hover:text-brand-300"
           >
             {project.title}
           </Link>
-        </h3>
+        </h2>
         <p className="text-sm text-muted">{project.summary}</p>
       </div>
 
