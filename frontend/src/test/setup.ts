@@ -1,14 +1,14 @@
-import '@testing-library/jest-dom/vitest'
-import 'vitest-axe/extend-expect'
-
-import * as axeMatchers from 'vitest-axe/matchers'
 import { afterEach, expect } from 'vitest'
 
-expect.extend(axeMatchers)
-
 // DOM-only wiring, guarded so this shared setup stays inert for the node-env (*.test.ts)
-// suites. Testing Library is imported dynamically only when a document exists.
+// suites. jest-dom's DOM matchers, axe, and Testing Library cleanup are only meaningful when a
+// document exists, so they are registered dynamically inside the guard.
 if (typeof window !== 'undefined') {
+  await import('@testing-library/jest-dom/vitest')
+
+  const axeMatchers = await import('vitest-axe/matchers')
+  expect.extend(axeMatchers)
+
   const { cleanup } = await import('@testing-library/react')
   afterEach(cleanup)
 

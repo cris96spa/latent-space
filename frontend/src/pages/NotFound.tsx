@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 
+import { PageMeta } from '../components/PageMeta'
 import { buttonClassName } from '../components/button-variants'
+import { PAGE_META } from '../lib/pageMeta'
 
 /**
  * The catch-all 404. Deliberately minimal (Cristian's request): the logo, the error, and one
@@ -10,6 +12,7 @@ import { buttonClassName } from '../components/button-variants'
 export function NotFound() {
   return (
     <section className="mx-auto flex max-w-md flex-col items-center gap-6 py-16 text-center">
+      <PageMeta {...PAGE_META.notFound} />
       <img src="/favicon.png" alt="latent-space" className="size-28 sm:size-32" />
       <div className="space-y-2">
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">

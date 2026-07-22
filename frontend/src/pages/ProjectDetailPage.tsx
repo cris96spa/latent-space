@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { LinkIcon } from '../components/LinkIcon'
+import { PageMeta } from '../components/PageMeta'
 import { TextLink } from '../components/TextLink'
 import { TokenChip } from '../components/TokenChip'
 import { getProject, type ProjectDetail } from '../lib/api'
@@ -72,6 +73,7 @@ export function ProjectDetailPage() {
 function ProjectBody({ project }: { project: ProjectDetail }) {
   return (
     <div className="space-y-6">
+      <PageMeta title={`${project.title} - latent-space`} description={project.summary} />
       <header className="space-y-4">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{project.title}</h1>
         <p className="text-lg text-muted">{project.summary}</p>
