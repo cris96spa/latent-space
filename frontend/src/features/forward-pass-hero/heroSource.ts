@@ -12,13 +12,15 @@ export interface TokenCounts {
 
 /**
  * Everything the hero needs to render its tokenized prompt and drive the animation.
- * `promptCounts` is `null` and `idsAvailable` is `false` in the pretokenizer fallback,
- * where there are no real ids or counts to show.
+ * `promptCounts`/`outputCounts` are `null` and `idsAvailable` is `false` in the
+ * pretokenizer fallback, where there are no real ids or counts to show. `outputCounts`
+ * describes the full streamed bio, mirroring `promptCounts` for the prompt.
  */
 export interface HeroForwardPass {
   readonly source: ForwardPassSource
   readonly promptTokens: readonly Token[]
   readonly promptCounts: TokenCounts | null
+  readonly outputCounts: TokenCounts | null
   readonly idsAvailable: boolean
 }
 
@@ -32,6 +34,7 @@ export function idleHeroForwardPass(): HeroForwardPass {
     source: { prompt: HERO_PROMPT, inputTokens: [], async *frames() {} },
     promptTokens: [],
     promptCounts: null,
+    outputCounts: null,
     idsAvailable: false,
   }
 }
@@ -61,6 +64,11 @@ export async function buildHeroForwardPass(): Promise<HeroForwardPass> {
         wordCount: promptTokenization.wordCount,
         charCount: promptTokenization.charCount,
       },
+      outputCounts: {
+        tokenCount: bioTokenization.tokenCount,
+        wordCount: bioTokenization.wordCount,
+        charCount: bioTokenization.charCount,
+      },
       idsAvailable: true,
     }
   } catch (error) {
@@ -73,6 +81,7 @@ export async function buildHeroForwardPass(): Promise<HeroForwardPass> {
       source,
       promptTokens: [...source.inputTokens],
       promptCounts: null,
+      outputCounts: null,
       idsAvailable: false,
     }
   }

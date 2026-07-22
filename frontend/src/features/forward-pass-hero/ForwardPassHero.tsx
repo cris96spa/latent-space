@@ -105,9 +105,17 @@ export function ForwardPassHero() {
         </div>
 
         <div className="space-y-2 border-t border-border bg-background/40 p-4 sm:p-6">
-          <p className="font-mono text-[11px] text-muted" aria-hidden="true">
-            detokenized output
-          </p>
+          <div
+            className="flex items-center justify-between gap-3 font-mono text-[11px] text-muted"
+            aria-hidden="true"
+          >
+            <span>detokenized output</span>
+            {hero.outputCounts && (
+              <span>
+                {`${hero.outputCounts.tokenCount} tokens · ${hero.outputCounts.wordCount} words · ${hero.outputCounts.charCount} chars`}
+              </span>
+            )}
+          </div>
           <StreamingBio frame={frame} streaming={status === 'running'} view={effectiveView} />
         </div>
       </div>
