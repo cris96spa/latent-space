@@ -1,4 +1,3 @@
-import { CANONICAL_BIO, HERO_PROMPT } from './content'
 import { buildForwardPassFrames } from './frames'
 import { pretokenizeText } from './tokenize'
 import type { ForwardPassSource, Token } from './types'
@@ -8,25 +7,26 @@ interface ScriptedForwardPassConfig {
   readonly output: string
 }
 
-function indexTokens(texts: readonly string[]): Token[] {
-  return texts.map((text, index) => ({ index, text }))
+/** Fallback tokens come from the client pretokenizer, which has no real ids. */
+export const FALLBACK_TOKEN_ID = -1
+
+function indexPretokens(texts: readonly string[]): Token[] {
+  return texts.map((text, index) => ({ index, text, id: FALLBACK_TOKEN_ID }))
 }
 
 /**
- * A deterministic, fully client-side `ForwardPassSource` backed by authored text.
- * It tokenizes the prompt and output once, precomputes the frame sequence, and
- * replays it; `frames` is async only to honor the streaming contract a real source
- * needs, and stops early when the caller aborts.
+ * Build a deterministic `ForwardPassSource` from already-tokenized input and output.
+ * The frame sequence is precomputed once and replayed; `frames` is async only to honor
+ * the streaming contract a real source needs, and stops early when the caller aborts.
  */
-export function createScriptedForwardPassSource(
-  config: ScriptedForwardPassConfig,
+export function createForwardPassSourceFromTokens(
+  prompt: string,
+  inputTokens: readonly Token[],
+  outputTokens: readonly Token[],
 ): ForwardPassSource {
-  const inputTokens = indexTokens(pretokenizeText(config.prompt))
-  const outputTokens = indexTokens(pretokenizeText(config.output))
   const builtFrames = buildForwardPassFrames(inputTokens, outputTokens)
-
   return {
-    prompt: config.prompt,
+    prompt,
     inputTokens,
     async *frames(signal?: AbortSignal) {
       for (const frame of builtFrames) {
@@ -39,7 +39,17 @@ export function createScriptedForwardPassSource(
   }
 }
 
-/** The canonical landing-page source: "Who is Cristian?" streaming the bio. */
-export function createHeroForwardPassSource(): ForwardPassSource {
-  return createScriptedForwardPassSource({ prompt: HERO_PROMPT, output: CANONICAL_BIO })
+/**
+ * The client-side fallback source: pretokenize the prompt and output with GPT-2's
+ * pretokenizer regex (no real BPE ids) and replay them. Used when the backend
+ * tokenizer is unreachable, so the pipeline still animates.
+ */
+export function createScriptedForwardPassSource(
+  config: ScriptedForwardPassConfig,
+): ForwardPassSource {
+  return createForwardPassSourceFromTokens(
+    config.prompt,
+    indexPretokens(pretokenizeText(config.prompt)),
+    indexPretokens(pretokenizeText(config.output)),
+  )
 }
