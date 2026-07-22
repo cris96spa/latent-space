@@ -24,4 +24,26 @@ describe('groupTokensByGrapheme', () => {
     expect(groups[0].tokens).toHaveLength(4)
     expect(groups[0].text).toBe('🛠️')
   })
+
+  it('folds a single-codepoint emoji continuation tokens into one group, no empty phantom groups', () => {
+    const groups = groupTokensByGrapheme([token('🤓', 20), token('', 21), token('', 22)])
+    expect(groups).toHaveLength(1)
+    expect(groups[0].tokens).toHaveLength(3)
+    expect(groups[0].text).toBe('🤓')
+  })
+
+  it('keeps two adjacent multi-token emoji as separate groups', () => {
+    const groups = groupTokensByGrapheme([
+      token('🤓', 1),
+      token('', 2),
+      token('', 3),
+      token('📉', 4),
+      token('', 5),
+      token('', 6),
+    ])
+    expect(groups).toHaveLength(2)
+    expect(groups.map((group) => group.text)).toEqual(['🤓', '📉'])
+    expect(groups.every((group) => group.tokens.length === 3)).toBe(true)
+    expect(groups.some((group) => group.text === '')).toBe(false)
+  })
 })
