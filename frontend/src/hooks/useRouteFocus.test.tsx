@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { StrictMode, useRef } from 'react'
 
 import { render, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom'
@@ -29,6 +29,17 @@ describe('useRouteFocus', () => {
       <MemoryRouter initialEntries={['/']}>
         <Harness />
       </MemoryRouter>,
+    )
+    expect(document.activeElement).toBe(document.body)
+  })
+
+  it('does not steal focus on first render even under StrictMode double-invocation', () => {
+    render(
+      <StrictMode>
+        <MemoryRouter initialEntries={['/']}>
+          <Harness />
+        </MemoryRouter>
+      </StrictMode>,
     )
     expect(document.activeElement).toBe(document.body)
   })
