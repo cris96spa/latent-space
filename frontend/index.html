@@ -4,22 +4,23 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Cristian C. Spagnuolo - NLP engineer. Part portfolio, part lab notebook, part applied-ML performance art."
-    />
-    <!-- Static share-card defaults for non-JS crawlers (Slack, LinkedIn, X, iMessage), which
-         never run the SPA. React sets richer per-page <title>/<meta> at runtime for Google. -->
+    <!-- No static <meta name="description"> on purpose: PageMeta renders a per-route one at
+         runtime, and React 19 *appends* metadata rather than replacing it, so a static tag here
+         would leave two description tags in <head> (a first-match crawler would read the generic
+         one). Google runs the SPA and gets the per-route description; the og/twitter descriptions
+         below still cover non-JS social crawlers (Slack, LinkedIn, X, iMessage). -->
+    <!-- Static share-card defaults for non-JS crawlers, which never run the SPA. React sets
+         richer per-page <title>/<meta> at runtime for Google. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="latent-space" />
-    <meta property="og:title" content="latent-space — Cristian C. Spagnuolo" />
+    <meta property="og:title" content="latent-space - Cristian C. Spagnuolo" />
     <meta
       property="og:description"
       content="NLP engineer. I make language models run faster, fit in less GPU memory, and stop confidently inventing things. Part portfolio, part lab notebook."
     />
     <meta property="og:image" content="/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="latent-space — Cristian C. Spagnuolo" />
+    <meta name="twitter:title" content="latent-space - Cristian C. Spagnuolo" />
     <meta
       name="twitter:description"
       content="NLP engineer. Part portfolio, part lab notebook, part applied-ML performance art."
