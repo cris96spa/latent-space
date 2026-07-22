@@ -52,7 +52,6 @@ export function Header() {
             className="inline-flex items-center gap-1.5"
           >
             <LinkIcon name="github" />
-            GitHub
           </TextLink>
           <ThemeToggle />
         </nav>

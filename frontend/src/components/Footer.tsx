@@ -20,7 +20,6 @@ export function Footer() {
             className="inline-flex items-center gap-1.5"
           >
             <LinkIcon name="github" />
-            GitHub
           </TextLink>
           <TextLink
             href={EXTERNAL_LINKS.linkedin}
@@ -29,11 +28,9 @@ export function Footer() {
             className="inline-flex items-center gap-1.5"
           >
             <LinkIcon name="linkedin" />
-            LinkedIn
           </TextLink>
           <TextLink href={EXTERNAL_LINKS.email} className="inline-flex items-center gap-1.5">
             <LinkIcon name="email" />
-            Email
           </TextLink>
         </nav>
       </div>
