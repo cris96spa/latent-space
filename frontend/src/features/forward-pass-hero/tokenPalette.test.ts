@@ -24,4 +24,9 @@ describe('tokenChipClasses', () => {
     expect(classes.length).toBeGreaterThan(0)
     expect(classes).toContain('dark:')
   })
+
+  it('selects a different hue and band for the next position', () => {
+    expect(tokenChipClasses(1)).not.toBe(tokenChipClasses(0))
+    expect(tokenChipClasses(1)).toContain('sweep-2')
+  })
 })

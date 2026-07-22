@@ -63,7 +63,11 @@ export async function buildHeroForwardPass(): Promise<HeroForwardPass> {
       },
       idsAvailable: true,
     }
-  } catch {
+  } catch (error) {
+    console.warn(
+      'forward-pass hero: backend tokenizer unavailable, using the client pretokenizer fallback',
+      error,
+    )
     const source = createScriptedForwardPassSource({ prompt: HERO_PROMPT, output: CANONICAL_BIO })
     return {
       source,
