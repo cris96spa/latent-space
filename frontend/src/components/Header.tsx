@@ -6,6 +6,13 @@ import { LinkIcon } from './LinkIcon'
 import { TextLink } from './TextLink'
 import { ThemeToggle } from './ThemeToggle'
 
+/** Active nav links reuse the hover brand tone — a lightness shift, not a new hue (CVD-safe). */
+const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
+  cn(
+    'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
+    isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
+  )
+
 export function Header() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur">
@@ -22,34 +29,19 @@ export function Header() {
         <nav className="flex items-center gap-4 text-sm" aria-label="Primary">
           <NavLink
             to="/projects"
-            className={({ isActive }) =>
-              cn(
-                'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
-                isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
-              )
-            }
+            className={navLinkClassName}
           >
             Projects
           </NavLink>
           <NavLink
             to="/writing"
-            className={({ isActive }) =>
-              cn(
-                'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
-                isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
-              )
-            }
+            className={navLinkClassName}
           >
             Writing
           </NavLink>
           <NavLink
             to="/resume"
-            className={({ isActive }) =>
-              cn(
-                'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
-                isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
-              )
-            }
+            className={navLinkClassName}
           >
             Resume
           </NavLink>
