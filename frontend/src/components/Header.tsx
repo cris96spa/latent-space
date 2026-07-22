@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
+import { cn } from '../lib/cn'
 import { EXTERNAL_LINKS } from '../lib/links'
 import { LinkIcon } from './LinkIcon'
 import { TextLink } from './TextLink'
@@ -18,25 +19,40 @@ export function Header() {
             latent<span className="text-brand-600 dark:text-brand-400">-space</span>
           </span>
         </Link>
-        <nav className="flex items-center gap-4 text-sm">
-          <Link
+        <nav className="flex items-center gap-4 text-sm" aria-label="Primary">
+          <NavLink
             to="/projects"
-            className="font-medium text-fg transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+            className={({ isActive }) =>
+              cn(
+                'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
+                isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
+              )
+            }
           >
             Projects
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/writing"
-            className="font-medium text-fg transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+            className={({ isActive }) =>
+              cn(
+                'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
+                isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
+              )
+            }
           >
             Writing
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/resume"
-            className="font-medium text-fg transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+            className={({ isActive }) =>
+              cn(
+                'font-medium transition-colors hover:text-brand-700 dark:hover:text-brand-300',
+                isActive ? 'text-brand-700 dark:text-brand-300' : 'text-fg',
+              )
+            }
           >
             Resume
-          </Link>
+          </NavLink>
           <TextLink
             href={EXTERNAL_LINKS.github}
             target="_blank"
