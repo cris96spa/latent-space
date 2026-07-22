@@ -23,7 +23,7 @@ export function Header() {
             {'>_'}
           </span>
           <span className="text-lg font-semibold tracking-tight">
-            latent<span className="text-brand-600 dark:text-brand-400">-space</span>
+            latent<span className="text-brand-700 dark:text-brand-400">-space</span>
           </span>
         </Link>
         <nav className="flex items-center gap-4 text-sm" aria-label="Primary">
