@@ -78,7 +78,7 @@ export function TokenPromptPanel({
       </div>
 
       {tokens.length > 0 ? (
-        <TokenizedText tokens={tokens} view={view} className="block font-mono text-sm" />
+        <TokenizedText tokens={tokens} view={view} className="font-mono text-sm" />
       ) : (
         <span className="block font-mono text-sm text-fg">{promptText}</span>
       )}
