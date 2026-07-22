@@ -18,6 +18,7 @@ export function Footer() {
             target="_blank"
             rel="noreferrer noopener"
             className="inline-flex items-center gap-1.5"
+            aria-label="GitHub"
           >
             <LinkIcon name="github" />
           </TextLink>
@@ -26,10 +27,15 @@ export function Footer() {
             target="_blank"
             rel="noreferrer noopener"
             className="inline-flex items-center gap-1.5"
+            aria-label="LinkedIn"
           >
             <LinkIcon name="linkedin" />
           </TextLink>
-          <TextLink href={EXTERNAL_LINKS.email} className="inline-flex items-center gap-1.5">
+          <TextLink
+            href={EXTERNAL_LINKS.email}
+            className="inline-flex items-center gap-1.5"
+            aria-label="Email"
+          >
             <LinkIcon name="email" />
           </TextLink>
         </nav>
