@@ -1,7 +1,9 @@
 import { LinkIcon, type LinkIconName } from '../components/LinkIcon'
+import { PageMeta } from '../components/PageMeta'
 import { TextLink } from '../components/TextLink'
 import { buttonClassName } from '../components/button-variants'
 import { EXTERNAL_LINKS, RESUME_PDF } from '../lib/links'
+import { PAGE_META } from '../lib/pageMeta'
 
 interface ContactLink {
   readonly name: LinkIconName
@@ -26,6 +28,7 @@ const CONTACT_LINKS: readonly ContactLink[] = [
 export function ResumePage() {
   return (
     <div className="space-y-10">
+      <PageMeta {...PAGE_META.resume} />
       <header className="max-w-2xl space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">
           the formal version

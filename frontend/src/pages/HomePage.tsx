@@ -1,7 +1,9 @@
+import { PageMeta } from '../components/PageMeta'
 import { TokenChip } from '../components/TokenChip'
 import { ChatSection } from '../features/chat'
 import { ForwardPassHero } from '../features/forward-pass-hero'
 import { SkillsRadarSection } from '../features/skills-radar'
+import { PAGE_META } from '../lib/pageMeta'
 
 // The active vocabulary: the languages, frameworks, and infrastructure Cristian reaches for
 // most, grounded in the CV skills section. Edit here when the CV's skills change.
@@ -55,6 +57,7 @@ const VOCABULARY_TOKENS = [
 export function HomePage() {
   return (
     <div className="space-y-16">
+      <PageMeta {...PAGE_META.home} />
       <ForwardPassHero />
 
       <ChatSection />

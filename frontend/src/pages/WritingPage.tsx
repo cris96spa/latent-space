@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import { Button } from '../components/Button'
+import { PageMeta } from '../components/PageMeta'
 import { TextLink } from '../components/TextLink'
 import { PostCard } from '../features/writing/PostCard'
 import { getPosts, type Post } from '../lib/api'
 import { EXTERNAL_LINKS } from '../lib/links'
+import { PAGE_META } from '../lib/pageMeta'
 
 type LoadState =
   | { readonly status: 'loading' }
@@ -43,6 +45,7 @@ export function WritingPage() {
 
   return (
     <section className="space-y-8">
+      <PageMeta {...PAGE_META.writing} />
       <header className="max-w-2xl space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">
           training logs
