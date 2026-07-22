@@ -291,3 +291,8 @@ pip-selfcheck.json
 .uv_cache
 
 tasks
+
+# Playwright e2e output (frontend/)
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/

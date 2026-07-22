@@ -29,12 +29,13 @@ the interesting part than re-litigate tooling for the hundredth time. **uv** for
 hooks, and a **GitHub Actions** pipeline that lints, tests, and publishes - all wired up on
 commit zero.
 
-Two touches I keep coming back to. Configuration is split cleanly in two: `YamlBaseSettings`
-for per-process settings that the environment can override, and `YamlBaseModel` for plain
-config documents you load explicitly, with a default path and a per-instance override so the
-common case takes no arguments. And `make doc` generates **MkDocs** API pages from the code,
-which descends from the same auto-doc generator I built for our internal template at work -
-so documentation stops being the thing everyone forgets.
+A few touches I keep coming back to. Configuration splits cleanly in two: `YamlBaseSettings`
+for per-process settings the environment can override, and `YamlBaseModel` for plain config
+documents you load explicitly, with a default path and a per-instance override so the common
+case takes no arguments. `make doc` generates **MkDocs** API pages straight from the code -
+the same auto-doc generator I built for our internal template at work - so documentation
+stops being the thing everyone forgets. And an update script pulls the template's later fixes
+into a project you already started, so a repo scaffolded months ago doesn't quietly rot.
 
 It's the least glamorous repo I own and quietly the most load-bearing. The backend of the
 site you're reading grew out of exactly this skeleton.

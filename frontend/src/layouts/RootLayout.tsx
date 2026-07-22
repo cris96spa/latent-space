@@ -1,6 +1,7 @@
 import { Suspense, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
+import { Analytics } from '@vercel/analytics/react'
 import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
 import { SkipLink } from '../components/SkipLink'
@@ -38,6 +39,7 @@ export function RootLayout() {
         </div>
       </main>
       <Footer />
+      <Analytics />
     </div>
   )
 }

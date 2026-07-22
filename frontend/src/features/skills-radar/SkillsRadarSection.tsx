@@ -23,7 +23,7 @@ export function SkillsRadarSection() {
   return (
     <div className="mt-10 space-y-3">
       <p className="font-mono text-xs uppercase tracking-widest text-muted">
-        self-eval · unreliable
+        self-eval · n=1
       </p>
 
       <Suspense fallback={<RadarFallback />}>

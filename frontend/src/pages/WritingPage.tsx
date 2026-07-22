@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import { Button } from '../components/Button'
+import { PageMeta } from '../components/PageMeta'
 import { TextLink } from '../components/TextLink'
 import { PostCard } from '../features/writing/PostCard'
 import { getPosts, type Post } from '../lib/api'
 import { EXTERNAL_LINKS } from '../lib/links'
+import { PAGE_META } from '../lib/pageMeta'
 
 type LoadState =
   | { readonly status: 'loading' }
@@ -43,13 +45,14 @@ export function WritingPage() {
 
   return (
     <section className="space-y-8">
+      <PageMeta {...PAGE_META.writing} />
       <header className="max-w-2xl space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">
           training logs
         </p>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Writing</h1>
         <p className="text-muted">
-          Notes from the lab notebook &mdash; training runs, papers I couldn&rsquo;t stop thinking
+          Notes from the lab notebook - training runs, papers I couldn&rsquo;t stop thinking
           about, and the occasional LLM tangent. Published on Substack; the good bits land there
           first.
         </p>
@@ -65,7 +68,7 @@ export function WritingPage() {
       {load.status === 'error' && (
         <div className="space-y-3">
           <p className="text-muted">
-            The posts didn&rsquo;t load &mdash; the content service might still be warming up.
+            The posts didn&rsquo;t load - the content service might still be warming up.
           </p>
           <Button variant="ghost" onClick={() => setReloadToken((token) => token + 1)}>
             Retry
@@ -75,7 +78,7 @@ export function WritingPage() {
 
       {load.status === 'ready' && load.posts.length === 0 && (
         <p className="max-w-2xl text-muted">
-          Nothing published yet &mdash; the first post is still overfitting to my drafts folder.
+          Nothing published yet - the first post is still overfitting to my drafts folder.
           Subscribe above and you&rsquo;ll catch it on the first epoch.
         </p>
       )}

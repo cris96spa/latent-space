@@ -1,7 +1,9 @@
 import { LinkIcon, type LinkIconName } from '../components/LinkIcon'
+import { PageMeta } from '../components/PageMeta'
 import { TextLink } from '../components/TextLink'
 import { buttonClassName } from '../components/button-variants'
 import { EXTERNAL_LINKS, RESUME_PDF } from '../lib/links'
+import { PAGE_META } from '../lib/pageMeta'
 
 interface ContactLink {
   readonly name: LinkIconName
@@ -26,14 +28,14 @@ const CONTACT_LINKS: readonly ContactLink[] = [
 export function ResumePage() {
   return (
     <div className="space-y-10">
+      <PageMeta {...PAGE_META.resume} />
       <header className="max-w-2xl space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">
           the formal version
         </p>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Resume</h1>
         <p className="text-muted">
-          Roles, dates, and grades... less fun than
-          the rest of this site.
+          Roles, dates, and grades... less fun than the rest of this site.
         </p>
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <a
@@ -63,8 +65,8 @@ export function ResumePage() {
           Get in touch
         </h2>
         <p className="text-muted">
-          A role, a collaboration, or just to say the loss curve looks nice. Please just not ask for an updated resume!
-          Based in Lugano, Switzerland.
+          A role, a collaboration, or just to say the loss curve looks nice. Based in Lugano,
+          Switzerland.
         </p>
         <ul className="space-y-2.5">
           {CONTACT_LINKS.map((link) => (
