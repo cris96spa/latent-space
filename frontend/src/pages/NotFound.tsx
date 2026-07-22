@@ -20,7 +20,7 @@ export function NotFound() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight">This route never trained</h1>
         <p className="text-muted">
-          Nothing here answers to that URL - most likely a hallucination.
+          Nothing here answers to that URL - most likely hallucinated.
         </p>
       </div>
       <Link to="/" className={buttonClassName('primary')}>

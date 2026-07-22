@@ -7,27 +7,31 @@ const read = (relative: string) =>
   readFileSync(fileURLToPath(new URL(relative, import.meta.url)), 'utf8')
 
 describe('shareability metadata', () => {
-  it('index.html declares Open Graph and Twitter card tags', () => {
+  // Crawlers and social scrapers need absolute URLs; relative paths are ignored.
+  const CANONICAL_ORIGIN = 'https://www.cris96spa-latent-space.com'
+
+  it('index.html declares Open Graph and Twitter card tags with the canonical URL', () => {
     const html = read('../../index.html')
     expect(html).toContain('property="og:title"')
     expect(html).toContain('property="og:description"')
     expect(html).toContain('property="og:image"')
+    expect(html).toContain(`property="og:url" content="${CANONICAL_ORIGIN}/"`)
     expect(html).toContain('name="twitter:card"')
     expect(html).toContain('content="summary_large_image"')
   })
 
-  it('ships robots.txt referencing the sitemap', () => {
+  it('ships robots.txt referencing the sitemap by absolute URL', () => {
     const robots = read('../../public/robots.txt')
     expect(robots).toContain('User-agent: *')
-    expect(robots).toContain('Sitemap:')
+    expect(robots).toContain(`Sitemap: ${CANONICAL_ORIGIN}/sitemap.xml`)
   })
 
-  it('ships a sitemap listing the top-level routes', () => {
+  it('ships a sitemap listing the top-level routes as absolute URLs', () => {
     const sitemap = read('../../public/sitemap.xml')
-    expect(sitemap).toContain('<loc>/</loc>')
-    expect(sitemap).toContain('/projects')
-    expect(sitemap).toContain('/writing')
-    expect(sitemap).toContain('/resume')
+    expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/</loc>`)
+    expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/projects</loc>`)
+    expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/writing</loc>`)
+    expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/resume</loc>`)
   })
 })
 
