@@ -12,11 +12,26 @@ const ENTRY_BUDGET_BYTES = 170 * 1024
 const assetsDir = fileURLToPath(new URL('../dist/assets', import.meta.url))
 const kb = (bytes) => `${(bytes / 1024).toFixed(1)} KB`
 
-const entry = readdirSync(assetsDir).find((name) => /^index-.*\.js$/.test(name))
-if (!entry) {
-  console.error('No entry chunk (index-*.js) found in dist/assets — run `npm run build` first.')
+let assetNames
+try {
+  assetNames = readdirSync(assetsDir)
+} catch {
+  console.error('dist/assets not found — run `npm run build` first.')
   process.exit(1)
 }
+
+// The Vite entry is `index-<hash>.js`. Require exactly one match: if a barrel `index.ts` ever
+// chunked to the same name, silently taking the first could validate a small chunk while a
+// bloated entry slips through — the exact regression this check exists to catch.
+const entries = assetNames.filter((name) => /^index-.*\.js$/.test(name))
+if (entries.length !== 1) {
+  console.error(
+    `Expected exactly one entry chunk (index-*.js) in dist/assets, found ${entries.length}` +
+      (entries.length ? `: ${entries.join(', ')}.` : ' — run `npm run build` first.'),
+  )
+  process.exit(1)
+}
+const entry = entries[0]
 
 const gzippedBytes = gzipSync(readFileSync(`${assetsDir}/${entry}`)).length
 if (gzippedBytes > ENTRY_BUDGET_BYTES) {
