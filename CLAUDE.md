@@ -184,5 +184,5 @@ cannot enforce them.
   dependency.
 - Do not silently change public URLs, API response shapes, metadata, or configuration
   precedence.
-- The public host, custom domain, TLS, and automated deployment remain undecided; do not
-  invent them.
+- The canonical public host is `https://www.cris96spa-latent-space.com/` (www subdomain, over
+  HTTPS). Do not invent deployment-automation details that are not documented in the repository.

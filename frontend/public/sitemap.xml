@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- TODO(deploy): <loc> values must be absolute URLs for crawlers to honour them; they ship
-     relative until the canonical host is decided. Per-project/-post detail URLs are omitted
-     deliberately — they are reachable via in-page links and would couple this static file to
-     backend content. -->
+<!-- Per-project/-post detail URLs are omitted deliberately: they are reachable via in-page
+     links and would couple this static file to backend content. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>/</loc></url>
-  <url><loc>/projects</loc></url>
-  <url><loc>/writing</loc></url>
-  <url><loc>/resume</loc></url>
+  <url><loc>https://www.cris96spa-latent-space.com/</loc></url>
+  <url><loc>https://www.cris96spa-latent-space.com/projects</loc></url>
+  <url><loc>https://www.cris96spa-latent-space.com/writing</loc></url>
+  <url><loc>https://www.cris96spa-latent-space.com/resume</loc></url>
 </urlset>
