@@ -85,3 +85,11 @@ fe-lint: # lint the frontend with oxlint
 
 fe-test: # run the frontend unit tests with Vitest
 	cd $(FRONTEND_DIR) && $(NPM) run test
+
+fe-e2e: # run the Playwright end-to-end smoke tests
+	cd $(FRONTEND_DIR) && $(NPM) run test:e2e
+
+fe-bundle: # check the gzipped entry-bundle budget (run after fe-build)
+	cd $(FRONTEND_DIR) && $(NPM) run test:bundle
+
+fe-check: fe-lint fe-test fe-build fe-bundle # run all fast frontend checks

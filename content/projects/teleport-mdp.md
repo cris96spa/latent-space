@@ -1,5 +1,5 @@
 ---
-title: Teleport MDPs — Curriculum Learning for RL
+title: Teleport MDPs - Curriculum Learning for RL
 summary: >-
   Master's thesis at Politecnico di Milano: a formal framework - the Teleport MDP - that
   explains why curricula work in reinforcement learning, plus algorithms that keep the

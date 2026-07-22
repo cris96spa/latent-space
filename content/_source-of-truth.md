@@ -136,7 +136,7 @@ publicly with their metrics, or should any be generalized / omitted for confiden
   FastAPI, Firebase, Django, Node-RED, Make, Uv, Neo4j.
 - **Languages:** English, Italian. `[CV]`
 
-## Canonical bio - DRAFT, needs sign-off
+## Canonical bio - signed off (2026-07-22)
 
 This is the single most-read string on the site (the hero streams it token by token; the
 about page expands it). Every clause below is grounded in the facts above, and it carries
@@ -145,26 +145,26 @@ no employer metrics while the confidentiality `TODO` above is open.
 **Direction given by Cristian (2026-07-21):** answer in **first person**, opening on the
 "Hi, I'm Cristian, and this is my latent space…" beat; push the funny/nerdy register
 harder; send people to the résumé for the parts that belong on a résumé.
-`TODO(content: needs-cristian)` - the tone question is settled, the exact wording is not.
-Confirm the text below or edit it; `frontend/src/features/forward-pass-hero/content.ts`
-and the `<noscript>` block in `frontend/index.html` mirror it verbatim.
+Signed off by Cristian 2026-07-22. Wording is drawn from `_voice-interview.md` (his own
+phrasing), with facts from the sections above - this source-of-truth is the CV fact base,
+not the voice. `frontend/src/features/forward-pass-hero/content.ts` and the `<noscript>`
+block in `frontend/index.html` mirror the text below verbatim; keep all three in sync.
 
-**Primary draft:**
+**Final (live):**
 
 > Hi, I'm Cristian, and this is my latent space. I'm an NLP engineer at Artificialy in
-> Lugano, which mostly means I make large language models run faster, fit in less GPU
-> memory, and stop confidently inventing things - efficient inference, fine-tuning (SFT,
-> DPO, GRPO), and evals that catch the regression before the demo does. On my own time I
-> rebuilt GPT-2 from scratch in PyTorch, for the same reason other people rebuild an engine
-> in the garage: I wanted to know what every layer was actually doing. Politecnico di
-> Milano, 110/110 cum laude - and that is the last sentence here that belongs on a resume.
-> I have one of those, it is one click away, and it is far less fun than this page. What I
-> actually want is to spend the rest of my life looking at training-loss curves.
+> Lugano, where I make large language models run faster, fit in less GPU memory, and stop
+> confidently making things up. The part I care about is the one most people skip: not that
+> something works, but why. So on weekends I rebuilt GPT-2 from scratch in PyTorch 🛠️.
+> Credentials (Politecnico di Milano, cum laude, bla, bla, bla... 🥱) on the resume. I'm a
+> nerd, I like it 🤓, and I'd spend the rest of
+> my life watching training-loss curves go down 📉.
 
 **Shorter hero lead (1 sentence), if the animation wants a tight opener:**
 
-> An NLP engineer who makes production language models faster, cheaper, and less prone to
-> confidently lying - and who, given a free weekend, reimplements GPT-2 from scratch for fun.
+> An NLP engineer who makes language models faster, lighter, and less likely to confidently
+> make things up - and who rebuilds GPT-2 from scratch on weekends because knowing why beats
+> knowing that.
 
 ## Open review checklist for Cristian
 
@@ -172,5 +172,5 @@ and the `<noscript>` block in `frontend/index.html` mirror it verbatim.
 - [ ] Publish exact location (Lugano)? (default: city-level ok)
 - [ ] OK to state Artificialy/MLcube achievements with their metrics publicly?
 - [x] Featured-projects set confirmed? (2026-07-21: 7 projects - see Projects section)
-- [ ] Canonical bio wording + humor level signed off?
+- [x] Canonical bio wording + humor level signed off? (2026-07-22)
 - [ ] Set GitHub descriptions on featured repos (or provide blurbs here)?

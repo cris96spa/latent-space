@@ -25,7 +25,7 @@ export const ENGINEERING_VIRTUES: readonly EngineeringVirtue[] = [
     label: 'Reads the paper, not the thread',
     axisLabel: 'Reads the<br>paper, not<br>the thread',
     rating: 8,
-    caption: 'The arXiv PDF before the quote-tweet. The ablation table is where the truth hides.',
+    caption: 'The arXiv PDF, not the quote-tweet about it.',
   },
   {
     label: 'Trusts the loss over the vibe',

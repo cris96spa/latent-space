@@ -38,7 +38,7 @@ export interface DiagramLayout {
   readonly mlp: ColumnBox
   readonly unembed: ColumnBox | null
   readonly logits: ColumnBox
-  /** RMSNorm markers, dropped when the layout has no room for them. */
+  /** LayerNorm markers, dropped when the layout has no room for them. */
   readonly attentionNormX: number | null
   readonly mlpNormX: number | null
   /** Where the residual stream rejoins after each sub-layer. */
@@ -65,11 +65,11 @@ export const FULL_DIAGRAM_LAYOUT: DiagramLayout = {
   embed: { x: 128, width: 68 },
   qkv: { x: 220, width: 90 },
   attention: { x: 324, width: 176 },
-  mlp: { x: 540, width: 140 },
-  unembed: { x: 706, width: 32 },
+  mlp: { x: 554, width: 126 },
+  unembed: { x: 714, width: 32 },
   logits: { x: 752, width: 214 },
   attentionNormX: 206,
-  mlpNormX: 526,
+  mlpNormX: 540,
   attentionAddX: 512,
   mlpAddX: 692,
 }

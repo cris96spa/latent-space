@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { LinkIcon } from '../components/LinkIcon'
+import { PageMeta } from '../components/PageMeta'
 import { TextLink } from '../components/TextLink'
 import { TokenChip } from '../components/TokenChip'
 import { getProject, type ProjectDetail } from '../lib/api'
@@ -58,7 +59,7 @@ export function ProjectDetailPage() {
         <div className="space-y-3">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Out of distribution</h1>
           <p className="text-muted">
-            Nothing published answers to &ldquo;{publicIdentifier}&rdquo; &mdash; it may have moved, or never
+            Nothing published answers to &ldquo;{publicIdentifier}&rdquo; - it may have moved, or never
             existed. Head <Link to="/projects" className="text-brand-700 underline dark:text-brand-300">back to the ones that do</Link>.
           </p>
         </div>
@@ -72,6 +73,7 @@ export function ProjectDetailPage() {
 function ProjectBody({ project }: { project: ProjectDetail }) {
   return (
     <div className="space-y-6">
+      <PageMeta title={`${project.title} - latent-space`} description={project.summary} />
       <header className="space-y-4">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{project.title}</h1>
         <p className="text-lg text-muted">{project.summary}</p>

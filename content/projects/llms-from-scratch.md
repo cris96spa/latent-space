@@ -24,7 +24,7 @@ draft: false
 A full **GPT-2 implementation in PyTorch**, written from scratch: byte-pair tokenization,
 learned embeddings, multi-head self-attention, and the training loop that ties them
 together. No `transformers` import doing the interesting part for me - the point was to
-build every layer by hand and watch the loss actually come down.
+build every layer by hand and watch the loss come down.
 
 Along the way I leaned on published **LLM scaling insights** to pick the architecture and
 hyperparameters rather than guessing, which cut training time by about **10%**. It's the

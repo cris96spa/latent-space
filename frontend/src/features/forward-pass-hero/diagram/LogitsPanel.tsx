@@ -67,9 +67,9 @@ export function LogitsPanel({
           ))}
           <text
             x={centerX(unembedBox)}
-            y={layout.railY + (UNEMBED_CELLS * 12) / 2 + 18}
+            y={layout.panelTop - 12}
             textAnchor="middle"
-            fontSize={layout.labelSize - 1}
+            fontSize={layout.labelSize}
             className="fill-muted font-mono"
           >
             unembed
