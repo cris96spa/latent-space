@@ -12,6 +12,8 @@ export type TokenOrigin = 'prompt' | 'generated'
 export interface Token {
   readonly index: number
   readonly text: string
+  /** The real GPT-2 token id, or `-1` for a client-pretokenizer fallback token. */
+  readonly id: number
 }
 
 /** A token in the model's running context, tagged with how it got there. */

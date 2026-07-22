@@ -214,11 +214,13 @@ function toContext(promptTokens: readonly Token[], outputTokens: readonly Token[
     ...promptTokens.map((token) => ({
       index: token.index,
       text: token.text,
+      id: token.id,
       origin: 'prompt' as const,
     })),
     ...outputTokens.map((token, offset) => ({
       index: promptTokens.length + offset,
       text: token.text,
+      id: token.id,
       origin: 'generated' as const,
     })),
   ]

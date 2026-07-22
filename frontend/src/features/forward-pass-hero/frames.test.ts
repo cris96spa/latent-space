@@ -16,7 +16,7 @@ import { pretokenizeText } from './tokenize'
 import type { ContextToken, Token } from './types'
 
 function toTokens(text: string): Token[] {
-  return pretokenizeText(text).map((tokenText, index) => ({ index, text: tokenText }))
+  return pretokenizeText(text).map((tokenText, index) => ({ index, text: tokenText, id: index }))
 }
 
 function toContext(text: string): ContextToken[] {
