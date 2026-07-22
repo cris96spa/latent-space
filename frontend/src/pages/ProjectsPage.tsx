@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 
 import { Button } from '../components/Button'
+import { PageMeta } from '../components/PageMeta'
 import { ProjectCard } from '../features/projects/ProjectCard'
 import { getProjects, type Project } from '../lib/api'
+import { PAGE_META } from '../lib/pageMeta'
 
 type LoadState =
   | { readonly status: 'loading' }
@@ -39,6 +41,7 @@ export function ProjectsPage() {
 
   return (
     <section className="space-y-8">
+      <PageMeta {...PAGE_META.projects} />
       <header className="max-w-2xl space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-brand-700 dark:text-brand-300">
           checkpoints

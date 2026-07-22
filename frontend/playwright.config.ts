@@ -15,7 +15,11 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm run build && npm run preview -- --port 4173 --strictPort',
+    // CI builds in a prior step of the same job, so reuse that `dist` and skip a redundant
+    // rebuild; locally, build first so the preview always serves fresh output.
+    command: process.env.CI
+      ? 'npm run preview -- --port 4173 --strictPort'
+      : 'npm run build && npm run preview -- --port 4173 --strictPort',
     url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
