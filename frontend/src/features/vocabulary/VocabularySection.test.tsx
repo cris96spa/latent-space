@@ -13,7 +13,7 @@ vi.mock('../skills-radar', () => ({ SkillsRadarSection: () => null }))
 
 const python = VOCABULARY_TOKENS.find((token) => token.label === 'Python')!
 const pythonIds = python.ids.join(' ')
-const pythonChipName = `Python — GPT-2 token IDs ${pythonIds}`
+const pythonChipName = `Python - GPT-2 token IDs ${pythonIds}`
 
 describe('VocabularySection', () => {
   it('shows the word on each chip, with input_ids offered on hover, by default', () => {
@@ -25,10 +25,12 @@ describe('VocabularySection', () => {
     expect(screen.queryByText('text')).not.toBeInTheDocument()
   })
 
-  it('reveals the reverse representation as a hover cross-reference', () => {
+  it('renders the reverse representation inside the decorative hover tooltip', () => {
     renderInApp(<VocabularySection />)
-    // The word chip is visible; its token IDs live in the (decorative) hover tooltip.
-    expect(screen.getByText(pythonIds)).toBeInTheDocument()
+    // jsdom cannot exercise CSS :hover, so assert the structure the hover reveals instead:
+    // the reverse representation (the IDs) lives inside the aria-hidden tooltip, not the chip.
+    const idsInTooltip = screen.getByText(pythonIds)
+    expect(idsInTooltip.closest('[aria-hidden="true"]')).not.toBeNull()
   })
 
   it('flips chips to token IDs and the hover label to text in the For LLMs view', async () => {
