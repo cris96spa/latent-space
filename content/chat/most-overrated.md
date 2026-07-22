@@ -13,4 +13,4 @@ in there. Claiming otherwise isn't visionary, it's just not reading the code.
 
 And the hype buries the useful part: "anyone can ship a product now," sure - right until
 your friend can't work out why `localhost:8000` won't open. The typing was never the
-bottleneck. Knowing what you're doing is - optimize that.
+bottleneck. Knowing what you're doing is the bottleneck - optimize that.
