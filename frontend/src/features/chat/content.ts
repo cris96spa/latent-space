@@ -18,8 +18,8 @@ export const CHAT_COPY = {
   empty: 'The prompt vocabulary is empty - nothing published yet.',
   fallback:
     "That one's out of distribution. There's no live model back here - just answers I " +
-    'actually wrote - so instead of bluffing, here is what I can actually talk about:',
-  userLabel: 'User',
+    "actually wrote - so instead of bluffing, here's what I can talk about:",
+  userLabel: 'You',
   assistantLabel: 'Cristian',
 } as const
 

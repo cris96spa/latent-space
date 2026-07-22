@@ -1,5 +1,5 @@
 ---
-title: Hackapizza 2025 — Cosmic Pizza RAG Agent
+title: Hackapizza 2025 - Cosmic Pizza RAG Agent
 summary: >-
   2nd place at Hackapizza 2025 (IBM Studios, Milano): a RAG agent that answers "what can I
   actually eat here?" for interdimensional restaurants by turning menus and Galactic
