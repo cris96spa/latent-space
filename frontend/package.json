@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:bundle": "node scripts/check-bundle-size.mjs",
     "og:image": "node scripts/generate-og-image.mjs"
   },
   "dependencies": {
