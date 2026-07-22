@@ -30,3 +30,14 @@ describe('shareability metadata', () => {
     expect(sitemap).toContain('/resume')
   })
 })
+
+describe('og-image', () => {
+  it('is a 1200×630 PNG', () => {
+    const png = readFileSync(fileURLToPath(new URL('../../public/og-image.png', import.meta.url)))
+    // PNG signature.
+    expect(Array.from(png.subarray(0, 8))).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+    // IHDR width/height are big-endian uint32 at byte offsets 16 and 20.
+    expect(png.readUInt32BE(16)).toBe(1200)
+    expect(png.readUInt32BE(20)).toBe(630)
+  })
+})
