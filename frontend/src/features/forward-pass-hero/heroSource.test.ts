@@ -38,6 +38,7 @@ describe('buildHeroForwardPass', () => {
   })
 
   it('falls back to the client pretokenizer when the backend fails', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     tokenizeMock.mockRejectedValue(new Error('offline'))
 
     const hero = await buildHeroForwardPass()
@@ -48,5 +49,7 @@ describe('buildHeroForwardPass', () => {
     expect(hero.promptTokens.every((token) => token.id === -1)).toBe(true)
     expect(hero.promptTokens.map((token) => token.text).join('')).toBe(HERO_PROMPT)
     expect(CANONICAL_BIO.length).toBeGreaterThan(0)
+    expect(warnSpy).toHaveBeenCalledTimes(1)
+    warnSpy.mockRestore()
   })
 })
