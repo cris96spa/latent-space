@@ -31,16 +31,24 @@ export function groupTokensByGrapheme(tokens: readonly Token[]): TokenGroup[] {
   let buffer: Token[] = []
   let groupStart = 0
   let position = 0
-  for (const token of tokens) {
+  for (let index = 0; index < tokens.length; index++) {
+    const token = tokens[index]
     buffer.push(token)
     position += [...token.text].length
-    if (graphemeBoundaries.has(position)) {
+    // An empty-text next token holds continuation bytes of this grapheme's last
+    // character, so keep it in the current group instead of flushing between them.
+    // Without this guard, a single-codepoint emoji [glyph, "", ""] would split into a
+    // glyph group plus phantom empty groups.
+    const nextIsContinuation = index + 1 < tokens.length && tokens[index + 1].text === ''
+    if (graphemeBoundaries.has(position) && !nextIsContinuation) {
       groups.push({ tokens: buffer, text: characters.slice(groupStart, position).join('') })
       buffer = []
       groupStart = position
     }
   }
   if (buffer.length > 0) {
+    // Defensive: well-formed lossless input always ends on a grapheme boundary and flushes
+    // in-loop, but a malformed/partial token stream is still emitted rather than dropped.
     groups.push({ tokens: buffer, text: characters.slice(groupStart).join('') })
   }
   return groups
