@@ -34,6 +34,7 @@ describe('buildHeroForwardPass', () => {
     expect(hero.idsAvailable).toBe(true)
     expect(hero.promptTokens.map((token) => token.id)).toEqual([8241, 318])
     expect(hero.promptCounts).toEqual({ tokenCount: 2, wordCount: 2, charCount: 6 })
+    expect(hero.outputCounts).toEqual({ tokenCount: 1, wordCount: 1, charCount: 2 })
     expect(hero.source.prompt).toBe(HERO_PROMPT)
   })
 
@@ -45,6 +46,7 @@ describe('buildHeroForwardPass', () => {
 
     expect(hero.idsAvailable).toBe(false)
     expect(hero.promptCounts).toBeNull()
+    expect(hero.outputCounts).toBeNull()
     // Fallback tokens carry the -1 sentinel and still reconstruct the prompt.
     expect(hero.promptTokens.every((token) => token.id === -1)).toBe(true)
     expect(hero.promptTokens.map((token) => token.text).join('')).toBe(HERO_PROMPT)
