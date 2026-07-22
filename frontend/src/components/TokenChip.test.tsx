@@ -15,4 +15,14 @@ describe('TokenChip', () => {
     const { container } = renderInApp(<TokenChip tone="neutral">PyTorch</TokenChip>)
     expect(await axe(container)).toHaveNoViolations()
   })
+
+  it('forwards title and aria-label to the chip element', () => {
+    renderInApp(
+      <TokenChip title="Python" aria-label="Python — GPT-2 token IDs 37906">
+        37906
+      </TokenChip>,
+    )
+    const chip = screen.getByLabelText('Python — GPT-2 token IDs 37906')
+    expect(chip).toHaveAttribute('title', 'Python')
+  })
 })
