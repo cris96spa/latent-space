@@ -30,7 +30,7 @@ export function SkillsRadarSection() {
         <SkillsRadar />
       </Suspense>
 
-      <p className="max-w-2xl font-mono text-xs text-muted">{RADAR_CAPTION}</p>
+      <p className="mx-auto max-w-2xl text-center font-mono text-xs text-muted">{RADAR_CAPTION}</p>
 
       <ul className="sr-only">
         {ENGINEERING_VIRTUES.map((virtue) => (

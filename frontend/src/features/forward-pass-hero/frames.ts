@@ -152,9 +152,10 @@ export function mlpActivationsForStep(step: number): number[] {
   )
 }
 
-/** The candidate pool: what the bio actually says, plus a little shop talk. */
+/** The candidate pool: what the bio actually says (minus empty byte-continuations), plus shop talk. */
 export function buildDistractorVocabulary(outputTokens: readonly Token[]): string[] {
-  return [...new Set([...outputTokens.map((token) => token.text), ...DISTRACTOR_VOCABULARY])]
+  const spoken = outputTokens.map((token) => token.text).filter((text) => text !== '')
+  return [...new Set([...spoken, ...DISTRACTOR_VOCABULARY])]
 }
 
 function pickDistractors(
@@ -188,9 +189,11 @@ function pickDistractors(
  */
 export function candidatesForStep(
   step: number,
-  selectedText: string,
+  selectedToken: Token,
   vocabulary: readonly string[],
 ): LogitCandidate[] {
+  // A byte-continuation token has no standalone text; show its real id instead of a blank row.
+  const selectedText = selectedToken.text !== '' ? selectedToken.text : `#${selectedToken.id}`
   const distractors = pickDistractors(step, selectedText, vocabulary, TOP_K - 1)
   const margins = distractors.map(
     (_, rank) =>
@@ -214,11 +217,13 @@ function toContext(promptTokens: readonly Token[], outputTokens: readonly Token[
     ...promptTokens.map((token) => ({
       index: token.index,
       text: token.text,
+      id: token.id,
       origin: 'prompt' as const,
     })),
     ...outputTokens.map((token, offset) => ({
       index: promptTokens.length + offset,
       text: token.text,
+      id: token.id,
       origin: 'generated' as const,
     })),
   ]
@@ -264,7 +269,7 @@ export function buildForwardPassFrames(
   const prefillAttention = attentionEdgesForStep(prefillContext, prefillQueryIndex, 0)
   const prefillActivations = mlpActivationsForStep(0)
   const prefillLogits =
-    outputTokens.length > 0 ? candidatesForStep(0, outputTokens[0].text, vocabulary) : []
+    outputTokens.length > 0 ? candidatesForStep(0, outputTokens[0], vocabulary) : []
 
   FORWARD_PASS_STAGES.forEach((stage, stagePosition) => {
     const reached = (id: StageId): boolean => stagePosition >= FORWARD_PASS_STAGES.indexOf(id)
@@ -300,7 +305,7 @@ export function buildForwardPassFrames(
       attention: attentionEdgesForStep(context, queryIndex, step),
       activations: mlpActivationsForStep(step),
       kvCacheLength: context.length,
-      logits: candidatesForStep(step, outputTokens[step].text, vocabulary),
+      logits: candidatesForStep(step, outputTokens[step], vocabulary),
       sampledToken: outputTokens[step],
       emittedTokens: outputTokens.slice(0, step + 1),
       isComplete: false,
@@ -320,7 +325,7 @@ export function buildForwardPassFrames(
     kvCacheLength: fullContext.length,
     logits:
       outputTokens.length > 0
-        ? candidatesForStep(finalStep, outputTokens[finalStep].text, vocabulary)
+        ? candidatesForStep(finalStep, outputTokens[finalStep], vocabulary)
         : [],
     sampledToken: null,
     emittedTokens: outputTokens.slice(),

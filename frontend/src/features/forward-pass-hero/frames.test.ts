@@ -16,7 +16,7 @@ import { pretokenizeText } from './tokenize'
 import type { ContextToken, Token } from './types'
 
 function toTokens(text: string): Token[] {
-  return pretokenizeText(text).map((tokenText, index) => ({ index, text: tokenText }))
+  return pretokenizeText(text).map((tokenText, index) => ({ index, text: tokenText, id: index }))
 }
 
 function toContext(text: string): ContextToken[] {
@@ -72,7 +72,7 @@ describe('mlpActivationsForStep', () => {
 
 describe('candidatesForStep', () => {
   it('returns a sorted top-k distribution led by the emitted token', () => {
-    const candidates = candidatesForStep(0, 'Hi', VOCABULARY)
+    const candidates = candidatesForStep(0, OUTPUT[0], VOCABULARY)
     expect(candidates).toHaveLength(TOP_K)
     expect(candidates[0]).toMatchObject({ text: 'Hi', selected: true })
     expect(candidates.filter((candidate) => candidate.selected)).toHaveLength(1)
@@ -85,7 +85,7 @@ describe('candidatesForStep', () => {
   })
 
   it('never proposes the emitted token twice', () => {
-    const texts = candidatesForStep(3, ' there', VOCABULARY).map((candidate) => candidate.text)
+    const texts = candidatesForStep(3, OUTPUT[1], VOCABULARY).map((candidate) => candidate.text)
     expect(new Set(texts).size).toBe(texts.length)
   })
 
@@ -96,7 +96,7 @@ describe('candidatesForStep', () => {
    */
   it('varies the winning probability across steps instead of pinning to one value', () => {
     const winners = Array.from({ length: 40 }, (_, step) =>
-      candidatesForStep(step, 'Hi', VOCABULARY)[0].probability,
+      candidatesForStep(step, OUTPUT[0], VOCABULARY)[0].probability,
     )
     expect(new Set(winners.map((probability) => probability.toFixed(4))).size).toBeGreaterThan(30)
     expect(Math.max(...winners) - Math.min(...winners)).toBeGreaterThan(0.2)
@@ -104,6 +104,22 @@ describe('candidatesForStep', () => {
       expect(probability).toBeGreaterThan(1 / TOP_K)
       expect(probability).toBeLessThan(1)
     })
+  })
+
+  it('labels an empty-text (byte-continuation) emitted token by its id', () => {
+    const continuation = { index: 9, text: '', id: 8582 }
+    const candidates = candidatesForStep(0, continuation, VOCABULARY)
+    expect(candidates.find((candidate) => candidate.selected)?.text).toBe('#8582')
+  })
+})
+
+describe('buildDistractorVocabulary', () => {
+  it('excludes empty-text continuation tokens from the candidate pool', () => {
+    const withContinuation = [
+      { index: 0, text: 'Hi', id: 1 },
+      { index: 1, text: '', id: 2 },
+    ]
+    expect(buildDistractorVocabulary(withContinuation)).not.toContain('')
   })
 })
 

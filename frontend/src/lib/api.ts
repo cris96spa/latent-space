@@ -51,6 +51,47 @@ export async function getChatEntries(): Promise<ChatEntry[]> {
   }))
 }
 
+/** One GPT-2 token: its id and the characters attributed to it ('' for a continuation). */
+export interface TokenSpan {
+  readonly id: number
+  readonly text: string
+}
+
+/** Real GPT-2 tokenization of a piece of text, with counts. */
+export interface Tokenization {
+  readonly tokens: readonly TokenSpan[]
+  readonly tokenCount: number
+  readonly wordCount: number
+  readonly charCount: number
+}
+
+/** Wire shape of a tokenization: the backend serializes counts in snake_case. */
+interface TokenizationWire {
+  readonly tokens: readonly { id: number; text: string }[]
+  readonly token_count: number
+  readonly word_count: number
+  readonly char_count: number
+}
+
+/** Tokenizes `text` with the backend GPT-2 tokenizer. */
+export async function tokenize(text: string): Promise<Tokenization> {
+  const response = await fetch(`${API_BASE_URL}/tokenize`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+  })
+  if (!response.ok) {
+    throw new Error(`POST /tokenize failed with status ${response.status}`)
+  }
+  const wire = (await response.json()) as TokenizationWire
+  return {
+    tokens: wire.tokens.map((token) => ({ id: token.id, text: token.text })),
+    tokenCount: wire.token_count,
+    wordCount: wire.word_count,
+    charCount: wire.char_count,
+  }
+}
+
 /** A portfolio project as listed on the index: metadata without the body. */
 export interface Project {
   readonly publicIdentifier: string

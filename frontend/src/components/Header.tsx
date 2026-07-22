@@ -50,9 +50,9 @@ export function Header() {
             target="_blank"
             rel="noreferrer noopener"
             className="inline-flex items-center gap-1.5"
+            aria-label="GitHub"
           >
             <LinkIcon name="github" />
-            GitHub
           </TextLink>
           <ThemeToggle />
         </nav>
