@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import { RootLayout } from './layouts/RootLayout'
 import { HomePage } from './pages/HomePage'
+import { NotFound } from './pages/NotFound'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { ResumePage } from './pages/ResumePage'
@@ -16,6 +17,7 @@ function App() {
         <Route path="projects/:publicIdentifier" element={<ProjectDetailPage />} />
         <Route path="resume" element={<ResumePage />} />
         <Route path="writing" element={<WritingPage />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   )
