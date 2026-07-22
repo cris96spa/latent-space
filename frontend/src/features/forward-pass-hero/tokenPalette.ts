@@ -22,7 +22,8 @@ export function tokenChipStyle(position: number): TokenChipStyle {
 
 // Literal Tailwind class strings (the scanner needs them whole). Light band uses a low
 // alpha, dark band a stronger one, so the two bands read apart in both themes; dark-mode
-// alphas are lower, where the same wash over a near-black panel reads hotter.
+// alphas are higher, so the wash stays visible against a near-black panel instead of
+// disappearing the way a low-alpha wash does over dark.
 const LIGHT_BAND_CLASSES: readonly string[] = [
   'bg-sweep-1/15 dark:bg-sweep-1/25',
   'bg-sweep-2/15 dark:bg-sweep-2/25',
