@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# TODO(deploy): make Sitemap an absolute URL once the canonical host is decided.
-Sitemap: /sitemap.xml
+Sitemap: https://www.cris96spa-latent-space.com/sitemap.xml
