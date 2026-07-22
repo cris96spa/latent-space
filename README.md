@@ -1,4 +1,4 @@
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square&logo=github)](https://cris96spa.github.io/latent-space/)
+[![Live site](https://img.shields.io/badge/live-cris96spa--latent--space.com-2ea043?style=flat-square&logo=vercel&logoColor=white)](https://www.cris96spa-latent-space.com/) [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square&logo=github)](https://cris96spa.github.io/latent-space/)
 
 # latent-space
 
@@ -57,8 +57,8 @@ built frontend and proxies `/api` to the backend.
 
 ## Deploy
 
-The site deploys on **Vercel** as a single project using
-[Vercel Services](https://vercel.com/docs/services):
+The site is live at **[www.cris96spa-latent-space.com](https://www.cris96spa-latent-space.com/)**,
+deployed on **Vercel** as a single project using [Vercel Services](https://vercel.com/docs/services):
 
 - a static **Vite** frontend service (`frontend/`), and
 - the **FastAPI** app as a native Python function — `asgi.py` mounts `create_app()` under
