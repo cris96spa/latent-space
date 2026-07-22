@@ -16,15 +16,25 @@ interface TokenChipProps {
   children: ReactNode
   tone?: TokenTone
   className?: string
+  title?: string
+  'aria-label'?: string
 }
 
 /**
  * The recurring "token" motif: a monospace pill that carries the ML metaphor
  * visually across tags, tech stacks, and the forward-pass hero (task 07).
  */
-export function TokenChip({ children, tone = 'brand', className }: TokenChipProps) {
+export function TokenChip({
+  children,
+  tone = 'brand',
+  className,
+  title,
+  'aria-label': ariaLabel,
+}: TokenChipProps) {
   return (
     <span
+      title={title}
+      aria-label={ariaLabel}
       className={cn(
         'inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-xs',
         TONE_CLASSES[tone],

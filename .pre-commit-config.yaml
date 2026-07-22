@@ -122,3 +122,25 @@ repos:
         language: system
         pass_filenames: false
         verbose: false
+
+  - repo: local
+    hooks:
+      # Recompute the GPT-2 token IDs whenever the authored vocabulary (or the generator)
+      # changes, then stage the generated file so the commit carries matching label and ID
+      # data. Mirrors the uv-lock-update -> uv-lock-add regenerate-then-stage pattern above.
+      - id: generate-vocabulary-tokens
+        name: Generate vocabulary token IDs
+        entry: uv run python utils/generate_vocabulary_tokens.py
+        language: system
+        pass_filenames: false
+        files: >-
+          ^(frontend/src/features/vocabulary/vocabulary\.labels\.json|utils/generate_vocabulary_tokens\.py)$
+        stages: [pre-commit]
+      - id: add-vocabulary-tokens
+        name: Stage generated vocabulary token IDs
+        entry: git add frontend/src/features/vocabulary/tokens.ts
+        language: system
+        pass_filenames: false
+        files: >-
+          ^(frontend/src/features/vocabulary/vocabulary\.labels\.json|utils/generate_vocabulary_tokens\.py)$
+        stages: [pre-commit]
