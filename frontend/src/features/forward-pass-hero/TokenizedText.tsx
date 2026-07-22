@@ -37,7 +37,13 @@ export function TokenizedText({
   const freshFrom = groups.length - freshCount
 
   return (
-    <span aria-hidden="true" className={cn('leading-loose', className)}>
+    <span
+      aria-hidden="true"
+      // Text view flows inline so the tokens read as prose; ids view is a token list, so
+      // it wraps as a flex grid where each chip is a whole unit (a grouped chip's ids never
+      // break across the line edge the way inline whitespace-pre-wrap let them).
+      className={cn(view === 'ids' ? 'flex flex-wrap gap-1' : 'leading-loose', className)}
+    >
       {groups.map((group, position) => {
         const ids = group.tokens.map((token) => token.id).join(' ')
         const isFresh = freshCount > 0 && position >= freshFrom
@@ -45,7 +51,8 @@ export function TokenizedText({
           <span
             key={`${position}:${ids}`}
             className={cn(
-              'rounded-[3px] whitespace-pre-wrap text-fg',
+              'rounded-[3px] text-fg',
+              view === 'ids' ? 'whitespace-nowrap' : 'whitespace-pre-wrap',
               tokenChipClasses(position),
               isFresh && FRESH_CHIP,
             )}
