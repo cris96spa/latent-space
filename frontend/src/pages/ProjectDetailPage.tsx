@@ -58,7 +58,7 @@ export function ProjectDetailPage() {
         <div className="space-y-3">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Out of distribution</h1>
           <p className="text-muted">
-            Nothing published answers to &ldquo;{publicIdentifier}&rdquo; &mdash; it may have moved, or never
+            Nothing published answers to &ldquo;{publicIdentifier}&rdquo; - it may have moved, or never
             existed. Head <Link to="/projects" className="text-brand-700 underline dark:text-brand-300">back to the ones that do</Link>.
           </p>
         </div>

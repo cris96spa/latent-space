@@ -844,7 +844,7 @@ export function WritingPage() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Writing</h1>
         <p className="text-muted">
-          Notes from the lab notebook &mdash; training runs, papers I couldn&rsquo;t stop thinking
+          Notes from the lab notebook - training runs, papers I couldn&rsquo;t stop thinking
           about, and the occasional LLM tangent. Published on Substack; the good bits land there
           first.
         </p>
@@ -860,7 +860,7 @@ export function WritingPage() {
       {load.status === 'error' && (
         <div className="space-y-3">
           <p className="text-muted">
-            The posts didn&rsquo;t load &mdash; the content service might still be warming up.
+            The posts didn&rsquo;t load - the content service might still be warming up.
           </p>
           <Button variant="ghost" onClick={() => setReloadToken((token) => token + 1)}>
             Retry
@@ -870,7 +870,7 @@ export function WritingPage() {
 
       {load.status === 'ready' && load.posts.length === 0 && (
         <p className="max-w-2xl text-muted">
-          Nothing published yet &mdash; the first post is still overfitting to my drafts folder.
+          Nothing published yet - the first post is still overfitting to my drafts folder.
           Subscribe above and you&rsquo;ll catch it on the first epoch.
         </p>
       )}
