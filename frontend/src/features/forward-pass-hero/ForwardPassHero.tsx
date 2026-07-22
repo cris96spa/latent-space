@@ -32,6 +32,14 @@ export function ForwardPassHero() {
   const layout = compact ? COMPACT_DIAGRAM_LAYOUT : FULL_DIAGRAM_LAYOUT
   const effectiveView: TokenView = hero.idsAvailable ? view : 'text'
 
+  // Live counts of the streamed output so far, so the numbers climb as tokens arrive and
+  // settle on the full bio's totals. Only shown with real backend tokens (idsAvailable).
+  const emittedText = frame.emittedTokens.map((token) => token.text).join('')
+  const outputTokenCount = frame.emittedTokens.length
+  const outputWordCount = emittedText.split(/\s+/).filter(Boolean).length
+  const outputCharCount = [...emittedText].length
+  const showOutputCounts = hero.idsAvailable && outputTokenCount > 0
+
   useEffect(() => {
     let cancelled = false
     void buildHeroForwardPass().then((next) => {
@@ -110,9 +118,9 @@ export function ForwardPassHero() {
             aria-hidden="true"
           >
             <span>detokenized output</span>
-            {hero.outputCounts && (
+            {showOutputCounts && (
               <span>
-                {`${hero.outputCounts.tokenCount} tokens · ${hero.outputCounts.wordCount} words · ${hero.outputCounts.charCount} chars`}
+                {`${outputTokenCount} tokens · ${outputWordCount} words · ${outputCharCount} chars`}
               </span>
             )}
           </div>
