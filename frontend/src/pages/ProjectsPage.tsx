@@ -45,7 +45,7 @@ export function ProjectsPage() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Projects</h1>
         <p className="text-muted">
-          The things I build to actually understand them &mdash; usually by rebuilding them from
+          The things I build to understand them - usually by rebuilding them from
           scratch. Weights not included; the code is.
         </p>
       </header>
@@ -55,7 +55,7 @@ export function ProjectsPage() {
       {load.status === 'error' && (
         <div className="space-y-3">
           <p className="text-muted">
-            The projects didn&rsquo;t load &mdash; the content service might still be warming up.
+            The projects didn&rsquo;t load - the content service might still be warming up.
           </p>
           <Button variant="ghost" onClick={() => setReloadToken((token) => token + 1)}>
             Retry
@@ -64,7 +64,7 @@ export function ProjectsPage() {
       )}
 
       {load.status === 'ready' && load.projects.length === 0 && (
-        <p className="text-muted">No published projects yet &mdash; they&rsquo;re still training.</p>
+        <p className="text-muted">No published projects yet - they&rsquo;re still training.</p>
       )}
 
       {load.status === 'ready' && load.projects.length > 0 && (

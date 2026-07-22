@@ -15,7 +15,7 @@ aligned they are. Run that across the whole sequence, softmax it, and you get we
 sum to one: a soft, learned highlight over the context.
 
 The refinement most explanations skip: each token wears three hats - a **query** ("what am
-I looking for"), a **key** ("what do I offer"), and a **value** (the actual information).
-Attention is the weighted sum of the values, weighted by query–key similarity:
+I looking for"), a **key** ("what do I offer"), and a **value** (the information).
+Attention is the weighted sum of the values, weighted by query-key similarity:
 `softmax(QKᵀ / √dₖ)·V`. The `√dₖ` is only there to stop the dot products from blowing up
 before the softmax. That's the whole trick - everything else is scaling it up.

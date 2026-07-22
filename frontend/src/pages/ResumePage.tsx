@@ -32,8 +32,7 @@ export function ResumePage() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Resume</h1>
         <p className="text-muted">
-          Roles, dates, and grades... less fun than
-          the rest of this site.
+          Roles, dates, and grades... less fun than the rest of this site.
         </p>
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <a
@@ -60,11 +59,11 @@ export function ResumePage() {
 
       <section aria-labelledby="contact-heading" className="max-w-2xl space-y-4">
         <h2 id="contact-heading" className="text-2xl font-semibold tracking-tight">
-          Get in touch
+          Open an issue
         </h2>
         <p className="text-muted">
-          A role, a collaboration, or just to say the loss curve looks nice. Please just not ask for an updated resume!
-          Based in Lugano, Switzerland.
+          A role, a collaboration, or just to say the loss curve looks nice. Based in Lugano,
+          Switzerland.
         </p>
         <ul className="space-y-2.5">
           {CONTACT_LINKS.map((link) => (
