@@ -15,6 +15,11 @@ interface TokenizedTextProps {
   readonly freshCount?: number
   /** Whether to show a blinking cursor after the last token (streaming output). */
   readonly cursor?: boolean
+  /**
+   * Whether to tint each chip with its per-position `sweep` wash. Off drops the colour so
+   * the run reads as plain prose; the fresh-token outline stays either way. Defaults on.
+   */
+  readonly highlight?: boolean
   readonly className?: string
 }
 
@@ -31,6 +36,7 @@ export function TokenizedText({
   view,
   freshCount = 0,
   cursor = false,
+  highlight = true,
   className,
 }: TokenizedTextProps) {
   const groups = groupTokensByGrapheme(tokens)
@@ -53,7 +59,7 @@ export function TokenizedText({
             className={cn(
               'rounded-[3px] text-fg',
               view === 'ids' ? 'whitespace-nowrap' : 'whitespace-pre-wrap',
-              tokenChipClasses(position),
+              highlight && tokenChipClasses(position),
               isFresh && FRESH_CHIP,
             )}
           >

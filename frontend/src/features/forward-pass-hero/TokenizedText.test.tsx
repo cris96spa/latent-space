@@ -26,4 +26,22 @@ describe('TokenizedText', () => {
     const { container } = render(<TokenizedText tokens={tokens} view="text" />)
     expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull()
   })
+
+  it('tints chips with a sweep background by default', () => {
+    const { container } = render(<TokenizedText tokens={tokens} view="text" />)
+    expect(container.querySelector('[class*="bg-sweep"]')).not.toBeNull()
+  })
+
+  it('drops the sweep backgrounds when highlight is off', () => {
+    const { container } = render(<TokenizedText tokens={tokens} view="text" highlight={false} />)
+    expect(container.querySelector('[class*="bg-sweep"]')).toBeNull()
+  })
+
+  it('keeps the fresh-token outline when highlight is off', () => {
+    const { container } = render(
+      <TokenizedText tokens={tokens} view="text" freshCount={1} highlight={false} />,
+    )
+    expect(container.querySelector('[class*="outline-token-edge"]')).not.toBeNull()
+    expect(container.querySelector('[class*="bg-sweep"]')).toBeNull()
+  })
 })

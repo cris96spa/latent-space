@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { TextLink } from '../../components/TextLink'
+import { cn } from '../../lib/cn'
 import { EXTERNAL_LINKS } from '../../lib/links'
 import { TARGET_MODEL } from './architecture'
 import { CANONICAL_BIO, HERO_PROMPT } from './content'
@@ -15,6 +16,38 @@ import { useForwardPass } from './useForwardPass'
 import { usePrefersCompactDiagram, usePrefersReducedMotion } from '../../hooks/useMediaQuery'
 
 /**
+ * The output section's on/off switch for the per-token colour wash. The washes only mark
+ * token boundaries, so hiding them lets the streamed bio read as plain prose when they are
+ * hard to see against the panel. `aria-pressed` carries the state, and the pressed look
+ * differs by fill and weight (not hue alone) so it stays legible under red-green CVD.
+ */
+function HighlightToggle({
+  pressed,
+  onToggle,
+}: {
+  pressed: boolean
+  onToggle: (next: boolean) => void
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={pressed}
+      aria-label="Highlight output tokens"
+      onClick={() => onToggle(!pressed)}
+      className={cn(
+        'rounded-md border px-2 py-0.5 font-mono text-[11px] motion-safe:transition-colors',
+        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700',
+        pressed
+          ? 'border-brand-700 bg-brand-700 font-semibold text-white'
+          : 'border-border text-muted hover:text-fg',
+      )}
+    >
+      highlight
+    </button>
+  )
+}
+
+/**
  * The landing-page hero. Fetches the real GPT-2 tokenization of the fixed prompt and bio
  * from the backend (falling back to the client pretokenizer if that call fails), plays it
  * through `useForwardPass`, and renders the decorative pipeline, the tokenized prompt
@@ -25,6 +58,7 @@ import { usePrefersCompactDiagram, usePrefersReducedMotion } from '../../hooks/u
 export function ForwardPassHero() {
   const [hero, setHero] = useState<HeroForwardPass>(idleHeroForwardPass)
   const [view, setView] = useState<TokenView>('text')
+  const [outputHighlight, setOutputHighlight] = useState(true)
   const reducedMotion = usePrefersReducedMotion()
   const compact = usePrefersCompactDiagram()
   const playback = useForwardPass(hero.source, { reducedMotion })
@@ -124,7 +158,16 @@ export function ForwardPassHero() {
               </span>
             )}
           </div>
-          <StreamingBio frame={frame} streaming={status === 'running'} view={effectiveView} />
+          <StreamingBio
+            frame={frame}
+            streaming={status === 'running'}
+            view={effectiveView}
+            highlight={outputHighlight}
+            reserveText={CANONICAL_BIO}
+          />
+          <div className="flex justify-end">
+            <HighlightToggle pressed={outputHighlight} onToggle={setOutputHighlight} />
+          </div>
         </div>
       </div>
 
