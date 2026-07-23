@@ -15,7 +15,7 @@ PublicIdentifier = Annotated[
 
 # A rich, non-text widget rendered beneath a chat answer. Declared in the answer's
 # frontmatter so the mapping lives with the content, not in the frontend.
-AnswerAttachment = Literal["resume", "ablation-sweep"]
+AnswerAttachment = Literal["resume", "playbook-banner"]
 
 
 class Project(BaseModel):
