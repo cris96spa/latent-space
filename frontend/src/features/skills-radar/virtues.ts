@@ -14,62 +14,65 @@ export interface EngineeringVirtue {
 export const VIRTUE_SCALE_MAX = 10
 
 /**
- * Self-assessed engineering virtues - temperament and taste, not benchmarked skills. These
- * are Cristian's own calibration of how he works; the two deliberately lower scores are
- * vices of taste (over-polishing, the Rust urge), never gaps in competence. Colocated as
- * typed config the way `VOCABULARY_TOKENS` is: authored values kept close to the one view
- * that renders them, and honestly flagged as opinion rather than measurement.
+ * Self-assessed traits - temperament, not benchmarked skills. Sourced from Cristian's own
+ * narrative interview, so each axis is something he actually said about himself. The low
+ * scores are either physiology (colour vision) or vices he openly owns (stopping,
+ * self-marketing); none of them are gaps in engineering competence. Colocated as typed
+ * config the way `VOCABULARY_TOKENS` is: authored values kept close to the one view that
+ * renders them, and honestly flagged as opinion rather than measurement.
  */
 export const ENGINEERING_VIRTUES: readonly EngineeringVirtue[] = [
   {
-    label: 'Reads the paper, not the thread',
-    axisLabel: 'Reads the<br>paper, not<br>the thread',
-    rating: 8,
-    caption: 'The arXiv PDF, not the quote-tweet about it.',
+    label: 'Table football',
+    axisLabel: 'Table<br>football',
+    rating: 10,
+    caption: 'My drug. Self-reported SOTA, reproducible at any bar table, any time.',
   },
   {
-    label: 'Trusts the loss over the vibe',
-    axisLabel: 'Trusts the<br>loss over<br>the vibe',
+    label: 'Dragon Ball: Sparking! Zero',
+    axisLabel: 'Dragon Ball:<br>Sparking! Zero',
+    rating: 9,
+    caption: 'Peer-reviewed. Ask Federico for a reference.',
+  },
+  {
+    label: 'Obsession beats talent',
+    axisLabel: 'Obsession<br>beats talent',
     rating: 9,
     caption:
-      'When the curve disagrees with my intuition, the curve wins and I go debug the intuition.',
+      'No innate-talent parameter found at initialization. Compensated with obsession; it compounds.',
   },
   {
-    label: 'Deletes code without grieving',
-    axisLabel: 'Deletes code<br>without grieving',
-    rating: 7,
-    caption: 'The best pull request is a red one.',
-  },
-  {
-    label: 'Reproducible by Friday',
-    axisLabel: 'Reproducible<br>by Friday',
+    label: 'Seeks a bigger pond',
+    axisLabel: 'Seeks a<br>bigger pond',
     rating: 8,
-    caption: "Seed pinned, config committed, or it didn't happen.",
+    caption:
+      'If I am the smartest person in the room, I change room. The gradient is steeper next to better people.',
   },
   {
-    label: "Ships before it's perfect",
-    axisLabel: "Ships before<br>it's perfect",
-    rating: 6,
-    caption: 'Perfect is a checkpoint I never reach. Good is one I can actually serve.',
-  },
-  {
-    label: 'Resists rewriting it in Rust',
-    axisLabel: 'Resists<br>rewriting<br>it in Rust',
+    label: 'Selling myself',
+    axisLabel: 'Selling<br>myself',
     rating: 4,
-    caption: 'Deliberately low. The urge is constant; the borrow checker is patient.',
+    caption: 'Chronically underfit. This entire website is the fine-tuning run.',
   },
   {
-    label: 'CUDA-error composure',
-    axisLabel: 'CUDA-error<br>composure',
-    rating: 7,
-    caption: 'Reads `device-side assert triggered` without flipping the desk. Most days.',
+    label: 'Knowing when to stop',
+    axisLabel: 'Knowing<br>when to stop',
+    rating: 3,
+    caption: 'Ask my thesis: eighteen months in the optimization trap. Patched; regressions occur.',
   },
   {
-    label: 'Sniffs out hand-waving',
-    axisLabel: 'Sniffs out<br>hand-waving',
-    rating: 9,
+    label: 'Buzzword tolerance',
+    axisLabel: 'Buzzword<br>tolerance',
+    rating: 1,
     caption:
-      'A high-recall detector for hype. "It just works" is a claim, not an eval; show me the benchmark table.',
+      '"Passionate about synergy" fails to parse. If there is no number under the claim, it is an opinion.',
+  },
+  {
+    label: 'Chromatic ability',
+    axisLabel: 'Chromatic<br>ability',
+    rating: 1,
+    caption:
+      'Red-green deficiency. Failed the army eye exam, got rerouted into engineering. Best hardware limitation I own.',
   },
 ]
 

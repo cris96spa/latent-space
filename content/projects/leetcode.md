@@ -20,14 +20,11 @@ draft: false
 ---
 
 North of a hundred **LeetCode** solutions in Python, filed by difficulty and by the
-**NeetCode 250** patterns - arrays and hashing, two pointers, sliding window, graphs, dynamic
-programming, and the rest. No Jupyter notebooks in sight (I don't do notebooks) - just clean
-solution files, a docs site, and a script that regenerates the progress table in the README,
-so the numbers reflect what's committed rather than what I'd like to believe I remember. The
-repo also carries a set of **PyTorch** exercises - tensor practice, aimed at framework
-fluency rather than data structures.
+**NeetCode 250** patterns - arrays and hashing, two pointers, sliding window, graphs,
+dynamic programming, the rest. No notebooks in sight (I don't do notebooks) - clean
+solution files, a docs site, and a script that regenerates the README progress table, so
+the numbers reflect what's committed rather than what I'd like to believe I remember. A
+side set of **PyTorch** exercises keeps the tensor reflexes warm.
 
-No product here and no pretending otherwise - it's deliberate practice, the equivalent of
-running scales. Data-structure fluency is the kind of thing that quietly overfits to whatever
-you last used at work, so this is the regularizer: a standing excuse to keep the fundamentals
-sharp and to enjoy the occasional clean solution to a genuinely nasty graph problem.
+No product here and no pretending otherwise. This is running scales: fundamentals quietly
+overfit to whatever you last used at work, and this repo is the regularizer.

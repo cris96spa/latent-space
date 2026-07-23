@@ -21,21 +21,19 @@ published_at: 2024-07-01
 draft: false
 ---
 
-My master's thesis at **Politecnico di Milano** (advisor: Prof. Marcello Restelli), with
-Dr. Alberto Maria Metelli and Dr. Luca Sabbioni. Everyone in RL uses curricula - start the
-agent on an easy version of the task, ramp up the difficulty - but the *theory* for why that
-helps was thin. So we built one: the **Teleport MDP (TMDP)**.
+My master's thesis at **Politecnico di Milano** (advisor Prof. Marcello Restelli, with
+Dr. Alberto Maria Metelli and Dr. Luca Sabbioni). Everyone in RL uses curricula: start the
+agent easy, ramp up. Almost nobody could tell you *why* that works. We built the missing
+mathematical object: the **Teleport MDP**.
 
-The trick is teleportation. A TMDP extends a normal MDP with a mechanism that can relocate
-the agent to a fresh state mid-episode, governed by a teleport rate **τ** and a teleport
-distribution **ξ** - so the transition model becomes `P_τ = (1−τ)·P + τ·ξ`. Crank τ up and
-the agent stops planning for the distant future and chases immediate reward: the horizon is
-effectively **truncated** and the task gets easier. A curriculum, then, is just annealing τ
-down to zero - starting on a short, forgiving horizon and gradually handing the agent the
-full problem.
+The mechanism is teleportation. With rate **τ** and distribution **ξ**, the transition
+model becomes `P_τ = (1−τ)·P + τ·ξ`: the agent sometimes gets relocated mid-episode, which
+truncates the horizon it can plan over. High τ, short horizon, easy problem. A curriculum
+stops being folklore and becomes a schedule - anneal τ to zero and hand the agent the full
+problem one notch at a time.
 
-We proved the bounds and derived the exact algorithm (**Teleport Model Policy Iteration** -
-correct, and completely impractical), then two that actually run: a **Static** and a
-**Dynamic** teleport schedule. On sparse-reward benchmarks - Frozen Lake and River Swim -
-both beat their vanilla counterparts. The short version: don't ask an agent to solve the
-hard problem on day one.
+We derived the bounds and the exact algorithm (**Teleport Model Policy Iteration**:
+provably correct, practically useless), then two schedules that actually run, one static
+and one dynamic. Both beat their vanilla counterparts on sparse-reward benchmarks like
+Frozen Lake and River Swim. Short version: don't ask an agent to solve the hard problem on
+day one - and now there's math for why not.

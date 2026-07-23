@@ -1,5 +1,5 @@
 ---
-question: How do you actually make a model cheaper to run?
+question: 'Cheaper inference: quantization, distillation, or a bigger GPU?'
 category: inference
 order: 4
 draft: false

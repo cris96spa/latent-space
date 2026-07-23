@@ -1,5 +1,5 @@
 ---
-question: How much do hyperparameters actually matter?
+question: Do hyperparameters actually matter?
 category: training
 attachment: ablation-sweep
 order: 10
