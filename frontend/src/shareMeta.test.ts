@@ -11,7 +11,7 @@ describe('shareability metadata', () => {
   const CANONICAL_ORIGIN = 'https://www.cris96spa-latent-space.com'
 
   it('index.html declares Open Graph and Twitter card tags with the canonical URL', () => {
-    const html = read('../../index.html')
+    const html = read('../index.html')
     expect(html).toContain('property="og:title"')
     expect(html).toContain('property="og:description"')
     expect(html).toContain('property="og:image"')
@@ -21,13 +21,13 @@ describe('shareability metadata', () => {
   })
 
   it('ships robots.txt referencing the sitemap by absolute URL', () => {
-    const robots = read('../../public/robots.txt')
+    const robots = read('../public/robots.txt')
     expect(robots).toContain('User-agent: *')
     expect(robots).toContain(`Sitemap: ${CANONICAL_ORIGIN}/sitemap.xml`)
   })
 
   it('ships a sitemap listing the top-level routes as absolute URLs', () => {
-    const sitemap = read('../../public/sitemap.xml')
+    const sitemap = read('../public/sitemap.xml')
     expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/</loc>`)
     expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/projects</loc>`)
     expect(sitemap).toContain(`<loc>${CANONICAL_ORIGIN}/writing</loc>`)
@@ -37,7 +37,7 @@ describe('shareability metadata', () => {
 
 describe('og-image', () => {
   it('is a 1200×630 PNG', () => {
-    const png = readFileSync(fileURLToPath(new URL('../../public/og-image.png', import.meta.url)))
+    const png = readFileSync(fileURLToPath(new URL('../public/og-image.png', import.meta.url)))
     // PNG signature.
     expect(Array.from(png.subarray(0, 8))).toEqual([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
     // IHDR width/height are big-endian uint32 at byte offsets 16 and 20.

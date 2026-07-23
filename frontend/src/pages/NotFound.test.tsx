@@ -3,7 +3,7 @@ import { axe } from 'vitest-axe'
 import { describe, expect, it } from 'vitest'
 
 import { NotFound } from './NotFound'
-import { renderInApp } from '../test/render'
+import { renderInApp } from '../test-utils/render'
 
 describe('NotFound', () => {
   it('shows the error and a single link back home', () => {
