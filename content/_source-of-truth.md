@@ -150,7 +150,10 @@ phrasing), with facts from the sections above - this source-of-truth is the CV f
 not the voice. `frontend/src/features/forward-pass-hero/content.ts` and the `<noscript>`
 block in `frontend/index.html` mirror the text below verbatim; keep all three in sync.
 
-**Final (live):**
+**Final (live):** (2026-07-23: a longer variant weaving in obsession-beats-talent and
+small-village/biggest-fish beats was tried and rejected by Cristian as pasted-together and
+too long. The signed-off text below stands; those beats live on the skills radar and in the
+chat answers instead. Do not re-add them here.)
 
 > Hi, I'm Cristian, and this is my latent space. I'm an NLP engineer at Artificialy in
 > Lugano, where I make large language models run faster, fit in less GPU memory, and stop

@@ -117,7 +117,7 @@ export function ForwardPassHero() {
             className="flex items-center justify-between gap-3 font-mono text-[11px] text-muted"
             aria-hidden="true"
           >
-            <span>detokenized output</span>
+            <span>output</span>
             {showOutputCounts && (
               <span>
                 {`${outputTokenCount} tokens · ${outputWordCount} words · ${outputCharCount} chars`}

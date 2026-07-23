@@ -12,9 +12,10 @@ interface SuggestedPromptsProps {
 
 /**
  * The suggested-prompt chips - the primary way into the chat. Each is a real button, so
- * it is keyboard-operable and focusable for free. Distinguished from the transcript by
- * shape (pills) and position, not colour, and the brand accent only appears on
- * hover/focus so a resting chip never reads as a link.
+ * it is keyboard-operable and focusable for free. At rest they are quiet chrome: neutral
+ * border, no fill, ink slightly dimmed - ten questions reading as text, not ten tinted
+ * buttons shouting over the transcript. The brand accent appears only on hover and
+ * focus, which also keeps a resting chip from reading as a link.
  */
 export function SuggestedPrompts({
   entries,
@@ -35,10 +36,11 @@ export function SuggestedPrompts({
             type="button"
             onClick={() => onSelect(entry)}
             className={cn(
-              'inline-flex items-center rounded-full border px-3 py-1.5 text-left text-sm transition-colors',
-              'border-brand-200 bg-brand-50 text-brand-700 hover:border-brand-400 hover:bg-brand-100',
-              'dark:border-brand-400/30 dark:bg-brand-400/10 dark:text-brand-200',
-              'dark:hover:border-brand-400/60 dark:hover:bg-brand-400/20',
+              'inline-flex items-center rounded-full border px-3 py-1 text-left text-sm transition-colors',
+              'border-border bg-transparent text-fg/80',
+              'hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700',
+              'dark:hover:border-brand-400/60 dark:hover:bg-brand-400/10 dark:hover:text-brand-200',
+              'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700',
             )}
           >
             {entry.question}
