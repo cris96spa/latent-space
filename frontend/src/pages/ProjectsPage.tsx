@@ -48,8 +48,7 @@ export function ProjectsPage() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Projects</h1>
         <p className="text-muted">
-          The things I build to understand them - usually by rebuilding them from
-          scratch. Weights not included; the code is.
+          Weights not included; the code is.
         </p>
       </header>
 

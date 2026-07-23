@@ -8,7 +8,7 @@ export const PAGE_META = {
   projects: {
     title: 'Projects - latent-space',
     description:
-      'Things I build to actually understand them - usually by rebuilding them from scratch. Weights not included; the code is.',
+      'Weights not included; the code is.',
   },
   writing: {
     title: 'Writing - latent-space',

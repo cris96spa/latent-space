@@ -103,7 +103,7 @@ function ProjectBody({ project }: { project: ProjectDetail }) {
             )}
             {project.demoUrl && (
               <TextLink href={project.demoUrl} target="_blank" rel="noreferrer noopener">
-                Live demo <span aria-hidden="true">&#8599;</span>
+                Docs <span aria-hidden="true">&#8599;</span>
               </TextLink>
             )}
           </div>
