@@ -23,19 +23,16 @@ published_at: 2025-02-10
 draft: false
 ---
 
-A fork I've beaten into my own shape: the repository I clone when I'd rather start writing
-the interesting part than re-litigate tooling for the hundredth time. **uv** for packaging,
-**Ruff** for lint and format, **pytest**, a multi-stage **Docker** build, **pre-commit**
-hooks, and a **GitHub Actions** pipeline that lints, tests, and publishes - all wired up on
-commit zero.
+The repository I clone when I'd rather write the interesting part than re-litigate tooling
+for the hundredth time: **uv**, **Ruff**, **pytest**, a multi-stage **Docker** build,
+**pre-commit** hooks, and a **GitHub Actions** pipeline that lints, tests, and publishes -
+all live from commit zero.
 
-A few touches I keep coming back to. Configuration splits cleanly in two: `YamlBaseSettings`
-for per-process settings the environment can override, and `YamlBaseModel` for plain config
-documents you load explicitly, with a default path and a per-instance override so the common
-case takes no arguments. `make doc` generates **MkDocs** API pages straight from the code -
-the same auto-doc generator I built for our internal template at work - so documentation
-stops being the thing everyone forgets. And an update script pulls the template's later fixes
-into a project you already started, so a repo scaffolded months ago doesn't quietly rot.
+The parts I actually care about: configuration split cleanly between `YamlBaseSettings`
+(process settings the environment can override) and `YamlBaseModel` (documents you load
+explicitly); `make doc` generating **MkDocs** API pages straight from the code, the same
+auto-doc generator I built for the internal template at work; and an update script that
+pulls later template fixes into projects scaffolded months ago, so they don't quietly rot.
 
-It's the least glamorous repo I own and quietly the most load-bearing. The backend of the
-site you're reading grew out of exactly this skeleton.
+Least glamorous repo I own, most load-bearing. The backend serving this site grew out of
+exactly this skeleton.

@@ -5,7 +5,7 @@
  * authored content served by the API; everything here is chrome.
  */
 export const CHAT_COPY = {
-  eyebrow: 'scripted · just my opinionated answers',
+  eyebrow: 'scripted · my answers, temperature 0',
   /** The big section headline, mirroring the hero's `Who is Cristian?`. */
   title: 'Ask me things',
   /** The chat's name, emphasized on its in-component title bar. */

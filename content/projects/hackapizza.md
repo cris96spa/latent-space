@@ -23,19 +23,17 @@ draft: false
 ---
 
 **2nd place at Hackapizza 2025**, IBM Studios in Milano. The premise was gleefully absurd:
-in Cosmic Cycle 789, gastronomy spans the multiverse, and an AI assistant has to recommend
-dishes to interdimensional travelers - honoring dietary restrictions for thousands of
-species and ingredients that exist in several quantum states at once, all while staying
-compliant with **Galactic Federation** food law. Under the costume it's a serious
+in Cosmic Cycle 789 an AI assistant recommends dishes to interdimensional travelers -
+dietary restrictions for thousands of species, ingredients in quantum superposition, full
+compliance with **Galactic Federation** food law. Strip the costume and it's a serious
 retrieval-and-reasoning problem.
 
-The solution is three parts. An **ingestion pipeline** parses menus, blogs, cookbooks, and
-regulations to extract the entities that matter - ingredients, dishes, planets, techniques -
-and stores them in a **Neo4j** knowledge graph, so structure the free text implies becomes
-structure you can query. A **LangGraph** agent then answers a free-form request by generating
-and executing **Cypher** against that graph, reasoning over the results with an LLM. A final
-stage maps matched dishes back to their IDs and handles the no-match cases, to line up with
-the Kaggle evaluation harness.
+Our solution has three parts. An **ingestion pipeline** parses menus, blogs, and
+regulations into a **Neo4j** knowledge graph - ingredients, dishes, planets, techniques -
+so structure the text implies becomes structure you can query. A **LangGraph** agent turns
+each free-form question into **Cypher**, runs it, and reasons over the result. A final
+stage maps dishes back to their IDs and owns the no-match cases, because the Kaggle
+harness does not grade vibes.
 
-Grounding a language model in a graph instead of letting it freestyle is precisely what keeps
-it from confidently inventing a dish that would violate three treaties and poison a delegate.
+Grounding the model in a graph instead of letting it freestyle is exactly what keeps it
+from inventing a dish that violates three treaties and poisons a delegate.

@@ -111,7 +111,7 @@ export function ChatSection() {
               {CHAT_COPY.name}
             </p>
             <p className="mt-1.5 font-mono text-[11px] text-muted">
-              {entries.length} answers · no live model
+              {entries.length} answers · no live model · hallucination rate 0%
             </p>
           </div>
 
