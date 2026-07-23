@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { Button } from '../components/Button'
 import { PageMeta } from '../components/PageMeta'
-import { ProjectCard } from '../features/projects/ProjectCard'
+import { ProjectCard } from '../components/ProjectCard'
 import { getProjects, type Project } from '../lib/api'
 import { PAGE_META } from '../lib/pageMeta'
 

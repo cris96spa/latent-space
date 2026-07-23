@@ -3,7 +3,7 @@ title: LLMs from Scratch
 summary: >-
   GPT-2 rebuilt from the tensor up in PyTorch - tokenizer, embeddings, attention,
   training loop - because you don't really understand an architecture until you've
-  hand-wired the backward pass.
+  built every layer of it yourself.
 stack:
   - Python
   - PyTorch
@@ -21,12 +21,16 @@ published_at: 2025-10-01
 draft: false
 ---
 
-A full **GPT-2 implementation in PyTorch**, written from scratch: byte-pair tokenization,
-learned embeddings, multi-head self-attention, and the training loop that ties them
-together. No `transformers` import doing the interesting part for me - the point was to
-build every layer by hand and watch the loss come down.
+**GPT-2, rebuilt from the tensor up in PyTorch**: BPE tokenization, learned embeddings,
+multi-head self-attention with the causal mask written by hand, and the training loop that
+ties it all together. No `transformers` import doing the interesting part for me.
 
-Along the way I leaned on published **LLM scaling insights** to pick the architecture and
-hyperparameters rather than guessing, which cut training time by about **10%**. It's the
-kind of project that turns "attention is all you need" from a sentence you can quote into a
-shape you can debug at 1 a.m.
+I used the library daily and kept hitting questions it was quietly answering on my behalf.
+How does text actually become numbers? Who decides the vocabulary? Time travel does not
+exist, so what exactly is the causal mask doing in there? The only honest way to close
+those gaps was to build every layer myself and watch the loss come down - or not, the day
+I forgot to zero the gradients.
+
+Published **scaling-law insights** picked the architecture and hyperparameters instead of
+guesswork, cutting training time by about **10%**. Knowing that something works is a demo.
+Knowing why is the whole point of this repo.

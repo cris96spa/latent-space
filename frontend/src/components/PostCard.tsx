@@ -1,8 +1,8 @@
-import { Card } from '../../components/Card'
-import { TextLink } from '../../components/TextLink'
-import { TokenChip } from '../../components/TokenChip'
-import type { Post } from '../../lib/api'
-import { formatPublishDate } from '../../lib/formatDate'
+import { Card } from './Card'
+import { TextLink } from './TextLink'
+import { TokenChip } from './TokenChip'
+import type { Post } from '../lib/api'
+import { formatPublishDate } from '../lib/formatDate'
 
 /**
  * One post on the writing index. The canonical post lives on Substack, so the whole card

@@ -8,7 +8,7 @@ const SkillsRadar = lazy(() => import('./SkillsRadar'))
 
 function RadarFallback() {
   return (
-    <div className="mt-2 flex h-[26rem] w-full items-center justify-center rounded-lg border border-border bg-background/60 font-mono text-xs text-muted">
+    <div className="mt-2 flex h-[30rem] w-full items-center justify-center rounded-lg border border-border bg-background/60 font-mono text-xs text-muted">
       calibrating self-eval…
     </div>
   )

@@ -3,7 +3,7 @@ import { axe } from 'vitest-axe'
 import { describe, expect, it } from 'vitest'
 
 import { TokenChip } from './TokenChip'
-import { renderInApp } from '../test/render'
+import { renderInApp } from '../test-utils/render'
 
 describe('TokenChip', () => {
   it('renders its children', () => {

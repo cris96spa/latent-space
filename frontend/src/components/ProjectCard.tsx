@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 
-import { Card } from '../../components/Card'
-import { LinkIcon } from '../../components/LinkIcon'
-import { TextLink } from '../../components/TextLink'
-import { TokenChip } from '../../components/TokenChip'
-import type { Project } from '../../lib/api'
+import { Card } from './Card'
+import { LinkIcon } from './LinkIcon'
+import { TextLink } from './TextLink'
+import { TokenChip } from './TokenChip'
+import type { Project } from '../lib/api'
 
 /**
  * One project on the index grid: title (linking to the detail route), summary, its

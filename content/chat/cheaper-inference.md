@@ -1,11 +1,11 @@
 ---
-question: How do you actually make a model cheaper to run?
+question: 'Cheaper inference: quantization, distillation, or a bigger GPU?'
 category: inference
 order: 4
 draft: false
 ---
 
-The honest answer is "buy a bigger GPU." The useful answer doesn't need a purchase order.
+Buy a bigger GPU. Wait, wait, just kidding.
 
 Training and serving are different problems. Models train in **bf16** for numerical
 stability; serving doesn't need that headroom. At today's state of the art, **8-bit

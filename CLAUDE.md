@@ -55,7 +55,9 @@ order, and only `frames()` may pace itself.
 
 Anything the diagram asserts must be checkable. Architecture numbers come from the
 published model config, token splits from the real GPT-2 pretokenizer regex, and the
-loss curves in `features/loss-curve/` from the Chinchilla fit. Where a shape is a
+loss curves in `features/loss-curve/` are real ablation telemetry from the Smol Training
+Playbook (CC-BY 4.0), regenerated from a pinned revision by
+`utils/generate_playbook_banner.py` - replotted, never simulated. Where a shape is a
 modelling choice rather than a published result, say so in the docstring.
 
 ### Scripted chat

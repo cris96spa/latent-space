@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { VocabularySection } from './VocabularySection'
 import { VOCABULARY_TOKENS } from './tokens'
-import { renderInApp } from '../../test/render'
+import { renderInApp } from '../../test-utils/render'
 
 // The skills radar renders on the home page already and is out of scope for this unit;
 // stub it so the test targets the vocabulary toggle and chips only.

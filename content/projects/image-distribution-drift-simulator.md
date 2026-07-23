@@ -21,10 +21,11 @@ draft: false
 ---
 
 A tool that manufactures **synthetic distribution shift** on image datasets: take a clean
-distribution, perturb it in controlled, parameterized ways, and hand your model exactly the
-kind of drift it will eventually meet in the wild - except now you get to choose the dose.
+distribution, perturb it in controlled, parameterized ways, and hand your model the drift
+it will eventually meet in production - except you choose the dose, the axis, and the
+timing.
 
-Used as a robustness harness, it improved **model-robustness testing by 22%**. The premise
-is boring and correct: a model's accuracy on the data you happened to collect tells you
-almost nothing about the day the data quietly changes. Better to simulate that day on
-purpose than to be surprised by it.
+The premise is boring and correct, my favorite combination: accuracy on the data you
+happened to collect says almost nothing about the day the data quietly changes. Used as a
+robustness harness it improved **model-robustness testing by 22%**. Simulate the bad day
+on purpose, before it schedules itself.

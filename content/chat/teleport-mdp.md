@@ -1,5 +1,5 @@
 ---
-question: What's the "Teleport MDP" (your thesis) about?
+question: Your thesis teleports RL agents. Explain.
 category: research
 order: 6
 draft: false

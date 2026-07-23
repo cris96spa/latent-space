@@ -3,7 +3,7 @@ import { axe } from 'vitest-axe'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ProjectsPage } from './ProjectsPage'
-import { renderInApp } from '../test/render'
+import { renderInApp } from '../test-utils/render'
 import type { Project } from '../lib/api'
 import { getProjects } from '../lib/api'
 

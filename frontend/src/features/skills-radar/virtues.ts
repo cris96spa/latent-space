@@ -1,75 +1,85 @@
 /** One axis of the engineering-virtues radar: a stance or habit, self-scored 0-10. */
 export interface EngineeringVirtue {
-  /** Clean one-line label for the accessible list and the hover heading. */
   readonly label: string
-  /** The label wrapped with `<br>` so the polar ticks read as two tidy lines. */
   readonly axisLabel: string
-  /** Self-assessment on the shared 0-`VIRTUE_SCALE_MAX` scale; higher is better. */
   readonly rating: number
-  /** One-beat aside revealed on hover and read out in the accessible list. */
   readonly caption: string
 }
 
 /** The ceiling every axis shares, so the radial grid and the accessible text agree. */
 export const VIRTUE_SCALE_MAX = 10
 
-/**
- * Self-assessed engineering virtues - temperament and taste, not benchmarked skills. These
- * are Cristian's own calibration of how he works; the two deliberately lower scores are
- * vices of taste (over-polishing, the Rust urge), never gaps in competence. Colocated as
- * typed config the way `VOCABULARY_TOKENS` is: authored values kept close to the one view
- * that renders them, and honestly flagged as opinion rather than measurement.
- */
 export const ENGINEERING_VIRTUES: readonly EngineeringVirtue[] = [
   {
-    label: 'Reads the paper, not the thread',
-    axisLabel: 'Reads the<br>paper, not<br>the thread',
-    rating: 8,
-    caption: 'The arXiv PDF, not the quote-tweet about it.',
+    label: 'Table football',
+    axisLabel: 'Table<br>football',
+    rating: 10,
+    caption: 'My drug. Self-reported SOTA, reproducible at any bar table, any time.',
   },
   {
-    label: 'Trusts the loss over the vibe',
-    axisLabel: 'Trusts the<br>loss over<br>the vibe',
+    label: 'Chromatic ability',
+    axisLabel: 'Chromatic<br>ability',
+    rating: 1,
+    caption:
+      'Red-green deficiency. Failed the army eye exam, got rerouted into engineering. Best hardware limitation I own.',
+  },
+  {
+    label: 'Dragon Ball: Sparking! Zero',
+    axisLabel: 'Dragon Ball:<br>Sparking! Zero',
+    rating: 9,
+    caption: 'Peer-reviewed. Ask Federico for a reference.',
+  },
+  {
+    label: 'Knowing when to stop',
+    axisLabel: 'Knowing<br>when to stop',
+    rating: 3,
+    caption: 'Ask my thesis: eighteen months in the optimization trap. Patched; regressions occur.',
+  },
+  {
+    label: 'Obsession beats talent',
+    axisLabel: 'Obsession<br>beats talent',
     rating: 9,
     caption:
-      'When the curve disagrees with my intuition, the curve wins and I go debug the intuition.',
+    'No innate-talent parameter found at initialization. Compensated with obsession; it compounds.',
   },
   {
-    label: 'Deletes code without grieving',
-    axisLabel: 'Deletes code<br>without grieving',
-    rating: 7,
-    caption: 'The best pull request is a red one.',
+    label: 'Doing nothing',
+    axisLabel: 'Doing<br>nothing',
+    rating: 2,
+    caption: 'Tried it once, on a beach. The process kept spawning background jobs.',
   },
   {
-    label: 'Reproducible by Friday',
-    axisLabel: 'Reproducible<br>by Friday',
+    label: 'Seeks a bigger pond',
+    axisLabel: 'Seeks a<br>bigger pond',
     rating: 8,
-    caption: "Seed pinned, config committed, or it didn't happen.",
+    caption:
+      'If I am the smartest person in the room, I change room. The gradient is steeper next to better people.',
   },
   {
-    label: "Ships before it's perfect",
-    axisLabel: "Ships before<br>it's perfect",
-    rating: 6,
-    caption: 'Perfect is a checkpoint I never reach. Good is one I can actually serve.',
+    label: 'R tolerance',
+    axisLabel: 'R<br>tolerance',
+    rating: 1,
+    caption: 'I built my girlfriend an entire ML framework so one R installation could be retired.',
   },
   {
-    label: 'Resists rewriting it in Rust',
-    axisLabel: 'Resists<br>rewriting<br>it in Rust',
+    label: 'Knowledge seeker',
+    axisLabel: 'Knowledge<br>seeker',
+    rating: 10,
+    caption:
+      'Infinite recursion: every paper answered pushes three more onto the stack. No base case.',
+  },
+  {
+    label: 'Selling myself',
+    axisLabel: 'Selling<br>myself',
     rating: 4,
-    caption: 'Deliberately low. The urge is constant; the borrow checker is patient.',
+    caption: 'Chronically underfit. This entire website is the fine-tuning run.',
   },
   {
-    label: 'CUDA-error composure',
-    axisLabel: 'CUDA-error<br>composure',
-    rating: 7,
-    caption: 'Reads `device-side assert triggered` without flipping the desk. Most days.',
-  },
-  {
-    label: 'Sniffs out hand-waving',
-    axisLabel: 'Sniffs out<br>hand-waving',
-    rating: 9,
+    label: 'Buzzword tolerance',
+    axisLabel: 'Buzzword<br>tolerance',
+    rating: 1,
     caption:
-      'A high-recall detector for hype. "It just works" is a claim, not an eval; show me the benchmark table.',
+      '"Passionate about synergy" fails to parse. If there is no number under the claim, it is an opinion.',
   },
 ]
 

@@ -4,8 +4,8 @@ export const EXTERNAL_LINKS = {
   email: 'mailto:cristian.c.spagnuolo@gmail.com',
   /** The public model whose config the hero's diagram labels are taken from. */
   gpt2Model: 'https://huggingface.co/openai-community/gpt2',
-  /** Hoffmann et al. 2022, the scaling law the ablation sweep is plotted from. */
-  chinchillaPaper: 'https://arxiv.org/abs/2203.15556',
+  /** The Smol Training Playbook, whose hero banner the chat's opener replots (CC-BY 4.0). */
+  smolPlaybook: 'https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook',
   // TODO(content): Cristian's Substack publication does not exist yet. This points at
   // Substack's home so the "Follow" affordance is never dead; replace with the real
   // publication URL (e.g. https://<name>.substack.com) when it exists.
