@@ -25,8 +25,10 @@ export const THINKING_HOOKS: Readonly<Record<string, string>> = {
   'most-overrated': 'denoising the hype…',
   'off-the-clock': 'unloading weights from VRAM…',
   'can-i-see-your-resume': 'rendering resume.tex → PDF…',
+  'read-of-the-year': 'pulling 29 loss curves from the playbook…',
 }
 
 export const FALLBACK_HOOK = 'searching the context window…'
 
-export const ABLATION_SWEEP_PUBLIC_IDENTIFIER = 'ablation-sweep'
+/** The entry the chat pre-loads as its opening turn. */
+export const OPENER_PUBLIC_IDENTIFIER = 'read-of-the-year'

@@ -5,7 +5,7 @@ export interface HealthStatus {
 }
 
 /** A rich, non-text widget an answer carries, declared in its frontmatter. */
-export type AnswerAttachment = 'resume' | 'ablation-sweep'
+export type AnswerAttachment = 'resume' | 'playbook-banner'
 
 /** A scripted-chat question and its authored answer, ready to render. */
 export interface ChatEntry {

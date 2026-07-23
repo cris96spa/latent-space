@@ -5,7 +5,7 @@ import { getChatEntries, type ChatEntry } from '../../lib/api'
 import { usePrefersReducedMotion } from '../../hooks/useMediaQuery'
 import { ChatComposer } from './ChatComposer'
 import { ChatTranscript } from './ChatTranscript'
-import { ABLATION_SWEEP_PUBLIC_IDENTIFIER, CHAT_COPY } from './content'
+import { CHAT_COPY, OPENER_PUBLIC_IDENTIFIER } from './content'
 import { createScriptedResponder } from './scriptedResponder'
 import { SuggestedPrompts } from './SuggestedPrompts'
 import { useChat } from './useChat'
@@ -54,7 +54,7 @@ export function ChatSection() {
   const responder = useMemo(() => createScriptedResponder(entries), [entries])
   const chat = useChat(responder, reducedMotion)
 
-  // Pre-load the ablation sweep as the opening turn, once, so its interactive plot greets
+  // Pre-load the read-of-the-year banner as the opening turn, once, so its plot greets
   // the visitor where the old always-on section used to sit. It is still a chip to re-ask.
   const { askPrompt } = chat
   const preloadedRef = useRef(false)
@@ -62,12 +62,12 @@ export function ChatSection() {
     if (load.status !== 'ready' || preloadedRef.current) {
       return
     }
-    const sweep = entries.find(
-      (entry) => entry.publicIdentifier === ABLATION_SWEEP_PUBLIC_IDENTIFIER,
+    const opener = entries.find(
+      (entry) => entry.publicIdentifier === OPENER_PUBLIC_IDENTIFIER,
     )
-    if (sweep) {
+    if (opener) {
       preloadedRef.current = true
-      askPrompt(sweep)
+      askPrompt(opener)
     }
   }, [load.status, entries, askPrompt])
 

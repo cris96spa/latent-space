@@ -124,13 +124,13 @@ def test_missing_required_field_fails_loudly(tmp_path: Path):
 def test_chat_attachment_loads_from_frontmatter(tmp_path: Path):
     _write_project_file(
         tmp_path / "chat",
-        "sweep.md",
-        "---\nquestion: q\ncategory: c\norder: 0\nattachment: ablation-sweep\n---\nBody.",
+        "banner.md",
+        "---\nquestion: q\ncategory: c\norder: 0\nattachment: playbook-banner\n---\nBody.",
     )
 
     entries = load_chat_entries_from_directory(tmp_path / "chat")
 
-    assert entries[0].attachment == "ablation-sweep"
+    assert entries[0].attachment == "playbook-banner"
 
 
 def test_chat_without_attachment_defaults_to_none(tmp_path: Path):
