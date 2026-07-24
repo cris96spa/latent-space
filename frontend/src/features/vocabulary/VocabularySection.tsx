@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { TokenChip } from '../../components/TokenChip'
 import { cn } from '../../lib/cn'
-import { SkillsRadarSection } from '../skills-radar'
+import { SelfEvalSection } from '../self-eval'
 import { VOCABULARY_TOKENS } from './tokens'
 
 type TokenView = 'humans' | 'llms'
@@ -89,7 +89,7 @@ export function VocabularySection() {
         })}
       </ul>
 
-      <SkillsRadarSection />
+      <SelfEvalSection />
     </section>
   )
 }

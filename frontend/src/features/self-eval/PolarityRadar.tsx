@@ -5,31 +5,38 @@ import type { Config, Data, Layout, PlotData } from 'plotly.js'
 
 import { usePrefersCompactDiagram } from '../../hooks/useMediaQuery'
 import { useTheme } from '../../hooks/useTheme'
-import { ENGINEERING_VIRTUES, VIRTUE_SCALE_MAX } from './virtues'
+import { splitRadarAxes } from './split'
+import { ENGINEERING_VIRTUES, VIRTUE_SCALE_MAX, type VirtuePolarity } from './virtues'
 
 /** Reads a CSS custom property off `<html>`, so the plot matches the live theme tokens. */
 function cssVar(name: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
 }
 
-// Brand sky, selected per theme rather than one value doing double duty: a low-alpha wash
-// that reads on a light panel disappears over a dark one, so the dark fill is a lighter
-// hue at higher alpha. Plotly draws to its own canvas and cannot consume the Tailwind
-// `brand-*` tokens (which tree-shake away once no utility references them). One trace
-// only, so no distinction is ever hue-coded.
-const RADAR_THEME_COLORS = {
-  light: { line: '#0284c7', fill: 'rgba(2, 132, 199, 0.16)' },
-  dark: { line: '#38bdf8', fill: 'rgba(56, 189, 248, 0.26)' },
+// One hue per polarity, picked per theme: strengths wear the brand blue, quirks wear amber. A
+// low-alpha wash tuned for a light panel disappears over a dark one, so each theme gets its own
+// line and fill. Plotly draws to its own canvas and cannot read the tree-shaken Tailwind
+// `brand-*`/`attention-*` tokens.
+const RADAR_COLORS = {
+  light: {
+    positive: { line: '#0284c7', fill: 'rgba(2, 132, 199, 0.16)' },
+    negative: { line: '#d97706', fill: 'rgba(217, 119, 6, 0.16)' },
+  },
+  dark: {
+    positive: { line: '#38bdf8', fill: 'rgba(56, 189, 248, 0.22)' },
+    negative: { line: '#fbbf24', fill: 'rgba(251, 191, 36, 0.20)' },
+  },
 } as const
 
 /**
- * The engineering-virtues radar: one `scatterpolar` polygon over self-assessed stances,
- * scored 0-`VIRTUE_SCALE_MAX`. Default-exported and imported lazily so Plotly stays in its
- * own chunk, off the main bundle. Axis and text colours are read from CSS variables and the
- * effect re-runs on theme change, since a canvas cannot follow CSS reactively. The figure
- * is `aria-hidden`; `SkillsRadarSection`'s list carries the same numbers for assistive tech.
+ * One side of the self-eval as a radar: the strengths (positive) or the quirks (negative) as a
+ * single `scatterpolar` polygon over their own spokes. Quirk spokes plot distance from a perfect
+ * ten, so a proud 1/10 reaches the rim. Default-exported and lazy so Plotly stays off the main
+ * bundle; colours and axes are read from CSS variables and the effect re-runs on theme or
+ * polarity change. The figure is `aria-hidden`; `SelfEvalSection`'s list carries the numbers for
+ * assistive tech.
  */
-export default function SkillsRadar() {
+export default function PolarityRadar({ polarity }: { polarity: VirtuePolarity }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const theme = useTheme()
   const compact = usePrefersCompactDiagram()
@@ -44,23 +51,24 @@ export default function SkillsRadar() {
     const muted = cssVar('--color-muted')
     const border = cssVar('--color-border')
     const surface = cssVar('--color-surface')
-    const colors = RADAR_THEME_COLORS[theme]
+    const colors = RADAR_COLORS[theme][polarity]
 
-    // Repeat the first vertex so the outline closes cleanly from the last point back to it.
-    const closed = [...ENGINEERING_VIRTUES, ENGINEERING_VIRTUES[0]]
+    const { positives, negatives } = splitRadarAxes(ENGINEERING_VIRTUES)
+    const axes = polarity === 'positive' ? positives : negatives
+    // Repeat the first spoke so the outline closes cleanly from the last point back to it.
+    const closed = [...axes, axes[0]]
+
     const trace: Partial<PlotData> = {
       type: 'scatterpolar',
       mode: 'lines+markers',
-      r: closed.map((virtue) => virtue.rating),
-      theta: closed.map((virtue) => virtue.axisLabel),
-      customdata: closed.map((virtue) => [virtue.label, virtue.caption]),
+      r: closed.map((axis) => axis.magnitude),
+      theta: closed.map((axis) => axis.axisLabel),
+      customdata: closed.map((axis) => [axis.label, axis.rating, axis.caption]),
       fill: 'toself',
       fillcolor: colors.fill,
       line: { color: colors.line, width: 2.5, shape: 'linear' },
-      // A surface-coloured ring keeps each vertex legible where the polygon crosses grid
-      // rings, and the 8px dot is an honest hover target rather than a decoration.
       marker: { color: colors.line, size: 8, line: { color: surface, width: 2 } },
-      hovertemplate: `%{customdata[0]}<br>%{r}/${VIRTUE_SCALE_MAX} · %{customdata[1]}<extra></extra>`,
+      hovertemplate: `%{customdata[0]}<br>%{customdata[1]}/${VIRTUE_SCALE_MAX} · %{customdata[2]}<extra></extra>`,
     }
 
     // Long axis labels sit in the plot's margins; a narrow viewport needs wider horizontal
@@ -79,14 +87,10 @@ export default function SkillsRadar() {
         radialaxis: {
           range: [0, VIRTUE_SCALE_MAX],
           tickvals: [2, 4, 6, 8, 10],
-          // The grid rings stay; the numbers overlap the east label and the exact values
-          // already live in the hover and the section's screen-reader list.
           showticklabels: false,
           gridcolor: border,
           linecolor: border,
         },
-        // The axis names are the chart's identity layer, so they wear the primary ink;
-        // the grid stays recessive in the border tone behind them.
         angularaxis: {
           gridcolor: border,
           linecolor: border,
@@ -105,7 +109,7 @@ export default function SkillsRadar() {
     return () => {
       Plotly.purge(element)
     }
-  }, [theme, compact])
+  }, [theme, compact, polarity])
 
   return (
     <div
