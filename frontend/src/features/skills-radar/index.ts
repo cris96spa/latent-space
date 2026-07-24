@@ -1,1 +1,0 @@
-export { SkillsRadarSection } from './SkillsRadarSection'

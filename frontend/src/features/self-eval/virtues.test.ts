@@ -27,4 +27,12 @@ describe('ENGINEERING_VIRTUES', () => {
       expect(virtue.caption.length).toBeGreaterThan(0)
     }
   })
+
+  it('tags every axis with a polarity and keeps both sides of the split populated', () => {
+    const positives = ENGINEERING_VIRTUES.filter((virtue) => virtue.polarity === 'positive')
+    const negatives = ENGINEERING_VIRTUES.filter((virtue) => virtue.polarity === 'negative')
+    expect(positives.length).toBeGreaterThan(0)
+    expect(negatives.length).toBeGreaterThan(0)
+    expect(positives.length + negatives.length).toBe(ENGINEERING_VIRTUES.length)
+  })
 })
