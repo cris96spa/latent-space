@@ -15,8 +15,8 @@ tags:
   - curriculum-learning
   - ppo
   - thesis
-repository_url: https://github.com/cris96spa/teleportMPD
-demo_url: https://cris96spa.github.io/teleportMPD/
+repository_url: https://github.com/cris96spa/teleport-mdp
+demo_url: https://cris96spa.github.io/teleport-mdp/
 published_at: 2024-07-01
 draft: false
 ---
