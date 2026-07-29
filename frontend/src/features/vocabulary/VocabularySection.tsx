@@ -74,10 +74,12 @@ export function VocabularySection() {
                 {showingIds ? ids : token.label}
               </TokenChip>
               {/* Mouse-only cross-reference. Each chip's aria-label already carries both
-                  representations, so this is decorative for assistive tech. */}
+                  representations, so this is decorative for assistive tech. Dropped below
+                  `sm`, where a centred tooltip on a left-column chip hangs 16px off the
+                  screen and no phone can hover it into view anyway. */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-fg px-2 py-1 text-background opacity-0 shadow-md group-hover:opacity-100 motion-safe:transition-opacity"
+                className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 hidden -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-fg px-2 py-1 text-background opacity-0 shadow-md group-hover:opacity-100 motion-safe:transition-opacity sm:block"
               >
                 <span className="block font-mono text-[10px] uppercase tracking-wider text-background/70">
                   {tooltipLabel}
