@@ -1,4 +1,6 @@
 import { Button } from '../../components/Button'
+import { longestString } from '../../lib/longestString'
+import { ReservedLine } from './ReservedLine'
 import type { ForwardPassPhase } from './types'
 import type { ForwardPassPlayback } from './useForwardPass'
 
@@ -8,6 +10,15 @@ const PHASE_CAPTIONS: Record<ForwardPassPhase, string> = {
   decode: 'one pass per token, reusing the cache',
   complete: 'done - the KV cache is warm and nobody paid for a GPU',
 }
+
+function captionFor(phase: ForwardPassPhase): string {
+  return `${phase}: ${PHASE_CAPTIONS[phase]}`
+}
+
+/** The longest caption, so a phase change cannot add or drop a wrapped line under the pass. */
+const CAPTION_SIZER = longestString(
+  (Object.keys(PHASE_CAPTIONS) as ForwardPassPhase[]).map(captionFor),
+)
 
 /**
  * Transport for the forward pass: play/pause, single-step by frame, and a slider over
@@ -67,7 +78,7 @@ export function PlaybackControls({ playback }: { playback: ForwardPassPlayback }
       </label>
 
       <p className="font-mono text-xs text-muted" aria-live="polite">
-        {frame.phase}: {PHASE_CAPTIONS[frame.phase]}
+        <ReservedLine sizer={CAPTION_SIZER}>{captionFor(frame.phase)}</ReservedLine>
       </p>
     </div>
   )

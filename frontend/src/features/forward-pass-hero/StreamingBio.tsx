@@ -1,3 +1,5 @@
+import { useLayoutEffect, useRef } from 'react'
+
 import { cn } from '../../lib/cn'
 import { TokenizedText, type TokenView } from './TokenizedText'
 import type { ForwardPassFrame } from './types'
@@ -13,9 +15,8 @@ interface StreamingBioProps {
   /** Whether to tint the tokens with their `sweep` washes; off reads as plain prose. Defaults on. */
   readonly highlight?: boolean
   /**
-   * The full authored bio, used only as an invisible sizer in the text view so the box
-   * reserves its final height up front and never grows as tokens stream. Omitted (or in
-   * the ids view) the box just grows to fit.
+   * The full authored bio, rendered as an invisible sizer so the box reserves its final
+   * height up front and never grows as tokens stream. Omitted, the box grows to fit.
    */
   readonly reserveText?: string
   readonly className?: string
@@ -35,6 +36,20 @@ export function StreamingBio({
   reserveText,
   className,
 }: StreamingBioProps) {
+  const scroller = useRef<HTMLSpanElement>(null)
+  const emittedCount = frame.emittedTokens.length
+
+  // The ids grid is the one view whose height cannot be reserved exactly: a streamed source
+  // does not know its own tokenization in advance, so it scrolls inside the reserved box and
+  // follows the newest chips instead. Assigning `scrollTop` jumps, so nothing animates here
+  // and reduced-motion needs no special case.
+  useLayoutEffect(() => {
+    const box = scroller.current
+    if (box) {
+      box.scrollTop = box.scrollHeight
+    }
+  }, [emittedCount, view])
+
   const tokens = (
     <TokenizedText
       tokens={frame.emittedTokens}
@@ -45,23 +60,42 @@ export function StreamingBio({
     />
   )
 
-  // Only the inline text view flows as prose whose height a full-length copy can predict;
-  // the ids view is a token grid that has to size to its own wrapped chips.
-  if (view === 'text' && reserveText) {
+  if (!reserveText) {
     return (
-      <p className={cn('grid min-h-40 text-base tracking-tight text-fg sm:text-lg', className)}>
-        <span
-          aria-hidden="true"
-          className="invisible col-start-1 row-start-1 leading-loose whitespace-pre-wrap"
-        >
-          {reserveText}
-        </span>
-        <span className="col-start-1 row-start-1">{tokens}</span>
+      <p className={cn('min-h-40 text-base tracking-tight text-fg sm:text-lg', className)}>
+        {tokens}
       </p>
     )
   }
 
+  // The text view flows as prose, so a full-length invisible copy predicts its final height
+  // exactly and it never needs to scroll. The ids view borrows that same height as a budget:
+  // it is taken out of flow so the invisible copy alone decides the row height, because a
+  // grid row otherwise grows to its tallest item's content even when that item can scroll.
+  const scrolls = view === 'ids'
   return (
-    <p className={cn('min-h-40 text-base tracking-tight text-fg sm:text-lg', className)}>{tokens}</p>
+    <p
+      className={cn(
+        'relative grid min-h-40 text-base tracking-tight text-fg sm:text-lg',
+        className,
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className="invisible col-start-1 row-start-1 leading-loose whitespace-pre-wrap"
+      >
+        {reserveText}
+      </span>
+      <span
+        ref={scroller}
+        aria-hidden="true"
+        className={cn(
+          'col-start-1 row-start-1',
+          scrolls && 'absolute inset-0 overflow-y-auto overscroll-contain',
+        )}
+      >
+        {tokens}
+      </span>
+    </p>
   )
 }

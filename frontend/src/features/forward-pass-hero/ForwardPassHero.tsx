@@ -3,10 +3,13 @@ import { useEffect, useState } from 'react'
 import { TextLink } from '../../components/TextLink'
 import { cn } from '../../lib/cn'
 import { EXTERNAL_LINKS } from '../../lib/links'
+import { longestString } from '../../lib/longestString'
 import { TARGET_MODEL } from './architecture'
 import { CANONICAL_BIO, HERO_PROMPT } from './content'
+import { FORWARD_PASS_PHASES, FORWARD_PASS_STAGES } from './frames'
 import { buildHeroForwardPass, idleHeroForwardPass, type HeroForwardPass } from './heroSource'
 import { PipelineDiagram } from './PipelineDiagram'
+import { ReservedLine } from './ReservedLine'
 import { PlaybackControls } from './PlaybackControls'
 import { StreamingBio } from './StreamingBio'
 import { TokenPromptPanel } from './TokenPromptPanel'
@@ -46,6 +49,28 @@ function HighlightToggle({
     </button>
   )
 }
+
+/**
+ * The KV-cache readout. Below `md` it drops the context and block counts: the diagram
+ * already names the block count, and the shorter line keeps the strip one line tall on a
+ * phone. Sized with `contextLength` in both slots, the widest either number ever gets.
+ */
+function kvCacheReadout(kvCacheLength: number, compact: boolean): string {
+  const cache = `kv cache ${kvCacheLength}/${TARGET_MODEL.contextLength}`
+  return compact ? cache : `${cache} ctx · ${TARGET_MODEL.blockCount} blocks`
+}
+
+/** The widest `phase · stage` the strip can show, built from the real phase and stage sets. */
+const PHASE_READOUT_SIZER = `${longestString(FORWARD_PASS_PHASES)} · ${longestString(FORWARD_PASS_STAGES)}`
+
+/**
+ * The widest output counts line. Every count is bounded by the bio's character count, so
+ * that number in all three slots over-reserves rather than under-reserves.
+ */
+const OUTPUT_COUNTS_SIZER = (() => {
+  const widest = [...CANONICAL_BIO].length
+  return `${widest} tokens · ${widest} words · ${widest} chars`
+})()
 
 /**
  * The landing-page hero. Fetches the real GPT-2 tokenization of the fixed prompt and bio
@@ -129,13 +154,17 @@ export function ForwardPassHero() {
                   : 'inline-block size-2 rounded-full bg-border'
               }
             />
-            {frame.phase}
-            {frame.activeStage ? ` · ${frame.activeStage}` : ''}
+            <ReservedLine sizer={PHASE_READOUT_SIZER}>
+              {frame.phase}
+              {frame.activeStage ? ` · ${frame.activeStage}` : ''}
+            </ReservedLine>
           </span>
-          <span>
-            kv cache {frame.kvCacheLength}/{TARGET_MODEL.contextLength} ctx {'·'}{' '}
-            {TARGET_MODEL.blockCount} blocks
-          </span>
+          <ReservedLine
+            sizer={kvCacheReadout(TARGET_MODEL.contextLength, compact)}
+            className="justify-items-end"
+          >
+            {kvCacheReadout(frame.kvCacheLength, compact)}
+          </ReservedLine>
         </div>
 
         <div className="p-3 sm:p-5">
@@ -152,11 +181,10 @@ export function ForwardPassHero() {
             aria-hidden="true"
           >
             <span>output</span>
-            {showOutputCounts && (
-              <span>
-                {`${outputTokenCount} tokens · ${outputWordCount} words · ${outputCharCount} chars`}
-              </span>
-            )}
+            <ReservedLine sizer={OUTPUT_COUNTS_SIZER} className="justify-items-end">
+              {showOutputCounts &&
+                `${outputTokenCount} tokens · ${outputWordCount} words · ${outputCharCount} chars`}
+            </ReservedLine>
           </div>
           <StreamingBio
             frame={frame}

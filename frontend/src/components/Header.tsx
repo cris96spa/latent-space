@@ -16,8 +16,18 @@ const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
 export function Header() {
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-        <Link to="/" className="inline-flex items-center gap-2" aria-label="latent-space, home">
+      {/*
+        The wordmark and the nav need 450px side by side, so on a phone the nav takes a line
+        of its own rather than squeezing the wordmark into two lines (which is what it did)
+        or pushing the whole page sideways. `whitespace-nowrap` keeps the wordmark on one
+        line now that it has the room, and the shorter mobile padding pays for the extra row.
+      */}
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-2 sm:flex-nowrap sm:px-6 sm:py-3">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 whitespace-nowrap"
+          aria-label="latent-space, home"
+        >
           <img src="/favicon.png" alt="" aria-hidden="true" className="size-7" />
           <span className="font-mono text-sm text-brand-500" aria-hidden="true">
             {'>_'}
@@ -26,7 +36,10 @@ export function Header() {
             latent<span className="text-brand-700 dark:text-brand-400">-space</span>
           </span>
         </Link>
-        <nav className="flex items-center gap-4 text-sm" aria-label="Primary">
+        <nav
+          className="flex w-full items-center justify-between gap-4 text-sm sm:w-auto sm:justify-end"
+          aria-label="Primary"
+        >
           <NavLink
             to="/projects"
             className={navLinkClassName}

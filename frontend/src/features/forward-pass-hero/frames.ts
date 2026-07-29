@@ -20,6 +20,14 @@ export const FORWARD_PASS_STAGES: readonly StageId[] = [
   'sample',
 ]
 
+/** Every phase a frame can report, so callers can size a readout against the longest. */
+export const FORWARD_PASS_PHASES: readonly ForwardPassPhase[] = [
+  'tokenize',
+  'prefill',
+  'decode',
+  'complete',
+]
+
 export const MLP_UNIT_COUNT = 12
 export const TOP_K = 5
 
