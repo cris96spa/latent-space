@@ -33,3 +33,25 @@ export async function stubApi(page: Page): Promise<void> {
   await page.route('**/api/chat/entries', (route) => route.fulfill({ json: CHAT_FIXTURE }))
   await page.route('**/api/posts', (route) => route.fulfill({ json: [] }))
 }
+
+/**
+ * Stands in for the backend GPT-2 tokenizer. Not the real BPE, but the same wire shape and a
+ * comparable piece count: splitting words into chunks of at most four characters puts the
+ * canonical bio at 139 pieces against the real tokenizer's 128, which matters because a
+ * layout test has to reproduce how far the ids grid overflows its box. Without this stub the
+ * hero takes its pretokenizer fallback and hides the ids view entirely.
+ */
+export async function stubTokenize(page: Page): Promise<void> {
+  await page.route('**/api/tokenize', (route) => {
+    const { text } = route.request().postDataJSON() as { text: string }
+    const pieces = text.match(/\s?[\p{L}\p{N}]{1,4}|\s?[^\p{L}\p{N}\s]+|\s+/gu) ?? []
+    return route.fulfill({
+      json: {
+        tokens: pieces.map((piece, index) => ({ id: 1000 + index, text: piece })),
+        token_count: pieces.length,
+        word_count: text.split(/\s+/).filter(Boolean).length,
+        char_count: [...text].length,
+      },
+    })
+  })
+}
